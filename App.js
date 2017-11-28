@@ -5,16 +5,12 @@
  */
 
 import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  AppRegistry,
-  Image,
-    ListView,
-} from 'react-native';
-import Blink from './Blink';
+import { Card, Button, Text, Header } from 'react-native-elements';
+import * as firebase from 'firebase';
+import { Platform, StyleSheet, View, AppRegistry, Image, ListView} from 'react-native';
+//import Blink from './Blink';
+import { google } from 'react-native-simple-auth';
+
 
 
 var MOCKED_MOVIES_DATA = [
@@ -36,6 +32,15 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
+// Initialize Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyDw-gKR_SGlQwrK7EpC30jvl2Jx5tPIyV8",
+    authDomain: "labs-c6f2f.firebaseapp.com",
+    databaseURL: "https://labs-c6f2f.firebaseio.com/",
+    storageBucket: "labs-c6f2f.appspot.com",
+};
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+
 export default class App extends Component<{}> {
 
     constructor(props) {
@@ -51,6 +56,26 @@ export default class App extends Component<{}> {
 
     componentDidMount() {
         this.fetchData();
+    }
+
+    signUp() {
+
+        google({
+            appId: '579433277918-8ks1ufi6s83c8erld858uq4ek17q8fk3.apps.googleusercontent.com',
+            callback: 'com.awesomeproject:/oauth2redirect',
+            //callback: 'com.awesomeproject',
+
+        }).then((info) => {
+            // info.user - user details from the provider
+            // info.credentials - tokens from the provider
+            console.log("******************************************GOOOD");
+        }).catch((error) => {
+            // error.code
+            // error.description
+            console.log("******************************************BADDD");
+        });
+
+
     }
 
     fetchData() {
@@ -70,21 +95,36 @@ export default class App extends Component<{}> {
         if (!this.state.loaded) {
             return this.renderLoadingView();
         }
-        console.log("Num Movies: "+this.state.numberOfMovies);
 
         let titleText = "Movies: "+this.state.numberOfMovies;
         return (
 
             //<Text> Movies: {this.state.numberOfMovies} </Text>
             <View >
-              <Blink style={styles.titleContainer} text={titleText} />
 
-              <Text style={styles.titleContainer}> Movies: {this.state.numberOfMovies} </Text>
-              <ListView
-                dataSource={this.state.dataSource}
-                renderRow={this.renderMovie}
-                style={styles.listView}
-              />
+                <Header
+                    leftComponent={{ icon: 'menu', color: '#fff' }}
+                    centerComponent={{ text: 'Labs', style: { color: '#fff' } }}
+                    rightComponent={{ icon: 'home', color: '#fff' }}
+                />
+
+
+                <Card
+                    title='HELLO WORLD'
+                    //image={require('../images/pic2.jpg')}
+                >
+                    <Text style={{marginBottom: 10}}>
+                        The idea with React Native Elements is more about component structure than actual design.
+                    </Text>
+                    <Button
+                        icon={{name: 'envira', type: 'font-awesome'}}
+                        backgroundColor='#03A9F4'
+                        fontFamily='Lato'
+                        buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                        title={`Sign in with Google`}
+                        onPress={this.signUp}/>
+                </Card>
+
             </View>
         );
     }
@@ -102,6 +142,8 @@ export default class App extends Component<{}> {
     renderMovie(movie) {
         return (
             <View style={styles.container}>
+
+
 
               <Image
                   source={{uri: movie.posters.thumbnail}}
@@ -157,6 +199,17 @@ AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
 
 
 /*
+
+<Blink style={styles.titleContainer} text={titleText} />
+         <Text style={styles.titleContainer}> Movies: {this.state.numberOfMovies} </Text>
+
+
+<ListView
+                dataSource={this.state.dataSource}
+                renderRow={this.renderMovie}
+                style={styles.listView}
+              />
+
     render() {
     var movie = MOCKED_MOVIES_DATA[0];
 
