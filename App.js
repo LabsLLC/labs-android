@@ -7,21 +7,9 @@
 import React, { Component } from 'react';
 import { Card, Button, Text, Header } from 'react-native-elements';
 import * as firebase from 'firebase';
-import { Platform, StyleSheet, View, AppRegistry, Image, ListView} from 'react-native';
-//import Blink from './Blink';
-import { google } from 'react-native-simple-auth';
+import { Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
+import LoginForm from './LoginForm'
 
-
-
-var MOCKED_MOVIES_DATA = [
-    {title: 'Title', year: '2015', posters: {thumbnail: 'http://i.imgur.com/UePbdph.jpg'}},
-];
-
-/**
- * For quota reasons we replaced the Rotten Tomatoes' API with a sample data of
- * their very own API that lives in React Native's Github repo.
- */
-var REQUEST_URL = 'https://raw.githubusercontent.com/facebook/react-native/master/docs/MoviesExample.json';
 
 
 
@@ -46,49 +34,14 @@ export default class App extends Component<{}> {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: new ListView.DataSource({
-                rowHasChanged: (row1, row2) => row1 !== row2,
-            }),
             loaded: false,
-            numberOfMovies: null
         };
     }
 
-    componentDidMount() {
-        this.fetchData();
-    }
-
-    signUp() {
-
-        google({
-            appId: '579433277918-8ks1ufi6s83c8erld858uq4ek17q8fk3.apps.googleusercontent.com',
-            callback: 'com.awesomeproject:/oauth2redirect',
-            //callback: 'com.awesomeproject',
-
-        }).then((info) => {
-            // info.user - user details from the provider
-            // info.credentials - tokens from the provider
-            console.log("******************************************GOOOD");
-        }).catch((error) => {
-            // error.code
-            // error.description
-            console.log("******************************************BADDD");
-        });
-
-
-    }
-
-    fetchData() {
-        fetch(REQUEST_URL)
-            .then((response) => response.json())
-            .then((responseData) => {
-                this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
-                    loaded: true,
-                    numberOfMovies: responseData.total,
-                });
-            })
-            .done();
+    componentDidMount(){
+        this.setState({
+            loaded: true
+        })
     }
 
     render() {
@@ -99,7 +52,6 @@ export default class App extends Component<{}> {
         let titleText = "Movies: "+this.state.numberOfMovies;
         return (
 
-            //<Text> Movies: {this.state.numberOfMovies} </Text>
             <View >
 
                 <Header
@@ -110,19 +62,9 @@ export default class App extends Component<{}> {
 
 
                 <Card
-                    title='HELLO WORLD'
-                    //image={require('../images/pic2.jpg')}
+                    title='HELLO USER'
                 >
-                    <Text style={{marginBottom: 10}}>
-                        The idea with React Native Elements is more about component structure than actual design.
-                    </Text>
-                    <Button
-                        icon={{name: 'envira', type: 'font-awesome'}}
-                        backgroundColor='#03A9F4'
-                        fontFamily='Lato'
-                        buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                        title={`Sign in with Google`}
-                        onPress={this.signUp}/>
+                    <LoginForm/>
                 </Card>
 
             </View>
@@ -133,32 +75,11 @@ export default class App extends Component<{}> {
         return (
             <View style={styles.container}>
               <Text>
-                Loading movies...
+                Loading awesome...
               </Text>
             </View>
         );
     }
-
-    renderMovie(movie) {
-        return (
-            <View style={styles.container}>
-
-
-
-              <Image
-                  source={{uri: movie.posters.thumbnail}}
-                  style={styles.thumbnail}
-              />
-              <View style={styles.rightContainer}>
-                <Text style={styles.title}>{movie.title}</Text>
-                <Text style={styles.year}>{movie.year}</Text>
-              </View>
-            </View>
-        );
-    }
-
-
-
 }
 
 const styles = StyleSheet.create({
@@ -196,48 +117,3 @@ const styles = StyleSheet.create({
 });
 
 AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
-
-
-/*
-
-<Blink style={styles.titleContainer} text={titleText} />
-         <Text style={styles.titleContainer}> Movies: {this.state.numberOfMovies} </Text>
-
-
-<ListView
-                dataSource={this.state.dataSource}
-                renderRow={this.renderMovie}
-                style={styles.listView}
-              />
-
-    render() {
-    var movie = MOCKED_MOVIES_DATA[0];
-
-    return (
-        <View style={styles.container}>
-          <Image
-              source={{uri: movie.posters.thumbnail}}
-              style={styles.thumbnail}
-          />
-          <View style={styles.rightContainer}>
-            <Text style={styles.title}>{movie.title}</Text>
-            <Text style={styles.year}>{movie.year}</Text>
-          </View>
-        </View>
-    );
-  }*/
-/*
-OLD View
- <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
-      </View>
-
- */
