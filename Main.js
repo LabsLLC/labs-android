@@ -43,7 +43,7 @@ export default class Main extends Component<{}> {
 
             <View >
                 <Button
-                    onPress={() => this.props.navigation.navigate('Details')}
+                    onPress={() => this.props.navigation.navigate('SignUp')}
                     title="Go to Second Screen"
                 />
 

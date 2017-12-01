@@ -10,7 +10,6 @@ import { StackNavigator } from 'react-navigation';
 import Main from './Main.js'
 import SignUp from './SignUp.js'
 import { AppRegistry} from 'react-native';
-import LoginForm from './LoginForm.js'
 
 
 export default class App extends Component<{}> {
@@ -22,12 +21,14 @@ export default class App extends Component<{}> {
 }
 
 const RootNavigator = StackNavigator({
-    Home: {
+    Main: {
         screen: Main,
     },
-    Details: {
-        screen: () => (<LoginForm SignUp={true}/>),
+    SignUp: {
+        screen: SignUp,
     },
 });
 
 AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
+
+//() => (<LoginForm SignUp={true}}/>) how to pass props
