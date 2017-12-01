@@ -23,10 +23,10 @@ export default class App extends Component<{}> {
 }
 
 const RootNavigator = StackNavigator({
-    Home: {
+    Main: {
         screen: Main,
     },
-    Details: {
+    SignUp: {
         screen: SignUp,
     },
     ExperimentBrowse: {
@@ -38,3 +38,5 @@ const RootNavigator = StackNavigator({
 });
 
 AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
+
+//() => (<LoginForm SignUp={true}}/>) how to pass props

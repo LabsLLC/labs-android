@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import {Text} from 'react-native-elements';
-import {View} from 'react-native';
+import {Card} from 'react-native-elements';
+import LoginForm from './LoginForm'
 
 
 export default class SignUp extends Component<{}> {
 
     render() {
         return (
-            <View>
-                <Text> For testing </Text>
-            </View>
+            <Card
+                title='Welcome to Labs!'
+            >
+                <LoginForm SignUp ={true}/>
+            </Card>
         )}
 }
 
