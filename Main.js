@@ -62,6 +62,11 @@ export default class Main extends Component<{}> {
                     <LoginForm/>
                 </Card>
 
+                <Button
+                    onPress={() => this.props.navigation.navigate('Home2')}
+                    title="Go to Home"
+                />
+
             </View>
         );
     }
