@@ -39,11 +39,9 @@ export default class Main extends Component<{}> {
         if (!this.state.loaded) {
             return this.renderLoadingView();
         }
-        // const { navigate } = this.props.navigation;
         return (
 
             <View >
-                {/*<RootNavigator/>*/}
                 <Button
                     onPress={() => this.props.navigation.navigate('Details')}
                     title="Go to Second Screen"
@@ -54,7 +52,6 @@ export default class Main extends Component<{}> {
                     centerComponent={{ text: 'Labs', style: { color: '#fff' } }}
                     rightComponent={{ icon: 'home', color: '#fff' }}
                 />
-
 
                 <Card
                     title='HELLO USER'

@@ -10,6 +10,7 @@ import { StackNavigator } from 'react-navigation';
 import Main from './Main.js'
 import SignUp from './SignUp.js'
 import { AppRegistry} from 'react-native';
+import LoginForm from './LoginForm.js'
 
 
 export default class App extends Component<{}> {
@@ -25,7 +26,7 @@ const RootNavigator = StackNavigator({
         screen: Main,
     },
     Details: {
-        screen: SignUp,
+        screen: () => (<LoginForm SignUp={true}/>),
     },
 });
 

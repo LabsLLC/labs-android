@@ -13,7 +13,7 @@ class Database {
      * @param userHome
      * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
      */
-    static setUserMobile(userId, userHome) {
+    static setUserHomeAddress(userId, userHome) {
 
         let userHomePath = "/user/" + userId;
         return firebase.database().ref(userHomePath).set({
@@ -50,7 +50,6 @@ class Database {
             if (snapshot.val()) {
                 userHome = snapshot.val().userHome
             }
-
             callback(userHome)
         });
     }
