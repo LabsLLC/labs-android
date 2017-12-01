@@ -35,11 +35,15 @@ class LoginForm extends Component {
                         Database.setUserHomeAddress(user.uid, address);
                         this.setState({ error: '', loading: false });
                     })
-                    .catch((e) => {
-                        console.log(e);
+                    .catch(() => {
                         this.setState({ error: 'Authentication failed.', loading: false });
                     });
     }
+
+    /**
+     * TODO: Rename to Log in
+     * @returns {XML}
+     */
     renderButtonOrSpinner() {
         if (this.state.loading) {
             return <Text />;
@@ -51,14 +55,26 @@ class LoginForm extends Component {
         if (this.state.loading) {
             return <Text />;
         }
-        return <Button onPress={this.onLoginPress.bind(this)} title="Log in" />;
+        return <Button onPress={this.onSignUpPress.bind(this)} title="Sign Up" />;
     }
 
     renderSignUpOrLogin() {
         if ('SignUp' in this.props){
-            console.log('here')
+            return this.renderSignUpButton()
         } else {
-            console.log('not here')
+            return this.renderButtonOrSpinner()
+        }
+    }
+
+    renderSignUp() {
+        if('SignUp' in this.props){
+            return <TitledInput
+                label='Home Address'
+                autoCorrect={false}
+                placeholder='100 Institute Rd, Worcester, MA'
+                value={this.state.address}
+                onChangeText={address => this.setState({ address })}
+            />;
         }
     }
 
@@ -79,6 +95,7 @@ class LoginForm extends Component {
                     value={this.state.password}
                     onChangeText={password => this.setState({ password })}
                 />
+                {this.renderSignUp()}
                 <Text style={styles.errorTextStyle}>{this.state.error}</Text>
                 {this.renderSignUpOrLogin()}
             </View>
@@ -95,17 +112,3 @@ const styles = {
 };
 
 module.exports = LoginForm;
-
-// {this.props.SignUp ?
-//     ( <View> <TitledInput
-//         label='Home Address'
-//         autoCorrect={false}
-//         placeholder='95 Dennis Street, Worcester, Mass.'
-//         // value={this.state.password}
-//         onChangeText={address => this.setState({ address })}
-//     />
-//         {this.renderSignUpButton()}
-//     </View>)
-//     : <View> {this.renderButtonOrSpinner()} </View>
-//
-// }
