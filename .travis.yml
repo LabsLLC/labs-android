@@ -2,6 +2,8 @@ language: android
 before_install:
 - nvm install 6
 - node --version
+- mkdir "$ANDROID_HOME/licenses" || true
+
 install:
 - npm install
 android:
