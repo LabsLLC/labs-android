@@ -34,7 +34,7 @@ export default class App extends Component<{}> {
     constructor(props) {
         super(props);
         this.state = {
-            loaded: false,
+            loaded: true,
         };
     }
 
@@ -49,7 +49,6 @@ export default class App extends Component<{}> {
             return this.renderLoadingView();
         }
 
-        let titleText = "Movies: "+this.state.numberOfMovies;
         return (
 
             <View >
@@ -75,7 +74,7 @@ export default class App extends Component<{}> {
         return (
             <View style={styles.container}>
               <Text>
-                Loading awesome...
+                Loading awesome!...
               </Text>
             </View>
         );

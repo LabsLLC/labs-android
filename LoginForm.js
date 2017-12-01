@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Button } from 'react-native';
 import firebase from 'firebase';
 import TitledInput from './TitledInput';
+import Database from './Database';
 
 class LoginForm extends Component {
     state = { email: '', password: '', error: '', loading: false };
@@ -13,8 +14,11 @@ class LoginForm extends Component {
             .then(() => { this.setState({ error: '', loading: false }); })
             .catch(() => {
                 //Login was not successful, let's create a new account
-                firebase.auth().createUserWithEmailAndPassword(email, password)
-                    .then(() => { this.setState({ error: '', loading: false }); })
+                 firebase.auth().createUserWithEmailAndPassword(email, password)
+                    .then((user) => {
+                        Database.setUserMobile(user.uid, "Testing!")
+                    this.setState({ error: '', loading: false });
+                })
                     .catch((e) => {
                         console.log(e)
                         this.setState({ error: 'Authentication failed.', loading: false });
