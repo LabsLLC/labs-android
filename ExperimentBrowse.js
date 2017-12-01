@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elements';
-import {ScrollView, Modal} from 'react-native';
+import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 
 
-export default class Home extends Component<{}> {
+export default class ExperimentBrowse extends Component<{}> {
 
     constructor(props) {
         super(props);
@@ -70,8 +70,8 @@ export default class Home extends Component<{}> {
                     icon={{name: 'favorite',  color: '#ffffff'  }}
                     imageSrc={require('./images/wakeupearly.png')}
                     title="Wake Up Early"
-                    titleStyle={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}
                     featured
+                    titleStyle= {styles.dividerTextStyle}
                     caption="Get in the habit of being productive"
                     onPress={(event) => this.handleTileClick(event)}
                 />
@@ -101,4 +101,12 @@ export default class Home extends Component<{}> {
         )}
 }
 
-module.exports = Home;
+module.exports = ExperimentBrowse;
+
+
+const styles = StyleSheet.create({
+    dividerTextStyle: {
+        textAlign: 'left',
+        fontSize: 20,
+    }
+});

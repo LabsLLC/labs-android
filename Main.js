@@ -63,8 +63,12 @@ export default class Main extends Component<{}> {
                 </Card>
 
                 <Button
-                    onPress={() => this.props.navigation.navigate('Home2')}
+                    onPress={() => this.props.navigation.navigate('HomePage')}
                     title="Go to Home"
+                />
+                <Button
+                    onPress={() => this.props.navigation.navigate('ExperimentBrowse')}
+                    title="Go to experiments"
                 />
 
             </View>
