@@ -18,7 +18,7 @@ const firebaseConfig = {
     databaseURL: "https://labs-c6f2f.firebaseio.com/",
     storageBucket: "labs-c6f2f.appspot.com",
 };
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+//const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 export default class Main extends Component<{}> {
 

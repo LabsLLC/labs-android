@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, Button } from 'react-native';
-import firebase from 'firebase';
+//import firebase from 'firebase';
 import TitledInput from './TitledInput';
 import Database from './Database';
+import firebase from 'react-native-firebase';
 
 class LoginForm extends Component {
     state = {
@@ -15,12 +16,12 @@ class LoginForm extends Component {
     onLoginPress() {
         this.setState({ error: '', loading: true });
         const { email, password, address } = this.state;
-        firebase.auth().signInWithEmailAndPassword(email, password)
+       /* firebase.auth().signInWithEmailAndPassword(email, password)
             .then(() => { this.setState({ error: '', loading: false }); })
             .catch(() => {
                         console.log(e);
                         this.setState({ error: 'Authentication failed. Please check your credentials', loading: false });
-            });
+            });*/
     }
 
     /**
@@ -30,14 +31,14 @@ class LoginForm extends Component {
         this.setState({ error: '', loading: true });
         const { email, password, address } = this.state;
                 //Login was not successful, let's create a new account
-                firebase.auth().createUserWithEmailAndPassword(email, password)
+              /*  firebase.auth().createUserWithEmailAndPassword(email, password)
                     .then((user) => {
                         Database.setUserHomeAddress(user.uid, address);
                         this.setState({ error: '', loading: false });
                     })
                     .catch(() => {
                         this.setState({ error: 'Authentication failed.', loading: false });
-                    });
+                    });*/
     }
 
     /**
