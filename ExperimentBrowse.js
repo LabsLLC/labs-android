@@ -58,46 +58,46 @@ export default class ExperimentBrowse extends Component<{}> {
 
         return (
             <ScrollView>
-            <View>
-                <Text h4> Experiments </Text>
-                <SearchBar
-                    lightTheme
-                    round
-                    onChangeText={(event) => this.handleChange(event)}
-                    onClearText={(event) => this.handleChange(event)}
-                    placeholder='Type Here...' />
+                <View>
+                    <Text h4> Experiments </Text>
+                    <SearchBar
+                        lightTheme
+                        round
+                        onChangeText={(event) => this.handleChange(event)}
+                        onClearText={(event) => this.handleChange(event)}
+                        placeholder='Type Here...' />
 
-                <Tile
-                    icon={{name: 'favorite',  color: '#ffffff'  }}
-                    imageSrc={require('./images/wakeupearly.png')}
-                    title="Wake Up Early"
-                    featured
-                    titleStyle= {styles.dividerTextStyle}
-                    caption="Get in the habit of being productive"
-                    onPress={(event) => this.handleTileClick(event)}
-                />
+                    <Tile
+                        icon={{name: 'favorite',  color: '#ffffff'  }}
+                        imageSrc={require('./images/wakeupearly.png')}
+                        title="Wake Up Early"
+                        featured
+                        titleStyle= {styles.dividerTextStyle}
+                        caption="Get in the habit of being productive"
+                        onPress={(event) => this.handleTileClick(event)}
+                    />
 
 
-                <List containerStyle={{marginBottom: 20}}>
-                    {
-                        list.map((l, i) => (
-                            <ListItem
-                                key={i}
-                                leftIcon={{name: l.icon}}
-                                title={l.name}
-                                subtitle={l.subtitle}
-                                onPress={(event) => this.handleClickExperiment(event)}
-                            />
-                        ))
-                    }
-                </List>
+                    <List containerStyle={{marginBottom: 20}}>
+                        {
+                            list.map((l, i) => (
+                                <ListItem
+                                    key={i}
+                                    leftIcon={{name: l.icon}}
+                                    title={l.name}
+                                    subtitle={l.subtitle}
+                                    onPress={(event) => this.handleClickExperiment(event)}
+                                />
+                            ))
+                        }
+                    </List>
 
-                <Button
-                    raised
-                    icon={{name: 'cached'}}
-                    title='See more' />
+                    <Button
+                        raised
+                        icon={{name: 'cached'}}
+                        title='See more' />
 
-            </View>
+                </View>
                 <Navbar navigation = {this.props.navigation}/>
             </ScrollView>
 
@@ -105,7 +105,6 @@ export default class ExperimentBrowse extends Component<{}> {
 }
 
 module.exports = ExperimentBrowse;
-
 
 const styles = StyleSheet.create({
     dividerTextStyle: {
