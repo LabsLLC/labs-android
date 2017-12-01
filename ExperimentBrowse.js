@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elements';
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
+import Navbar from './Navbar.js'
 
 
 export default class ExperimentBrowse extends Component<{}> {
@@ -97,7 +98,9 @@ export default class ExperimentBrowse extends Component<{}> {
                     title='See more' />
 
             </View>
+                <Navbar navigation = {this.props.navigation}/>
             </ScrollView>
+
         )}
 }
 

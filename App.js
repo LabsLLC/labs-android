@@ -12,7 +12,7 @@ import SignUp from './SignUp.js'
 import ExperimentBrowse from './ExperimentBrowse.js'
 import HomePage from './HomePage.js'
 import { AppRegistry} from 'react-native';
-
+import Navbar from './Navbar.js'
 
 export default class App extends Component<{}> {
 
@@ -34,6 +34,9 @@ const RootNavigator = StackNavigator({
     },
     HomePage: {
         screen: HomePage,
+    },
+    Navbar: {
+        screen: Navbar,
     },
 });
 

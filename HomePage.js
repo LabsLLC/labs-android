@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Icon,Button, Text, Tile, SearchBar, List, ListItem, Card} from 'react-native-elements';
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
+import Navbar from './Navbar.js'
 
 
 export default class HomePage extends Component<{}> {
@@ -94,6 +95,7 @@ export default class HomePage extends Component<{}> {
                     </Card>
 
                 </View>
+                <Navbar navigation = {this.props.navigation}/>
             </ScrollView>
         )}
 }
