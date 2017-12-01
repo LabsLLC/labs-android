@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Card, Button, Text, Header } from 'react-native-elements';
+import { Card, Text, Header } from 'react-native-elements';
 import * as firebase from 'firebase';
-import { Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
+import { Button, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
 import LoginForm from './LoginForm'
 
 const instructions = Platform.select({
@@ -42,10 +42,6 @@ export default class Main extends Component<{}> {
         return (
 
             <View >
-                <Button
-                    onPress={() => this.props.navigation.navigate('SignUp')}
-                    title="Go to Second Screen"
-                />
 
                 <Header
                     leftComponent={{ icon: 'menu', color: '#fff' }}
@@ -57,6 +53,10 @@ export default class Main extends Component<{}> {
                     title='HELLO USER'
                 >
                     <LoginForm/>
+                    <Button
+                        onPress={() => this.props.navigation.navigate('SignUp')}
+                        title="Create an account"
+                    />
                 </Card>
 
             </View>

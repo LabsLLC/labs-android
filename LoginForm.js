@@ -48,7 +48,8 @@ class LoginForm extends Component {
         if (this.state.loading) {
             return <Text />;
         }
-        return <Button onPress={this.onLoginPress.bind(this)} title="Log in" />;
+        return <Button onPress={this.onLoginPress.bind(this)}
+                       title="Log in"/>;
     }
 
     renderSignUpButton() {
