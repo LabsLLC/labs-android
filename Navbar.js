@@ -75,30 +75,3 @@ const styles = StyleSheet.create({
 });
 
 module.exports = Navbar;
-
-
-    //
-    //         <TouchableHighlight onPress={this._onPressButton}>
-    // <Image
-    //     style={styles.button}
-    //     source={require('./images/experiments.png')}
-    //     />
-    // </TouchableHighlight>
-    //     <TouchableHighlight onPress={this._onPressButton}>
-    //         <Image
-    //             style={styles.button}
-    //             source={require('./images/completeSurvey.png')}
-    //         />
-    //         </TouchableHighlight>
-    //         <TouchableHighlight onPress={this._onPressButton}>
-    //             <Image
-    //                 style={styles.button}
-    //                 source={require('./images/stats.png')}
-    //             />
-    //         </TouchableHighlight>
-    //         <TouchableHighlight onPress={this._onPressButton}>
-    //         <Image
-    //         style={styles.button}
-    //         source={require('./images/userProfile.png')}
-    //         />
-    //     </TouchableHighlight>
