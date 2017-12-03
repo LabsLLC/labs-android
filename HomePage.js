@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Icon,Button, Text, Tile, SearchBar, List, ListItem, Card} from 'react-native-elements';
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
-
+import ReactionModal from './ReactionModal.js'
 
 export default class HomePage extends Component<{}> {
 
@@ -25,6 +25,8 @@ export default class HomePage extends Component<{}> {
 
 
     render() {
+
+
 
         //Temporary list...
         const list = [
@@ -74,14 +76,10 @@ export default class HomePage extends Component<{}> {
                         <Text>You still need to record progress for:  </Text>
 
                         <List containerStyle={{marginBottom: 20}}>
+
                             {
-                                list.map((l, i) => (
-                                    <ListItem
-                                        leftIcon={{name: l.icon}}
-                                        key={i}
-                                        title={l.name}
-                                        onPress={(event) => this.handleClickExperiment(event)}
-                                    />
+                                list.map((item, i) => (
+                                    <ReactionModal item={item} index={i}/>
                                 ))
                             }
                         </List>
@@ -92,6 +90,8 @@ export default class HomePage extends Component<{}> {
                           titleStyle = {styles.dividerTextStyle}>
 
                     </Card>
+
+
 
                 </View>
             </ScrollView>
