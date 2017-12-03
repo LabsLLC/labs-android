@@ -56,6 +56,8 @@ export default class HomePage extends Component<{}> {
 
 
         return (
+            <View style={{flex: 1}}>
+
             <ScrollView>
                 <View>
                     <Text h4> Experiments </Text>
@@ -96,8 +98,12 @@ export default class HomePage extends Component<{}> {
 
 
                 </View>
-                <Navbar navigation = {this.props.navigation}/>
+
             </ScrollView>
+                <View>
+                    <Navbar navigation = {this.props.navigation}/>
+                </View>
+            </View>
         )}
 }
 
