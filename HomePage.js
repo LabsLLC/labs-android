@@ -3,6 +3,8 @@ import {Icon,Button, Text, Tile, SearchBar, List, ListItem, Card} from 'react-na
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import ReactionModal from './ReactionModal.js'
+import Navbar from './Navbar.js'
+
 
 export default class HomePage extends Component<{}> {
 
@@ -94,6 +96,7 @@ export default class HomePage extends Component<{}> {
 
 
                 </View>
+                <Navbar navigation = {this.props.navigation}/>
             </ScrollView>
         )}
 }
