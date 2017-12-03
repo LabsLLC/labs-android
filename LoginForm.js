@@ -4,6 +4,7 @@ import { View, Text, Button } from 'react-native';
 import TitledInput from './TitledInput';
 import Database from './Database';
 import firebase from 'react-native-firebase';
+import { AccessToken, LoginManager } from 'react-native-fbsdk';
 
 class LoginForm extends Component {
     state = {
@@ -16,6 +17,33 @@ class LoginForm extends Component {
     onLoginPress() {
         this.setState({ error: '', loading: true });
         const { email, password, address } = this.state;
+        LoginManager
+            .logInWithReadPermissions(['public_profile', 'email'])
+            .then((result) => {
+                if (result.isCancelled) {
+                    return Promise.reject(new Error('The user cancelled the request'));
+                }
+
+                console.log(`Login success with permissions: ${result.grantedPermissions.toString()}`);
+                // get the access token
+                return AccessToken.getCurrentAccessToken();
+            })
+            .then(data => {
+                // create a new firebase credential with the token
+                const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+
+                // login with credential
+                return firebase.auth().signInWithCredential(credential);
+            })
+            .then((currentUser) => {
+                console.warn(JSON.stringify(currentUser.toJSON()));
+                this.setState({ error: '', loading: false });
+            })
+            .catch((error) => {
+                console.log(`Login fail with error: ${error}`);
+                this.setState({ error: 'Authentication failed. Please check your credentials', loading: false });
+            });
+
        /* firebase.auth().signInWithEmailAndPassword(email, password)
             .then(() => { this.setState({ error: '', loading: false }); })
             .catch(() => {
