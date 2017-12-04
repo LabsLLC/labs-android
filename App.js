@@ -11,7 +11,7 @@ import Main from './Main.js'
 import SignUp from './SignUp.js'
 import ExperimentBrowse from './ExperimentBrowse.js'
 import HomePage from './HomePage.js'
-import { AppRegistry} from 'react-native';
+import { AppRegistry, ScrollView, View} from 'react-native';
 import Navbar from './Navbar.js'
 
 export default class App extends Component<{}> {

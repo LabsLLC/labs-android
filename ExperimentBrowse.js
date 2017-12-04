@@ -57,6 +57,7 @@ export default class ExperimentBrowse extends Component<{}> {
         ]
 
         return (
+            <View style={{flex: 1}}>
             <ScrollView>
                 <View>
                     <Text h4> Experiments </Text>
@@ -98,8 +99,12 @@ export default class ExperimentBrowse extends Component<{}> {
                         title='See more' />
 
                 </View>
-                <Navbar navigation = {this.props.navigation}/>
+
             </ScrollView>
+                <View>
+                    <Navbar navigation = {this.props.navigation}/>
+                </View>
+            </View>
 
         )}
 }
