@@ -12,15 +12,6 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-// Initialize Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyDw-gKR_SGlQwrK7EpC30jvl2Jx5tPIyV8",
-    authDomain: "labs-c6f2f.firebaseapp.com",
-    databaseURL: "https://labs-c6f2f.firebaseio.com/",
-    storageBucket: "labs-c6f2f.appspot.com",
-};
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-
 export default class Main extends Component<{}> {
 
     constructor(props) {
@@ -43,24 +34,22 @@ export default class Main extends Component<{}> {
         return (
             <View >
                 <Card
-                    title='HELLO USER'
-                >
-                    <LoginForm/>
+                    title='Welcome'>
                     <Button
                         onPress={() => this.props.navigation.navigate('SignUp')}
-                        title="Create an account"
-                    />
+                        title="Create an account"/>
+                    <LoginForm/>
                 </Card>
                 <Navbar navigation = {this.props.navigation}/>
             </View>
         );
     }
 
-    renderLoadingView() {
+    static renderLoadingView() {
         return (
             <View style={styles.container}>
                 <Text>
-                    Loading awesome!...
+                    Loading something great...
                 </Text>
             </View>
         );

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
-import firebase from 'firebase';
+import { View, Text, StyleSheet, Button } from 'react-native';
 import TitledInput from './TitledInput';
 import Database from './Database';
+import firebase from 'react-native-firebase';
+import LoginUtils from './LoginUtils'
 
 class LoginForm extends Component {
     state = {
@@ -15,11 +16,13 @@ class LoginForm extends Component {
     onLoginPress() {
         this.setState({ error: '', loading: true });
         const { email, password, address } = this.state;
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => { this.setState({ error: '', loading: false }); })
-            .catch(() => {
-                        console.log(e);
-                        this.setState({ error: 'Authentication failed. Please check your credentials', loading: false });
+        LoginUtils.getFacebookLoginPromise()
+            .then((currentUser) => {
+                this.setState({ error: '', loading: false });
+            })
+            .catch((error) => {
+                console.log(`Login fail with error: ${error}`);
+                this.setState({ error: 'Authentication failed. Please check your credentials', loading: false });
             });
     }
 
@@ -29,15 +32,11 @@ class LoginForm extends Component {
     onSignUpPress() {
         this.setState({ error: '', loading: true });
         const { email, password, address } = this.state;
-                //Login was not successful, let's create a new account
-                firebase.auth().createUserWithEmailAndPassword(email, password)
-                    .then((user) => {
-                        Database.setUserHomeAddress(user.uid, address);
-                        this.setState({ error: '', loading: false });
-                    })
-                    .catch(() => {
-                        this.setState({ error: 'Authentication failed.', loading: false });
-                    });
+
+        LoginUtils.getFacebookLoginPromise().then((currentUser) => {
+            Database.setUserHomeAddress(currentUser.uid, address);
+            this.setState({ error: '', loading: false });
+        });
     }
 
     /**
@@ -48,23 +47,17 @@ class LoginForm extends Component {
         if (this.state.loading) {
             return <Text />;
         }
-        return <Button onPress={this.onLoginPress.bind(this)}
-                       title="Log in"/>;
+        return <View style={styles.loginButtonStyle}>
+                    <Button onPress={this.onLoginPress.bind(this)}
+                             title="Log in with Facebook"/>
+                </View>;
     }
 
     renderSignUpButton() {
         if (this.state.loading) {
             return <Text />;
         }
-        return <Button onPress={this.onSignUpPress.bind(this)} title="Sign Up" />;
-    }
-
-    renderSignUpOrLogin() {
-        if ('SignUp' in this.props){
-            return this.renderSignUpButton()
-        } else {
-            return this.renderButtonOrSpinner()
-        }
+        return <Button  onPress={this.onSignUpPress.bind(this)} title="Sign Up" />;
     }
 
     renderSignUp() {
@@ -82,34 +75,23 @@ class LoginForm extends Component {
     render() {
         return (
             <View>
-                <TitledInput
-                    label='Email Address'
-                    placeholder='you@domain.com'
-                    value={this.state.email}
-                    onChangeText={email => this.setState({ email })}
-                />
-                <TitledInput
-                    label='Password'
-                    autoCorrect={false}
-                    placeholder='*******'
-                    secureTextEntry
-                    value={this.state.password}
-                    onChangeText={password => this.setState({ password })}
-                />
                 {this.renderSignUp()}
-                <Text style={styles.errorTextStyle}>{this.state.error}</Text>
-                {this.renderSignUpOrLogin()}
+                {this.renderSignUpButton()}
             </View>
         );
     }
 }
-const styles = {
+const styles =  StyleSheet.create({
     errorTextStyle: {
         color: '#E64A19',
         alignSelf: 'center',
         paddingTop: 10,
         paddingBottom: 10
-    }
-};
+    },
+    loginButtonStyle:
+    {
+        marginTop: 20
+    },
+});
 
 module.exports = LoginForm;

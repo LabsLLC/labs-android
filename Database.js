@@ -1,4 +1,4 @@
-import * as firebase from "firebase";
+import firebase from 'react-native-firebase';
 
 class Database {
 
