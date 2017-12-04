@@ -8,8 +8,9 @@ export default class SignUp extends Component<{}> {
     render() {
         return (
             <Card
-                title='Welcome to Labs!'
-            >
+                title='Welcome to Labs!'>
+
+
                 <LoginForm SignUp={true}/>
             </Card>
         )}
