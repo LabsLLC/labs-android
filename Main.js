@@ -3,6 +3,7 @@ import { Card, Text, Header } from 'react-native-elements';
 import * as firebase from 'firebase';
 import { Button, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
 import LoginForm from './LoginForm'
+import Navbar from './Navbar.js'
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' +
@@ -30,11 +31,8 @@ export default class Main extends Component<{}> {
         if (!this.state.loaded) {
             return this.renderLoadingView();
         }
-        return (<View >
-                <Header
-                    leftComponent={{ icon: 'menu', color: '#fff' }}
-                    centerComponent={{ text: 'Labs', style: { color: '#fff' } }}
-                    rightComponent={{ icon: 'home', color: '#fff' }}/>
+        return (
+            <View >
                 <Card
                     title='Welcome'>
                     <Button
@@ -42,7 +40,9 @@ export default class Main extends Component<{}> {
                         title="Create an account"/>
                     <LoginForm/>
                 </Card>
-            </View>);
+                <Navbar navigation = {this.props.navigation}/>
+            </View>
+        );
     }
 
     static renderLoadingView() {
