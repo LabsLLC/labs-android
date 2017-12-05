@@ -3,7 +3,7 @@ import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elemen
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import Navbar from './Navbar.js'
-
+import Database from './Database.js';
 
 export default class ExperimentBrowse extends Component<{}> {
 
@@ -13,7 +13,7 @@ export default class ExperimentBrowse extends Component<{}> {
         this.handleChange = this.handleChange.bind(this);
 
         this.state = {
-            searchText:'',
+            experimentData:'',
         };
     }
 
@@ -26,6 +26,20 @@ export default class ExperimentBrowse extends Component<{}> {
     }
     handleClickExperiment(event){
         console.log("Clicked List item "+event.toString())
+    }
+
+
+    componentWillMount() {
+
+        //Query firebase to get the experiments
+        Database.getExperiments()
+            .then((data) => {
+                this.setState({experimentData: data});
+                console.log("experimentData: "+data);
+            }).catch((error) => {
+                console.log(error)
+        });
+
     }
 
 

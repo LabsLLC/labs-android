@@ -1,5 +1,6 @@
 import firebase from 'react-native-firebase';
 
+
 class Database {
 
 
@@ -53,6 +54,28 @@ class Database {
             callback(userHome)
         });
     }
+
+
+    /**
+     * getExperiments - get the first 10 or so experiments
+     *
+     */
+    static getExperiments() {
+        return new Promise(function (success, fail) {
+            console.log("getExperiments: ");
+
+            var playersRef = firebase.database().ref("experiment/");
+
+            return playersRef.orderByChild("name").on("value", function (data) {
+                console.log(JSON.stringify(data.val()));
+                success(data.val());
+            });
+        })
+
+
+
+    }
+
 
 }
 
