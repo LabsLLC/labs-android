@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import {Icon,Button, Text, Tile, SearchBar, List, ListItem, Card} from 'react-native-elements';
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
-import ReactionModal from './ReactionModal.js'
-import Navbar from './Navbar.js'
+import ReactionModal from '../components/ReactionModal/ReactionModal.js'
+import Navbar from '../components/NavBar/Navbar.js'
 
 
 export default class HomePage extends Component<{}> {
@@ -21,15 +21,12 @@ export default class HomePage extends Component<{}> {
     handleChange(event) {
         this.setState({ searchText: event});
     }
+
     handleClickExperiment(event){
         console.log("Clicked List item "+event.toString())
     }
 
-
     render() {
-
-
-
         //Temporary list...
         const list = [
             {
@@ -52,8 +49,7 @@ export default class HomePage extends Component<{}> {
                 subtitle: 'Veggies and Keenwah man',
                 icon: 'av-timer'
             }
-        ]
-
+        ];
 
         return (
             <View style={{flex: 1}}>

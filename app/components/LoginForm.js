@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-import TitledInput from './TitledInput';
-import Database from './Database';
+import TitledInput from './TitledInput/TitledInput';
+import Database from '../lib/Database';
 import firebase from 'react-native-firebase';
-import LoginUtils from './LoginUtils'
+import LoginUtils from '../lib/LoginUtils'
 
 class LoginForm extends Component {
     state = {
@@ -20,6 +20,7 @@ class LoginForm extends Component {
             .then((currentUser) => {
                 this.setState({ error: '', loading: false });
             })
+            .then(Database.experimentTest())
             .catch((error) => {
                 console.log(`Login fail with error: ${error}`);
                 this.setState({ error: 'Authentication failed. Please check your credentials', loading: false });
@@ -36,7 +37,10 @@ class LoginForm extends Component {
         LoginUtils.getFacebookLoginPromise().then((currentUser) => {
             Database.setUserHomeAddress(currentUser.uid, address);
             this.setState({ error: '', loading: false });
-        });
+        })
+        .then(() => {
+            console.log("Here");
+            Database.experimentTest()} );
     }
 
     /**

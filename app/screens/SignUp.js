@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Card} from 'react-native-elements';
-import LoginForm from './LoginForm'
+import LoginForm from '../components/LoginForm'
 
 
 export default class SignUp extends Component<{}> {
@@ -9,8 +9,6 @@ export default class SignUp extends Component<{}> {
         return (
             <Card
                 title='Welcome to Labs!'>
-
-
                 <LoginForm SignUp={true}/>
             </Card>
         )}

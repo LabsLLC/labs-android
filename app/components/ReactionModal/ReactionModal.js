@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {StyleSheet, Modal, Text, TouchableHighlight, View } from 'react-native';
 import {Icon, Button,  Tile, SearchBar, List, ListItem} from 'react-native-elements';
-
-
+import styles from './styles'
 
 class ReactionModal extends Component {
     constructor(props) {
@@ -115,34 +114,4 @@ class ReactionModal extends Component {
     }
 }
 
-
 module.exports = ReactionModal;
-
-
-const styles = StyleSheet.create({
-    dividerTextStyle: {
-        textAlign: 'center',
-        fontSize: 20,
-    },
-    emojiDivider: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 100
-    },
-    emojiToken: {
-        width: 100,
-        height: 100,
-        margin: 7
-    },
-});
-
-//
-/*
-<ListItem
-                        leftIcon={{name: this.props.item.icon}}
-                        key={this.props.item.index}
-                        title={this.props.item.name}
-                        onPress={(event) => this.handleClickExperiment(event)}
-                    />
- */

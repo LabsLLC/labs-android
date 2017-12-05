@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elements';
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
-import Navbar from './Navbar.js'
+import Navbar from '../components/NavBar/Navbar.js'
 
 export default class Experiment extends Component<{}> {
 
