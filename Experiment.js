@@ -4,6 +4,9 @@ import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import Navbar from './Navbar.js'
 
+
+
+
 export default class Experiment extends Component<{}> {
 
     constructor(props) {
@@ -29,6 +32,18 @@ export default class Experiment extends Component<{}> {
         return (
             <View style={{flex: 1}}>
                 <ScrollView>
+
+                    <Tile
+                        imageSrc={{require: ('./img/path')}}
+                        title="Lorem ipsum dolor sit amet, consectetur"
+                        icon={{name: 'play-circle', type: 'font-awesome'}}  // optional
+                        contentContainerStyle={{height: 70}}
+                    >
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Text>Caption</Text>
+                            <Text>Caption</Text>
+                        </View>
+                    </Tile>
 
 
 
