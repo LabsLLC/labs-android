@@ -3,9 +3,9 @@ import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elemen
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import Navbar from '../components/NavBar/Navbar.js'
-
-
-
+//import WakeUpImage from '../images/experiments/icon_wakeup.png';
+//import ExerciseImage from '../images/experiments/icon_wakeup.png';
+import ExperimentImages from '../config/utils'
 
 export default class Experiment extends Component<{}> {
 
@@ -26,6 +26,10 @@ export default class Experiment extends Component<{}> {
     componentWillMount() {
         this.setState({experiment: this.props.navigation.state.params.experiment.val });
         console.log("3HERE!!!!: "+ this.props.navigation.state.params.experiment.val);
+
+
+
+
     }
 
     render() {
@@ -34,7 +38,7 @@ export default class Experiment extends Component<{}> {
                 <ScrollView>
 
                     <Tile
-                        imageSrc={{require: ('./img/path')}}
+                        imageSrc={ExperimentImages.getImage(this.state.experiment.name)}
                         title="Lorem ipsum dolor sit amet, consectetur"
                         icon={{name: 'play-circle', type: 'font-awesome'}}  // optional
                         contentContainerStyle={{height: 70}}
