@@ -110,3 +110,6 @@ freeline.py
 freeline/
 freeline_project_description.json
 
+#secret
+app/config/secrets.js
+
