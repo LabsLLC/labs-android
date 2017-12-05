@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-import TitledInput from './TitledInput';
+import TitledInput from './TitledInput/TitledInput';
 import Database from '../lib/Database';
 import firebase from 'react-native-firebase';
 import LoginUtils from '../lib/LoginUtils'

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elements';
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
-import Navbar from '../components/Navbar.js'
+import Navbar from '../components/NavBar/Navbar.js'
 
 
 export default class ExperimentBrowse extends Component<{}> {
@@ -27,7 +27,6 @@ export default class ExperimentBrowse extends Component<{}> {
     handleClickExperiment(event){
         console.log("Clicked List item "+event.toString())
     }
-
 
     render() {
         let searchText = this.state.searchText;
@@ -78,7 +77,6 @@ export default class ExperimentBrowse extends Component<{}> {
                         onPress={(event) => this.handleTileClick(event)}
                     />
 
-
                     <List containerStyle={{marginBottom: 20}}>
                         {
                             list.map((l, i) => (
@@ -97,7 +95,6 @@ export default class ExperimentBrowse extends Component<{}> {
                         raised
                         icon={{name: 'cached'}}
                         title='See more' />
-
                 </View>
 
             </ScrollView>
