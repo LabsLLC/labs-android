@@ -3,12 +3,15 @@ import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elemen
 import {Image, TouchableOpacity, ScrollView, Modal, StyleSheet, AsyncStorage} from 'react-native';
 import {View} from 'react-native';
 import Navbar from '../components/NavBar/Navbar.js'
+import ProfilePicture from "../components/ProfilePicture/ProfilePicture";
 
 const FBSDK = require('react-native-fbsdk');
 const {
     GraphRequest,
     GraphRequestManager,
 } = FBSDK;
+
+const profileImageKey = "profileImage";
 
 export default class UserProfile extends Component<{}> {
 
@@ -27,10 +30,10 @@ export default class UserProfile extends Component<{}> {
 
     componentDidMount()
     {
-        AsyncStorage.getItem("profileImage").then((value) => {
+        AsyncStorage.getItem(profileImageKey).then((value) => {
             if(value)
             {
-                this.setState({"profileImage": value});
+                this.setState({profileImage: value});
             }
         }).done();
 
@@ -54,7 +57,7 @@ export default class UserProfile extends Component<{}> {
                     profileImage: result.data.url
                 });
 
-                AsyncStorage.setItem("profileImage", result.data.url);
+                AsyncStorage.setItem(profileImageKey, result.data.url);
             }
 
             //alert('Success fetching data: ' + result.toString());
@@ -76,6 +79,14 @@ export default class UserProfile extends Component<{}> {
                         redirect: /* if not specified, an image (non-json) rather than the url is returned */
                         {
                             string: 'false'
+                        },
+                        height:
+                        {
+                            string: '120'
+                        },
+                        width:
+                        {
+                            string: '120'
                         }
                     }
             },
@@ -85,30 +96,12 @@ export default class UserProfile extends Component<{}> {
         new GraphRequestManager().addRequest(infoRequest).start();
     }
 
-    onProfileClick()
-    {
-        this.fetchFbProfilePic();
-    }
-
     render() {
         return (
             <View>
-                <TouchableOpacity onPress={() => this.onProfileClick()}>
-                    <Image style={styles.image} onClick="onProfileClick" source={{uri: this.state.profileImage}}/>
-                </TouchableOpacity>
+                <ProfilePicture profileImage={this.state.profileImage} onPress={this.fetchFbProfilePic}/>
             </View>
         )
     }
 }
-
-const styles = StyleSheet.create({
-    image: {
-        height: 120,
-        borderRadius: 60,
-        width: 120,
-        marginTop: 48,
-        alignSelf: "center",
-    }
-});
-
 
