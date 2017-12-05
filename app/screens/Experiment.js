@@ -39,15 +39,18 @@ export default class Experiment extends Component<{}> {
 
                     <Tile
                         imageSrc={ExperimentImages.getImage(this.state.experiment.name)}
-                        title="Lorem ipsum dolor sit amet, consectetur"
-                        icon={{name: 'play-circle', type: 'font-awesome'}}  // optional
-                        contentContainerStyle={{height: 70}}
+                        title= {this.state.experiment.name}
+                        contentContainerStyle={{height: 90}}
                     >
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text>Caption</Text>
-                            <Text>Caption</Text>
+                            <Text>Active Users: {this.state.experiment.active_user_count}</Text>
+                            <Text>Satisfaction: {this.state.experiment.total_satisfaction} %</Text>
                         </View>
                     </Tile>
+
+                    <View style={{flex: 1}}>
+                        <Text>{this.state.experiment.description}</Text>
+                    </View>
 
 
 
