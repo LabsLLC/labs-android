@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elements';
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
-import Navbar from './Navbar.js'
+import Navbar from '../components/Navbar.js'
 
 
 export default class ExperimentBrowse extends Component<{}> {
@@ -70,7 +70,7 @@ export default class ExperimentBrowse extends Component<{}> {
 
                     <Tile
                         icon={{name: 'favorite',  color: '#ffffff'  }}
-                        imageSrc={require('./images/wakeupearly.png')}
+                        imageSrc={require('../../images/wakeupearly.png')}
                         title="Wake Up Early"
                         featured
                         titleStyle= {styles.dividerTextStyle}

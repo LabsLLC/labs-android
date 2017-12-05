@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import {Icon,Button, Text, Tile, SearchBar, List, ListItem, Card} from 'react-native-elements';
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
-import ReactionModal from './ReactionModal.js'
-import Navbar from './Navbar.js'
+import ReactionModal from '../components/ReactionModal.js'
+import Navbar from '../components/Navbar.js'
 
 
 export default class HomePage extends Component<{}> {

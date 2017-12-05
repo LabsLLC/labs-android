@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Card, Text, Header } from 'react-native-elements';
 import * as firebase from 'firebase';
 import { Button, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
-import LoginForm from './LoginForm'
-import Navbar from './Navbar.js'
+import LoginForm from '../components/LoginForm'
+import Navbar from '../components/Navbar.js'
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' +
