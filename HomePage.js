@@ -80,7 +80,6 @@ export default class HomePage extends Component<{}> {
                         <Text>You still need to record progress for:  </Text>
 
                         <List containerStyle={{marginBottom: 20}}>
-
                             {
                                 list.map((item, i) => (
                                     <ReactionModal item={item} index={i}/>
@@ -94,8 +93,6 @@ export default class HomePage extends Component<{}> {
                           titleStyle = {styles.dividerTextStyle}>
 
                     </Card>
-
-
 
                 </View>
 

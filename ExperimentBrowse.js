@@ -91,7 +91,7 @@ export default class ExperimentBrowse extends Component<{}> {
                                     leftIcon={{name: l.val.icon}}
                                     title={l.val.name}
                                     subtitle={l.val.description}
-                                    onPress={(event) => this.handleClickExperiment(event)}
+                                    onPress={(event) =>  this.props.navigation.navigate('Experiment', {experiment: l})}
                                 />
                             ))
                         }

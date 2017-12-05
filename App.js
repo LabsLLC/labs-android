@@ -13,6 +13,7 @@ import ExperimentBrowse from './ExperimentBrowse.js'
 import HomePage from './HomePage.js'
 import { AppRegistry, ScrollView, View} from 'react-native';
 import Navbar from './Navbar.js'
+import Experiment from './Experiment.js'
 
 export default class App extends Component<{}> {
 
@@ -31,6 +32,9 @@ const RootNavigator = StackNavigator({
     },
     ExperimentBrowse: {
         screen: ExperimentBrowse,
+    },
+    Experiment: {
+        screen: Experiment,
     },
     HomePage: {
         screen: HomePage,
