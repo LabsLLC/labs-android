@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elements';
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
-import Navbar from './Navbar.js'
-import Database from './Database.js';
+import Navbar from '../components/NavBar/Navbar.js'
+import Database from '../lib/Database.js';
+
 
 export default class ExperimentBrowse extends Component<{}> {
 
@@ -22,15 +23,15 @@ export default class ExperimentBrowse extends Component<{}> {
     handleChange(event) {
         this.setState({ searchText: event});
     }
+
     handleTileClick(event) {
-        console.log("Clicked Image "+event.toString()) //Not sure what is within this event object - cyclical structure
+        console.log("Clicked Image " + event.toString()) //Not sure what is within this event object - cyclical structure
         //this.setState({ searchText: event});
     }
+
     handleClickExperiment(event){
         console.log("Clicked List item "+event.toString())
     }
-
-
 
     componentWillMount() {
 
@@ -71,7 +72,7 @@ export default class ExperimentBrowse extends Component<{}> {
                         (
                             <Tile
                                 icon={{name: 'favorite',  color: '#ffffff'  }}
-                                imageSrc={require('./images/wakeupearly.png')}
+                                imageSrc={require('../images/wakeupearly.png')}
                                 title={this.state.featuredExperiment.val.name}
                                 featured
                                 titleStyle= {styles.dividerTextStyle}s
@@ -101,7 +102,6 @@ export default class ExperimentBrowse extends Component<{}> {
                         raised
                         icon={{name: 'cached'}}
                         title='See more' />
-
                 </View>
 
             </ScrollView>
@@ -125,17 +125,3 @@ const styles = StyleSheet.create({
         fontSize: 20,
     }
 });
-
-
-/*
-this.state.featuredExperiment.val.image
- <Tile
-                                icon={{name: 'favorite',  color: '#ffffff'  }}
-                                imageSrc={require('./images/wakeupearly.png')}
-                                title="Wake Up Early"
-                                featured
-                                titleStyle= {styles.dividerTextStyle}
-                                caption="Get in the habit of being productive"
-                                onPress={(event) => this.handleTileClick(event)}
-                            />
- */
