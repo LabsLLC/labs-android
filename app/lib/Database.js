@@ -41,19 +41,26 @@ class Database {
      */
     static listenUserHome(userId, callback) {
 
-        let userHomePath = "/user/" + userId + "/details";
+        let userHomePath = "/experiment";
 
         firebase.database().ref(userHomePath).on('value', (snapshot) => {
-
-            var mobile = "";
-
-            if (snapshot.val()) {
+            console.log(snapshot.val());
+            /*if (snapshot.val()) {
                 userHome = snapshot.val().userHome
             }
-            callback(userHome)
+            callback(userHome)*/
         });
     }
 
+    static experimentTest()
+    {
+        console.log("Ran");
+        let userHomePath = "experiment/";
+
+        firebase.database().ref(userHomePath).on('value', (snapshot) => {
+            console.log(snapshot.val())
+        });
+    }
 }
 
 module.exports = Database;

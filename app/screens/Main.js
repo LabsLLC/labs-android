@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Card, Text, Header } from 'react-native-elements';
 import * as firebase from 'firebase';
 import { Button, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
-import LoginForm from './LoginForm'
-import Navbar from './Navbar.js'
+import LoginForm from '../components/LoginForm'
+import Navbar from '../components/NavBar/Navbar.js'
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' +
@@ -40,7 +40,7 @@ export default class Main extends Component<{}> {
                         title="Create an account"/>
                     <LoginForm/>
                 </Card>
-                <Navbar navigation = {this.props.navigation}/>
+              <Navbar navigation = {this.props.navigation}/>
             </View>
         );
     }
@@ -57,35 +57,11 @@ export default class Main extends Component<{}> {
 }
 
 const styles = StyleSheet.create({
-    titleContainer: {
-        textAlign: 'center',
-        fontSize: 20,
-    },
     container: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    thumbnail: {
-        width: 53,
-        height: 81,
-    },
-    rightContainer: {
-        flex: 1,
-        backgroundColor: '#BFFCFF'
-    },
-    title: {
-        fontSize: 20,
-        marginBottom: 8,
-        textAlign: 'center',
-    },
-    year: {
-        textAlign: 'center',
-    },
-    listView: {
-        paddingTop: 20,
         backgroundColor: '#F5FCFF',
     },
 });
