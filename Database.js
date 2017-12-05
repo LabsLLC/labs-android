@@ -67,8 +67,16 @@ class Database {
             var playersRef = firebase.database().ref("experiment/");
 
             return playersRef.orderByChild("name").on("value", function (data) {
-                console.log(JSON.stringify(data.val()));
-                success(data.val());
+
+                var list =[]
+                var i = 0;
+                data.forEach(function(data) {
+                    var x = {id: data.key, val: data.val()};
+                    list.push(x);
+                });
+
+                //console.log(JSON.stringify(data.val()));
+                success(list);
             });
         })
 

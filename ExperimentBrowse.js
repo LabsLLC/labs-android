@@ -13,7 +13,9 @@ export default class ExperimentBrowse extends Component<{}> {
         this.handleChange = this.handleChange.bind(this);
 
         this.state = {
-            experimentData:'',
+            experimentData: null,
+            featuredExperiment: null,
+            featuredExperimentImage: '',
         };
     }
 
@@ -29,13 +31,21 @@ export default class ExperimentBrowse extends Component<{}> {
     }
 
 
+
     componentWillMount() {
 
         //Query firebase to get the experiments
         Database.getExperiments()
             .then((data) => {
                 this.setState({experimentData: data});
-                console.log("experimentData: "+data);
+
+                this.setState({featuredExperiment: data[0]});
+                this.setState({featuredExperimentImage: data[0].image})
+
+                console.log("Image string: "+this.state.featuredExperimentImage);
+                //Object.values(data);
+
+
             }).catch((error) => {
                 console.log(error)
         });
@@ -44,32 +54,7 @@ export default class ExperimentBrowse extends Component<{}> {
 
 
     render() {
-        let searchText = this.state.searchText;
-
-        //Temporary list...
-        const list = [
-            {
-                name: 'Wake Up Early',
-                subtitle: 'Start this two week experiment',
-                icon: 'av-timer'
-            },
-            {
-                name: 'No Phone Before Bed',
-                subtitle: 'Put the god damn phone away',
-                icon: 'av-timer'
-            },
-            {
-                name: 'Exersize Daily',
-                subtitle: 'Hit the gym yo',
-                icon: 'av-timer'
-            },
-            {
-                name: 'Eat Healthy',
-                subtitle: 'Veggies and Keenwah man',
-                icon: 'av-timer'
-            }
-        ]
-
+        let experiments = this.state.experimentData;
         return (
             <View style={{flex: 1}}>
             <ScrollView>
@@ -81,26 +66,31 @@ export default class ExperimentBrowse extends Component<{}> {
                         onChangeText={(event) => this.handleChange(event)}
                         onClearText={(event) => this.handleChange(event)}
                         placeholder='Type Here...' />
-
-                    <Tile
-                        icon={{name: 'favorite',  color: '#ffffff'  }}
-                        imageSrc={require('./images/wakeupearly.png')}
-                        title="Wake Up Early"
-                        featured
-                        titleStyle= {styles.dividerTextStyle}
-                        caption="Get in the habit of being productive"
-                        onPress={(event) => this.handleTileClick(event)}
-                    />
+                    {
+                        this.state.featuredExperiment &&
+                        (
+                            <Tile
+                                icon={{name: 'favorite',  color: '#ffffff'  }}
+                                imageSrc={require('./images/wakeupearly.png')}
+                                title={this.state.featuredExperiment.val.name}
+                                featured
+                                titleStyle= {styles.dividerTextStyle}s
+                                caption={this.state.featuredExperiment.val.description}
+                                onPress={(event) => this.handleTileClick(event)}
+                            />
+                        )
+                    }
 
 
                     <List containerStyle={{marginBottom: 20}}>
                         {
-                            list.map((l, i) => (
+                            this.state.experimentData &&
+                            this.state.experimentData.map((l) => (
                                 <ListItem
-                                    key={i}
-                                    leftIcon={{name: l.icon}}
-                                    title={l.name}
-                                    subtitle={l.subtitle}
+                                    key={l.id}
+                                    leftIcon={{name: l.val.icon}}
+                                    title={l.val.name}
+                                    subtitle={l.val.description}
                                     onPress={(event) => this.handleClickExperiment(event)}
                                 />
                             ))
@@ -125,9 +115,27 @@ export default class ExperimentBrowse extends Component<{}> {
 
 module.exports = ExperimentBrowse;
 
+
+
+
+
 const styles = StyleSheet.create({
     dividerTextStyle: {
         textAlign: 'left',
         fontSize: 20,
     }
 });
+
+
+/*
+this.state.featuredExperiment.val.image
+ <Tile
+                                icon={{name: 'favorite',  color: '#ffffff'  }}
+                                imageSrc={require('./images/wakeupearly.png')}
+                                title="Wake Up Early"
+                                featured
+                                titleStyle= {styles.dividerTextStyle}
+                                caption="Get in the habit of being productive"
+                                onPress={(event) => this.handleTileClick(event)}
+                            />
+ */
