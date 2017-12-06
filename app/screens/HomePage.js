@@ -8,6 +8,7 @@ import Geocoder from 'react-native-geocoding'
 import Secrets from '../config/secrets.js'
 import firebase from 'react-native-firebase';
 import Database from '../lib/Database.js'
+import { VictoryArea,VictoryChart, VictoryTheme } from "victory-native";
 
 export default class HomePage extends Component<{}> {
 
@@ -116,6 +117,17 @@ export default class HomePage extends Component<{}> {
 
     render() {
 
+        const data1995 = [
+            {x: 1, y: 18000},
+            {x: 2, y: 13250},
+            {x: 3, y: 15000},
+            {x: 4, y: 12000},
+            {x: 5, y: 18000},
+            {x: 6, y: 13250},
+            {x: 7, y: 15000},
+            {x: 8, y: 12000}
+        ];
+
         return (
             <View style={{flex: 1}}>
 
@@ -123,12 +135,6 @@ export default class HomePage extends Component<{}> {
                 <View>
                     <Text h4> My {this.state.experiment_info ? <Text>{this.state.experiment_info.name}</Text> : null} </Text>
                     <Text> See how you are doing with your experiment </Text>
-
-
-                    <Card title="Day 2"
-                          titleStyle = {styles.dividerTextStyle}>
-
-                    </Card>
 
                     <Card >
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -139,11 +145,26 @@ export default class HomePage extends Component<{}> {
                                 color='#00aced' />
                         </View>
                         <Text>You still need to record progress for:  </Text>
-
                         {this.state.experiment_info ?  <ReactionModal item={this.state.experiment_info} index={1}/> : null}
-
-
                     </Card>
+
+
+                    <Card title="Day 2"
+                          titleStyle = {styles.dividerTextStyle}>
+
+                        <View style={styles.container}>
+                            <VictoryChart
+                                theme={VictoryTheme.material}
+                            >
+                                <VictoryArea
+                                    style={{ data: { fill: "#c43a31" } }}
+                                    data={data1995}
+                                />
+                            </VictoryChart>
+                        </View>
+                    </Card>
+
+
 
                     <Card title="Goal Streak"
                           titleStyle = {styles.dividerTextStyle}>
