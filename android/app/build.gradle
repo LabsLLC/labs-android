@@ -94,13 +94,13 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId "com.labs.android"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         ndk {
@@ -137,13 +137,20 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-fbsdk')
+    compile(project(':react-native-fbsdk')){
+        exclude(group: 'com.facebook.android', module: 'facebook-android-sdk')
+    }
+    compile "com.facebook.android:facebook-android-sdk:4.22.1"
+//    compile project(':react-native-fbsdk'){
+//        exclude(group: 'com.facebook.android', module: 'facebook-android-sdk')
+//    }
+//    compile "com.facebook.android:facebook-android-sdk:4.22.1"
     compile(project(':react-native-firebase')) {
         transitive = false
     }
     compile project(':react-native-vector-icons')
     compile fileTree(dir: "libs", include: ["*.jar"])
-    compile "com.android.support:appcompat-v7:24.0.1"
+    compile "com.android.support:appcompat-v7:26"
     compile "com.facebook.react:react-native:+"  // From node_modules
 
     // Firebase dependencies
