@@ -36,7 +36,7 @@ export default class Experiment extends Component<{}> {
     subscribeToExperiment(event){
         console.log("The user is subscribing to a an experiment: "+this.state.experimentID);
         //now all we need is the userID from local storage
-        Database.setUserExperiment(1, this.state.experimentID);
+        Database.setUserExperiment(this.state.experimentID);
     }
 
     render() {

@@ -1,5 +1,5 @@
 import firebase from 'react-native-firebase';
-
+import TimeUtils from './TimeUtils'
 
 class Database {
 
@@ -29,8 +29,28 @@ class Database {
      * @param experimentId
      * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
      */
-    static setUserExperiment(userId, experimentId) {
+    static setUserExperiment(experimentId) {
 
+        //Retrieve current users id
+        firebase.auth().onAuthStateChanged((user) => {
+            if(user) {
+                var id = user.uid;
+
+                //update this user's experimentID
+                let userHomePath = "/user/" + id;
+
+                //calculate today's date
+                var today = TimeUtils.getTime();
+
+                return firebase.database().ref(userHomePath).update({
+                    experiment_id: experimentId,
+                    start_date: today
+                })
+            }
+        });
+
+
+        /*
         var user = firebase.auth().currentUser;
 
         if (user) {
@@ -44,7 +64,7 @@ class Database {
         }
 
 
-        /*let userHomePath = "/user/" + userId;
+        let userHomePath = "/user/" + userId;
         return firebase.database().ref(userHomePath).set({
             experimentId: experimentId
         })*/
