@@ -61,6 +61,17 @@ class Database {
             console.log(snapshot.val())
         });
     }
+
+    static getUserAddress(userId) {
+        return new Promise( (success, fail) => {
+            const userHomePath = "user/" + userId + "/userHome/";
+            console.log(userHomePath);
+            return firebase.database().ref(userHomePath).on('value', (snapshot) => {
+                var home = JSON.stringify(snapshot.val());
+                success(home);
+            });
+        })
+    }
 }
 
 module.exports = Database;

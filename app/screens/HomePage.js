@@ -6,6 +6,8 @@ import ReactionModal from '../components/ReactionModal/ReactionModal.js'
 import Navbar from '../components/NavBar/Navbar.js'
 import Geocoder from 'react-native-geocoding'
 import Secrets from '../config/secrets.js'
+import firebase from 'react-native-firebase';
+import Database from '../lib/Database.js'
 
 export default class HomePage extends Component<{}> {
 
@@ -19,10 +21,24 @@ export default class HomePage extends Component<{}> {
             latitude: null,
             longitude: null,
             error: null,
+            user_uid: null,
+            home_address: null,
         };
     }
 
     componentDidMount(){
+
+        //Retrieve current users id
+        firebase.auth().onAuthStateChanged((user) => {
+            if(user) {
+                var id = user.uid;
+                this.setState({
+                    user_uid: id
+                }, this.getHomeAddress);
+            }
+        });
+
+        //Users current position
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 this.setState({
@@ -34,16 +50,6 @@ export default class HomePage extends Component<{}> {
             (error) => this.setState({ error: error.message }),
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
         );
-
-        Geocoder.getFromLocation("100 Institute Rd, Worcester, MA").then(
-            json => {
-                var location = json.results[0].geometry.location;
-                console.log(location.lat + ", " + location.lng);
-            },
-            error => {
-                console.log(error);
-            }
-        );
     }
 
     handleChange(event) {
@@ -52,6 +58,32 @@ export default class HomePage extends Component<{}> {
 
     handleClickExperiment(event){
         console.log("Clicked List item "+event.toString())
+    }
+
+    /**
+     * Retrieve the home address of a user given its user id
+     */
+    getHomeAddress() {
+        Database.getUserAddress(this.state.user_uid).then((address) => {
+            this.setState({
+                home_address: address
+            }, this.findGeoLocation)
+        });
+    }
+
+    /**
+     * Find the longitude and latitude of a user given its home address
+     */
+    findGeoLocation() {
+        Geocoder.getFromLocation(this.state.home_address).then(
+            json => {
+                var location = json.results[0].geometry.location;
+                console.log(location.lat + ", " + location.lng);
+            },
+            error => {
+                console.log(error);
+            }
+        );
     }
 
     render() {
