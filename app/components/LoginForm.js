@@ -7,16 +7,13 @@ import LoginUtils from '../lib/LoginUtils'
 
 class LoginForm extends Component {
     state = {
-        email: '',
-        password: '',
         address: '',
         error: '',
         loading: false };
 
     onLoginPress() {
         this.setState({ error: '', loading: true });
-        const { email, password, address } = this.state;
-        LoginUtils.getFacebookLoginPromise()
+            LoginUtils.getFacebookLoginPromise()
             .then((currentUser) => {
                 this.setState({ error: '', loading: false });
             })
@@ -32,24 +29,23 @@ class LoginForm extends Component {
      */
     onSignUpPress() {
         this.setState({ error: '', loading: true });
-        const { email, password, address } = this.state;
-
+        const {address } = this.state;
         LoginUtils.getFacebookLoginPromise().then((currentUser) => {
             Database.setUserHomeAddress(currentUser.uid, address);
             this.setState({ error: '', loading: false });
         })
         .then(() => {
-            console.log("Here");
             Database.experimentTest()} );
     }
 
-    /**
-     * TODO: Rename to Log in
-     * @returns {XML}
-     */
-    renderButtonOrSpinner() {
+
+    renderLogin() {
         if (this.state.loading) {
-            return <Text />;
+            return <View style={styles.loginButtonStyle}>
+                <Button onPress={this.onLoginPress.bind(this)}
+                        title="Log in with Facebook"
+                        disabled/>
+            </View>;
         }
         return <View style={styles.loginButtonStyle}>
                     <Button onPress={this.onLoginPress.bind(this)}
@@ -61,7 +57,7 @@ class LoginForm extends Component {
         if (this.state.loading) {
             return <Text />;
         }
-        return <Button  onPress={this.onSignUpPress.bind(this)} title="Sign Up" />;
+        return <Button onPress={this.onSignUpPress.bind(this)} title="Sign Up" />;
     }
 
     renderSignUp() {
@@ -80,7 +76,7 @@ class LoginForm extends Component {
         return (
             <View>
                 {this.renderSignUp()}
-                {this.renderSignUpButton()}
+                {this.renderLogin()}
             </View>
         );
     }

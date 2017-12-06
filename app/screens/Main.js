@@ -38,7 +38,7 @@ export default class Main extends Component<{}> {
                     <Button
                         onPress={() => this.props.navigation.navigate('SignUp')}
                         title="Create an account"/>
-                    <LoginForm/>
+                    <LoginForm />
                 </Card>
               <Navbar navigation = {this.props.navigation}/>
             </View>

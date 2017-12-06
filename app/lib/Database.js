@@ -24,6 +24,31 @@ class Database {
     }
 
     /**
+     * Sets a users experiment
+     * @param userId
+     * @param experimentId
+     * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
+     */
+    static setUserExperiment(userId, experimentId) {
+
+        var user = firebase.auth().currentUser;
+
+        if (user) {
+            // User is signed in.
+            console.log("User is signed in: "+ user);
+        } else {
+            // No user is signed in.
+            console.log("User is signed in");
+        }
+
+        let userHomePath = "/user/" + userId;
+        return firebase.database().ref(userHomePath).set({
+            experimentId: experimentId
+        })
+
+    }
+
+    /**
      * Sets a userID in the database
      * @param userId
      * @returns {firebase.Promise.<void>}
@@ -80,11 +105,29 @@ class Database {
             });
         })
 
-
-
     }
 
 
+    static getUserAddress(userId) {
+        return new Promise( (success, fail) => {
+            const userHomePath = "user/" + userId + "/userHome/";
+            console.log(userHomePath);
+            return firebase.database().ref(userHomePath).on('value', (snapshot) => {
+                var home = JSON.stringify(snapshot.val());
+                success(home);
+            });
+        })
+    }
+
+    static experimentTest()
+    {
+        console.log("Ran");
+        let userHomePath = "experiment/";
+
+        firebase.database().ref(userHomePath).on('value', (snapshot) => {
+            console.log(snapshot.val())
+        });
+    }
 }
 
 module.exports = Database;

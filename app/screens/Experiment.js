@@ -16,6 +16,7 @@ export default class Experiment extends Component<{}> {
 
         this.state = {
             experiment: null,
+            experimentID: null
         };
     }
 
@@ -25,11 +26,15 @@ export default class Experiment extends Component<{}> {
 
     componentWillMount() {
         this.setState({experiment: this.props.navigation.state.params.experiment.val });
+        this.setState({experimentID: this.props.navigation.state.params.experiment.id });
+
         console.log("3HERE!!!!: "+ this.props.navigation.state.params.experiment.val);
+    }
 
 
-
-
+    subscribeToExperiment(event){
+        console.log("The user is subscribing to a an experiment: "+this.state.experimentID);
+        //now all we need is the userID from local storage
     }
 
     render() {
@@ -48,11 +53,16 @@ export default class Experiment extends Component<{}> {
                         </View>
                     </Tile>
 
-                    <View style={{flex: 1}}>
+                    <View style={{flex: 1, margin: 10}}>
                         <Text>{this.state.experiment.description}</Text>
                     </View>
 
 
+                    <Button
+                        raised
+                        icon={{name: 'cached'}}
+                        title='Subscribe to experiment'
+                        onPress={(event) => this.subscribeToExperiment(event)}/>
 
                 </ScrollView>
                 <View>
