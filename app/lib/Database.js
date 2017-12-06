@@ -25,52 +25,26 @@ class Database {
 
     /**
      * Sets a users experiment
-     * @param userId
      * @param experimentId
      * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
      */
     static setUserExperiment(experimentId) {
-
         //Retrieve current users id
         firebase.auth().onAuthStateChanged((user) => {
             if(user) {
                 var id = user.uid;
-
-                //update this user's experimentID
-                let userHomePath = "/user/" + id;
-
-                //calculate today's date
+                let userHomePath = "/user/" + id; //update this user's experimentID
                 var today = TimeUtils.getTime();
-
                 return firebase.database().ref(userHomePath).update({
                     experiment_id: experimentId,
                     start_date: today
                 })
             }
         });
-
-
-        /*
-        var user = firebase.auth().currentUser;
-
-        if (user) {
-            // User is signed in.
-            console.log("User is signed in: "+ JSON.stringify(user));
-            var token = user.getIdToken();
-            console.log("TOKEN: "+  JSON.stringify(token));
-        } else {
-            // No user is signed in.
-            console.log("User is NOT signed in");
-        }
-
-
-        let userHomePath = "/user/" + userId;
-        return firebase.database().ref(userHomePath).set({
-            experimentId: experimentId
-        })*/
-        return
-
     }
+
+
+
 
     /**
      * Sets a userID in the database
