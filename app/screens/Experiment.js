@@ -6,6 +6,7 @@ import Navbar from '../components/NavBar/Navbar.js'
 //import WakeUpImage from '../images/experiments/icon_wakeup.png';
 //import ExerciseImage from '../images/experiments/icon_wakeup.png';
 import ExperimentImages from '../config/utils'
+import Database from '../lib/Database.js';
 
 export default class Experiment extends Component<{}> {
 
@@ -35,6 +36,7 @@ export default class Experiment extends Component<{}> {
     subscribeToExperiment(event){
         console.log("The user is subscribing to a an experiment: "+this.state.experimentID);
         //now all we need is the userID from local storage
+        Database.setUserExperiment(1, this.state.experimentID);
     }
 
     render() {

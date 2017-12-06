@@ -35,16 +35,20 @@ class Database {
 
         if (user) {
             // User is signed in.
-            console.log("User is signed in: "+ user);
+            console.log("User is signed in: "+ JSON.stringify(user));
+            var token = user.getIdToken();
+            console.log("TOKEN: "+  JSON.stringify(token));
         } else {
             // No user is signed in.
-            console.log("User is signed in");
+            console.log("User is NOT signed in");
         }
 
-        let userHomePath = "/user/" + userId;
+
+        /*let userHomePath = "/user/" + userId;
         return firebase.database().ref(userHomePath).set({
             experimentId: experimentId
-        })
+        })*/
+        return
 
     }
 
