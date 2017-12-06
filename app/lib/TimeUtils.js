@@ -16,7 +16,7 @@ class TimeUtils {
             dd = '0'+dd
         if(mm<10)
             mm = '0'+mm
-        today = mm + '/' + dd + '/' + yyyy;
+        today = mm + '_' + dd + '_' + yyyy;
 
         return today
     }

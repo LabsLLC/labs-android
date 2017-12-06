@@ -43,8 +43,50 @@ class Database {
         });
     }
 
+    /**
+     * Sets a users reaction for the day
+     * @param cpmpleted
+     * @param reaction double on how the user felt
+     * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
+     */
+    static addDailyReaction(completed, reaction) {
+        //Retrieve current users id
+        firebase.auth().onAuthStateChanged((user) => {
+            if(user) {
+                var id = user.uid;
+                var today = TimeUtils.getTime();
 
+                let dailyReactionPath = "/user/" + id + "/reactions/" + today;
+                return firebase.database().ref(dailyReactionPath).update({
+                    completed: completed,
+                    reaction: reaction
+                })
+            }
+        });
+    }
 
+    /**
+     * Gets a users experiment data (get the ID, reactions, days etc)
+     * @param cpmpleted
+     * @param reaction double on how the user felt
+     * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
+     */
+    static getMyExperimentData() {
+        return new Promise( (success, fail) => {
+            firebase.auth().onAuthStateChanged((user) => { //Retrieve current users id
+
+                if(user) {
+                    var id = user.uid;
+                    let experimentPath = "/user/" + id ;
+                    return firebase.database().ref(experimentPath).on('value', (snapshot) => {
+                        var myExperimentData = JSON.stringify(snapshot.val());
+                        console.log("myExperimentData: "+myExperimentData);
+                        success(snapshot.val());
+                    });
+                }
+            });
+        })
+    }
 
     /**
      * Sets a userID in the database
@@ -87,9 +129,9 @@ class Database {
         return new Promise(function (success, fail) {
             console.log("getExperiments: ");
 
-            var playersRef = firebase.database().ref("experiment/");
+            var experimentRef = firebase.database().ref("experiment/");
 
-            return playersRef.orderByChild("name").on("value", function (data) {
+            return experimentRef.orderByChild("name").on("value", function (data) {
 
                 var list =[]
                 var i = 0;
@@ -102,9 +144,31 @@ class Database {
                 success(list);
             });
         })
-
     }
 
+    /**
+     * Gets a users experiment information
+     * @param cpmpleted
+     * @param reaction double on how the user felt
+     * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
+     */
+    static getMyExperimentInfo(experiment_id) {
+
+        return new Promise( (success, fail) => {
+
+            //Retrieve current users id
+            firebase.auth().onAuthStateChanged((user) => {
+                if(user) {
+                    let experimentPath = "/experiment/" + experiment_id;
+                    return firebase.database().ref(experimentPath).on('value', (snapshot) => {
+                        var experimentInfo = JSON.stringify(snapshot.val());
+                        console.log("experimentInfo: "+experimentInfo);
+                        success(snapshot.val());
+                    });
+                }
+            });
+        })
+    }
 
     static getUserAddress(userId) {
         return new Promise( (success, fail) => {

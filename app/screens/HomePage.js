@@ -15,6 +15,8 @@ export default class HomePage extends Component<{}> {
         super(props);
         //function bindings
         this.handleChange = this.handleChange.bind(this);
+        this.getExperimentInfo = this.getExperimentInfo.bind(this);
+
         Geocoder.setApiKey(Secrets.GoogleApiSecret);
         this.state = {
             searchText:'',
@@ -23,10 +25,20 @@ export default class HomePage extends Component<{}> {
             error: null,
             user_uid: null,
             home_address: null,
+            my_experiment_data: null,
+            experiment_info: null,
         };
     }
 
     componentDidMount(){
+
+        //Get the current user's experiment data -> then get the experiments associated information to populate the screen
+        Database.getMyExperimentData().then((data) => {
+            this.setState({
+                my_experiment_data: data
+            }, this.getExperimentInfo);
+        });
+
 
         //Retrieve current users id
         firebase.auth().onAuthStateChanged((user) => {
@@ -71,6 +83,22 @@ export default class HomePage extends Component<{}> {
         });
     }
 
+    /** (Andrew added)
+     * Retrieve the experiment information of a user given experiment
+     */
+    getExperimentInfo() {
+
+        console.log("DATA1: "+JSON.stringify(this.state.my_experiment_data));
+
+        Database.getMyExperimentInfo(this.state.my_experiment_data.experiment_id).then((data) => {
+            this.setState({
+                experiment_info: data
+            });
+        }).catch((error) => {
+            console.log("Error because: "+error);
+        });
+    }
+
     /**
      * Find the longitude and latitude of a user given its home address
      */
@@ -87,37 +115,14 @@ export default class HomePage extends Component<{}> {
     }
 
     render() {
-        //Temporary list...
-        const list = [
-            {
-                name: 'Wake Up Early',
-                subtitle: 'Start this two week experiment',
-                icon: 'av-timer'
-            },
-            {
-                name: 'No Phone Before Bed',
-                subtitle: 'Put the god damn phone away',
-                icon: 'av-timer'
-            },
-            {
-                name: 'Exersize Daily',
-                subtitle: 'Hit the gym yo',
-                icon: 'av-timer'
-            },
-            {
-                name: 'Eat Healthy',
-                subtitle: 'Veggies and Keenwah man',
-                icon: 'av-timer'
-            }
-        ];
 
         return (
             <View style={{flex: 1}}>
 
             <ScrollView>
                 <View>
-                    <Text h4> Experiments </Text>
-                    <Text> See how you are doing with your experiments </Text>
+                    <Text h4> My {this.state.experiment_info ? <Text>{this.state.experiment_info.name}</Text> : null} </Text>
+                    <Text> See how you are doing with your experiment </Text>
 
 
                     <Card title="Day 2"
@@ -135,13 +140,8 @@ export default class HomePage extends Component<{}> {
                         </View>
                         <Text>You still need to record progress for:  </Text>
 
-                        <List containerStyle={{marginBottom: 20}}>
-                            {
-                                list.map((item, i) => (
-                                    <ReactionModal item={item} index={i}/>
-                                ))
-                            }
-                        </List>
+                        {this.state.experiment_info ?  <ReactionModal item={this.state.experiment_info} index={1}/> : null}
+
 
                     </Card>
 
@@ -174,3 +174,4 @@ const styles = StyleSheet.create({
         fontSize: 20,
     }
 });
+

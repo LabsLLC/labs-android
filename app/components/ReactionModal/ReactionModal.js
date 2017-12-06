@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import {StyleSheet, Modal, Text, TouchableHighlight, View } from 'react-native';
 import {Icon, Button,  Tile, SearchBar, List, ListItem} from 'react-native-elements';
 import styles from './styles'
+import Database from '../../lib/Database.js'
+
+
 
 class ReactionModal extends Component {
     constructor(props) {
@@ -25,9 +28,8 @@ class ReactionModal extends Component {
     }
 
     render() {
-        console.log("ASDASDASDASDAD: " + this.props.item);
+        //console.log("ASDASDASDASDAD: " + this.props.item);
 
-        ///let ableToRenderView = this.props.propInQuestion ? true : false
 
         if ('item' in this.props) {
             return (
@@ -47,6 +49,7 @@ class ReactionModal extends Component {
                                 <View style = {styles.emojiDivider} >
                                     <View style={styles.emojiToken} >
                                         <TouchableHighlight onPress={() => {
+                                            Database.addDailyReaction(1, 0);
                                             this.setModalVisible(!this.state.modalVisible)
                                         }}>
                                             <View>
@@ -59,6 +62,7 @@ class ReactionModal extends Component {
                                     </View>
                                     <View style={styles.emojiToken} >
                                         <TouchableHighlight onPress={() => {
+                                            Database.addDailyReaction(1, .5);
                                             this.setModalVisible(!this.state.modalVisible)
                                         }}>
                                             <View>
@@ -71,6 +75,7 @@ class ReactionModal extends Component {
                                     </View>
                                     <View style={styles.emojiToken} >
                                         <TouchableHighlight onPress={() => {
+                                            Database.addDailyReaction(1, 1);
                                             this.setModalVisible(!this.state.modalVisible)
                                         }}>
                                             <View>
