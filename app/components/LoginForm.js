@@ -41,7 +41,11 @@ class LoginForm extends Component {
 
     renderLogin() {
         if (this.state.loading) {
-            return <Text />;
+            return <View style={styles.loginButtonStyle}>
+                <Button onPress={this.onLoginPress.bind(this)}
+                        title="Log in with Facebook"
+                        disabled/>
+            </View>;
         }
         return <View style={styles.loginButtonStyle}>
                     <Button onPress={this.onLoginPress.bind(this)}
@@ -53,7 +57,7 @@ class LoginForm extends Component {
         if (this.state.loading) {
             return <Text />;
         }
-        return <Button  onPress={this.onSignUpPress.bind(this)} title="Sign Up" />;
+        return <Button onPress={this.onSignUpPress.bind(this)} title="Sign Up" />;
     }
 
     renderSignUp() {
