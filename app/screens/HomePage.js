@@ -17,6 +17,7 @@ export default class HomePage extends Component<{}> {
         //function bindings
         this.handleChange = this.handleChange.bind(this);
         this.getExperimentInfo = this.getExperimentInfo.bind(this);
+        this.getMyExperimentData = this.getMyExperimentData.bind(this);
 
         Geocoder.setApiKey(Secrets.GoogleApiSecret);
         this.state = {
@@ -31,14 +32,11 @@ export default class HomePage extends Component<{}> {
         };
     }
 
+
+
     componentDidMount(){
 
-        //Get the current user's experiment data under experiments directory
-        Database.getMyExperimentData().then((data) => {
-            this.setState({
-                my_experiment_data: data
-            }, this.getExperimentInfo);
-        });
+       this.getMyExperimentData();
 
 
         //Retrieve current users id
@@ -88,9 +86,6 @@ export default class HomePage extends Component<{}> {
      * Retrieve the experiment information of a user given experiment
      */
     getExperimentInfo() {
-
-        console.log("DATA1: "+JSON.stringify(this.state.my_experiment_data));
-
         Database.getMyExperimentInfo(this.state.my_experiment_data.experiment_id).then((data) => {
             this.setState({
                 experiment_info: data
@@ -99,6 +94,7 @@ export default class HomePage extends Component<{}> {
             console.log("Error because: "+error);
         });
     }
+
 
     /**
      * Find the longitude and latitude of a user given its home address
@@ -114,6 +110,17 @@ export default class HomePage extends Component<{}> {
             }
         );
     }
+
+    getMyExperimentData() {
+        //Get the current user's experiment data under experiments directory
+        Database.getMyExperimentData().then((data) => {
+            this.setState({
+                my_experiment_data: data
+            }, this.getExperimentInfo);
+        });
+    }
+
+
 
     render() {
 
@@ -164,7 +171,7 @@ export default class HomePage extends Component<{}> {
                                 color='#00aced' />
                         </View>
                         <Text>You still need to record progress for:  </Text>
-                        {this.state.experiment_info ?  <ReactionModal experimentInfo={this.state.experiment_info} experimentData={this.state.my_experiment_data} index={1}/> : null}
+                        {this.state.experiment_info ?  <ReactionModal experimentInfo={this.state.experiment_info} experimentData={this.state.my_experiment_data} callback= {this.getMyExperimentData} index={1}/> : null}
                     </Card>
 
 
