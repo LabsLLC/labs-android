@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Card, Text, Header } from 'react-native-elements';
-import * as firebase from 'firebase';
-import { Button, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
+import {Text, Button, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
 import LoginForm from '../components/LoginForm'
 import Navbar from '../components/NavBar/Navbar.js'
+import firebase from 'react-native-firebase';
+
+import Screens from '../config/navigationNames'
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' +
@@ -12,40 +13,65 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
+const firebaseConfig = {
+    apiKey: "AIzaSyDw-gKR_SGlQwrK7EpC30jvl2Jx5tPIyV8",
+    authDomain: "labs-c6f2f.firebaseapp.com",
+    databaseURL: "https://labs-c6f2f.firebaseio.com/",
+    storageBucket: "",
+};
+
+/*const instance = firebase.initializeApp({
+    persistence: true
+});*/
+
 export default class Main extends Component<{}> {
 
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
+
         this.state = {
-            loaded: true,
+            loading: true,
+            authenticated: false,
         };
     }
 
     componentDidMount(){
-        this.setState({
-            loaded: true
-        })
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({ loading: false, authenticated: true });
+            } else {
+                this.setState({ loading: false, authenticated: false });
+            }
+        });
     }
 
     render() {
-        if (!this.state.loaded) {
+        if (this.state.loading) {
             return this.renderLoadingView();
         }
-        return (
-            <View >
-                <Card
-                    title='Welcome'>
-                    <Button
-                        onPress={() => this.props.navigation.navigate('SignUp')}
-                        title="Create an account"/>
-                    <LoginForm />
-                </Card>
-              <Navbar navigation = {this.props.navigation}/>
-            </View>
-        );
+        else if(this.state.authenticated)
+        {
+            this.props.navigation.navigate(Screens.Home);
+            return (<View/>);
+        }
+        else
+        {
+            return (
+                <View >
+                    <Card
+                        title='Welcome'>
+                        <Button
+                            onPress={() => this.props.navigation.navigate('SignUp')}
+                            title="Create an account"/>
+                        <LoginForm />
+                    </Card>
+                    <Navbar navigation = {this.props.navigation}/>
+                </View>
+            );
+        }
     }
 
-    static renderLoadingView() {
+    renderLoadingView() {
         return (
             <View style={styles.container}>
                 <Text>

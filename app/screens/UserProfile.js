@@ -4,6 +4,8 @@ import {Image, TouchableOpacity, ScrollView, Modal, StyleSheet, AsyncStorage} fr
 import {View} from 'react-native';
 import Navbar from '../components/NavBar/Navbar.js'
 import ProfilePicture from "../components/ProfilePicture/ProfilePicture";
+import firebase from 'react-native-firebase';
+
 
 const FBSDK = require('react-native-fbsdk');
 const {
@@ -25,6 +27,8 @@ export default class UserProfile extends Component<{}> {
         this.state = {
             searchText: '',
             profileImage: 'http://placehold.it/120x120',
+            user: firebase.auth().currentUser,
+            name: firebase.auth().currentUser.displayName
         };
     }
 
@@ -100,6 +104,7 @@ export default class UserProfile extends Component<{}> {
         return (
             <View>
                 <ProfilePicture profileImage={this.state.profileImage} onPress={this.fetchFbProfilePic}/>
+                <Text style={{marginTop:48}}>{this.state.name}</Text>
             </View>
         )
     }
