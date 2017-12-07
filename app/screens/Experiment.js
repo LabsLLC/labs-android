@@ -14,10 +14,14 @@ export default class Experiment extends Component<{}> {
         super(props);
         //function bindings
         this.handleChange = this.handleChange.bind(this);
+        this.getMyExperimentData = this.getMyExperimentData.bind(this);
 
         this.state = {
             experiment: null,
-            experimentID: null
+            active_user_count: null,
+            experimentID: null,
+            userExperimentID: null,
+            isUserAlreadySubscribed: false
         };
     }
 
@@ -26,20 +30,51 @@ export default class Experiment extends Component<{}> {
     }
 
     componentWillMount() {
-        this.setState({experiment: this.props.navigation.state.params.experiment.val });
-        this.setState({experimentID: this.props.navigation.state.params.experiment.id });
 
-        console.log("3HERE!!!!: "+ this.props.navigation.state.params.experiment.val);
+        // Determine if the user is already subscribed to this experiment - if so, don't let them subscribe again
+        this.getMyExperimentData();
+        this.setState({
+            experiment: this.props.navigation.state.params.experiment.val,
+            active_user_count: this.props.navigation.state.params.experiment.val.active_user_count,
+        });
+
+    }
+
+    //Get the current user's experiment data under experiments directory
+    getMyExperimentData() {
+        Database.getMyExperimentData().then((data) => {
+            this.setState({
+                userExperimentID: data.experiment_id
+            }, this.isUserSubscribed);
+        });
     }
 
 
-    subscribeToExperiment(event){
-        console.log("The user is subscribing to a an experiment: "+this.state.experimentID);
-        //now all we need is the userID from local storage
-        Database.setUserExperiment(this.state.experimentID);
+    isUserSubscribed() {
+        var experimentID = this.props.navigation.state.params.experiment.id;
+        var userExperimentID = this.state.userExperimentID;
+
+        if(userExperimentID && experimentID){
+            console.log("userExperimentID: "+ userExperimentID + " experimentID: " +experimentID)
+            if(userExperimentID == experimentID){
+                console.log("ALREADY SUBSCRIBED!");
+                this.setState({isUserAlreadySubscribed: true});
+            }
+        }
+    }
+
+    subscribeToExperiment() {
+        //console.log("The user is subscribing to a an experiment: "+this.state.experimentID);
+        Database.setUserExperiment(this.props.navigation.state.params.experiment.id)
+        this.setState({
+            isUserAlreadySubscribed: true,
+            active_user_count: this.state.active_user_count+1
+        });
     }
 
     render() {
+
+
         return (
             <View style={{flex: 1}}>
                 <ScrollView>
@@ -50,7 +85,7 @@ export default class Experiment extends Component<{}> {
                         contentContainerStyle={{height: 90}}
                     >
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text>Active Users: {this.state.experiment.active_user_count}</Text>
+                            <Text>Active Users: {this.state.active_user_count}</Text>
                             <Text>Satisfaction: {this.state.experiment.total_satisfaction} %</Text>
                         </View>
                     </Tile>
@@ -59,12 +94,19 @@ export default class Experiment extends Component<{}> {
                         <Text>{this.state.experiment.description}</Text>
                     </View>
 
+                    {this.state.isUserAlreadySubscribed == true ?
+                        <Button
+                            raised
+                            icon={{name: 'cached'}}
+                            title='Already subscribed'
+                            disabled/>
+                        : <Button
+                            raised
+                            icon={{name: 'cached'}}
+                            title='Subscribe to experiment'
+                            onPress={(event) => this.subscribeToExperiment(event)}/>}
 
-                    <Button
-                        raised
-                        icon={{name: 'cached'}}
-                        title='Subscribe to experiment'
-                        onPress={(event) => this.subscribeToExperiment(event)}/>
+
 
                 </ScrollView>
                 <View>
@@ -88,3 +130,17 @@ const styles = StyleSheet.create({
     }
 });
 
+
+/*
+{this.state.isUserAlreadySubscribed == true ?
+                        <Button
+                            raised
+                            icon={{name: 'cached'}}
+                            title='Already subscribed'
+                            disabled/>
+                        : <Button
+                            raised
+                            icon={{name: 'cached'}}
+                            title='Subscribe to experiment'
+                            onPress={(event) => this.subscribeToExperiment(event)}/>}
+ */

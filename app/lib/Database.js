@@ -24,7 +24,7 @@ class Database {
     }
 
     /**
-     * Sets a users experiment
+     * Sets a users experiment - then also update the experiment's active users
      * @param experimentId
      * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
      */
@@ -35,10 +35,15 @@ class Database {
                 var id = user.uid;
                 let userHomePath = "/user/" + id; //update this user's experimentID
                 var today = TimeUtils.getTime();
-                return firebase.database().ref(userHomePath).update({
+                firebase.database().ref(userHomePath).update({
                     experiment_id: experimentId,
                     start_date: today
                 })
+                //Update this experiment's active user count
+                let dailyReactionPath = "/experiment/" + experimentId ;
+                firebase.database().ref(dailyReactionPath).child('active_user_count').transaction(function(currentValue) {
+                    return (currentValue||0) + 1
+                });
             }
         });
     }
@@ -65,6 +70,8 @@ class Database {
             }
         });
     }
+
+
 
     /**
      * Gets a users experiment data (get the ID, reactions, days etc)
