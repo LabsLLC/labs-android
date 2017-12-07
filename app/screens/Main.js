@@ -37,8 +37,8 @@ export default class Main extends Component<{}> {
 
     componentDidMount(){
         firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                this.setState({ loading: false, authenticated: true });
+            if (user) { //if user is authenticated
+                this.props.navigation.navigate(Screens.Home);
             } else {
                 this.setState({ loading: false, authenticated: false });
             }
@@ -48,11 +48,6 @@ export default class Main extends Component<{}> {
     render() {
         if (this.state.loading) {
             return this.renderLoadingView();
-        }
-        else if(this.state.authenticated)
-        {
-            this.props.navigation.navigate(Screens.Home);
-            return (<View/>);
         }
         else
         {

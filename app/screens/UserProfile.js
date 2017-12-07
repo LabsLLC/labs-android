@@ -28,7 +28,8 @@ export default class UserProfile extends Component<{}> {
             searchText: '',
             profileImage: 'http://placehold.it/120x120',
             user: firebase.auth().currentUser,
-            name: firebase.auth().currentUser.displayName
+            name: firebase.auth().currentUser.displayName,
+            email: firebase.auth().currentUser.email
         };
     }
 
@@ -102,9 +103,10 @@ export default class UserProfile extends Component<{}> {
 
     render() {
         return (
-            <View>
+            <View style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}>
                 <ProfilePicture profileImage={this.state.profileImage} onPress={this.fetchFbProfilePic}/>
-                <Text style={{marginTop:48}}>{this.state.name}</Text>
+                <Text style={{marginTop:16, fontSize: 24, fontWeight: "300"}}>{this.state.name}</Text>
+                <Text style={{marginTop:4, fontSize: 14, fontWeight: "300"}}>{this.state.email}</Text>
             </View>
         )
     }
