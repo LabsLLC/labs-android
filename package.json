@@ -18,8 +18,10 @@
     "react-native-firebase": "^3.1.1",
     "react-native-geocoding": "^0.2.0",
     "react-native-simple-auth": "^2.1.0",
+    "react-native-svg": "^6.0.1-rc.1",
     "react-native-vector-icons": "^4.4.2",
-    "react-navigation": "^1.0.0-beta.21"
+    "react-navigation": "^1.0.0-beta.21",
+    "victory-native": "^0.16.1"
   },
   "devDependencies": {
     "babel-jest": "21.2.0",

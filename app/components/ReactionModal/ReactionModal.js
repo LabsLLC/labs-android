@@ -9,12 +9,19 @@ import Database from '../../lib/Database.js'
 class ReactionModal extends Component {
     constructor(props) {
         super(props);
+        this.postReaction = this.postReaction.bind(this);
         //function bindings
         //this.handleChange = this.handleChange.bind(this);
 
         this.state = {
             modalVisible: false,
         };
+    }
+
+    postReaction(experiment_id, complete, reaction){
+        Database.addDailyReaction(experiment_id, complete, reaction);
+        this.setModalVisible(!this.state.modalVisible);
+        this.props.callback()
     }
 
     /*
@@ -28,10 +35,13 @@ class ReactionModal extends Component {
     }
 
     render() {
-        //console.log("ASDASDASDASDAD: " + this.props.item);
+        //console.log("this.state.experiment_info.id: " + this.props.experiment_info);
 
 
-        if ('item' in this.props) {
+        if ('experimentInfo' in this.props) {
+
+            var experiment_id = this.props.experimentData.experiment_id;
+
             return (
                 <View style={{marginTop: 22}}>
                     <Modal
@@ -49,8 +59,7 @@ class ReactionModal extends Component {
                                 <View style = {styles.emojiDivider} >
                                     <View style={styles.emojiToken} >
                                         <TouchableHighlight onPress={() => {
-                                            Database.addDailyReaction(1, 0);
-                                            this.setModalVisible(!this.state.modalVisible)
+                                            this.postReaction(experiment_id, 1, 0);
                                         }}>
                                             <View>
                                                 <Icon
@@ -62,8 +71,7 @@ class ReactionModal extends Component {
                                     </View>
                                     <View style={styles.emojiToken} >
                                         <TouchableHighlight onPress={() => {
-                                            Database.addDailyReaction(1, .5);
-                                            this.setModalVisible(!this.state.modalVisible)
+                                            this.postReaction(experiment_id, 1, .5);
                                         }}>
                                             <View>
                                                 <Icon
@@ -75,8 +83,7 @@ class ReactionModal extends Component {
                                     </View>
                                     <View style={styles.emojiToken} >
                                         <TouchableHighlight onPress={() => {
-                                            Database.addDailyReaction(1, 1);
-                                            this.setModalVisible(!this.state.modalVisible)
+                                            this.postReaction(experiment_id, 1, 1);
                                         }}>
                                             <View>
                                                 <Icon
@@ -98,9 +105,9 @@ class ReactionModal extends Component {
 
                     <View>
                         <ListItem
-                            leftIcon={{name: this.props.item.icon}}
-                            key={this.props.item.index}
-                            title={this.props.item.name}
+                            leftIcon={{name: this.props.experimentInfo.icon}}
+                            key={this.props.experimentInfo.index}
+                            title={this.props.experimentInfo.name}
                             onPress={() => this.setModalVisible(!this.state.modalVisible)} />
                     </View>
 
