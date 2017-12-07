@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {StyleSheet, Modal, Text, TouchableHighlight, View } from 'react-native';
-import {Icon, Button,  Tile, SearchBar, List, ListItem} from 'react-native-elements';
+import { Modal, Text, TouchableHighlight, View } from 'react-native';
+import {Icon, ListItem} from 'react-native-elements';
 import styles from './styles'
 import Database from '../../lib/Database.js'
 
@@ -10,24 +10,22 @@ class ReactionModal extends Component {
     constructor(props) {
         super(props);
         this.postReaction = this.postReaction.bind(this);
-        //function bindings
-        //this.handleChange = this.handleChange.bind(this);
 
         this.state = {
             modalVisible: false,
         };
     }
 
-    postReaction(experiment_id, complete, reaction){
-        Database.addDailyReaction(experiment_id, complete, reaction);
-        this.setModalVisible(!this.state.modalVisible);
-        this.props.callback()
+    postReaction(complete, reaction){
+        //Add the reaction to the user
+        Database.addDailyReaction(complete, reaction).then(() => {
+            Database.calculateUserSatisfaction();
+            this.setModalVisible(!this.state.modalVisible);
+            this.props.callback()
+        });
+
     }
 
-    /*
-    state = {
-        modalVisible: false,
-    }*/
 
     //Here, we want to pass another variable depending on what emoji we clicked - Then send the data to the database!
     setModalVisible(visible) {
@@ -35,13 +33,7 @@ class ReactionModal extends Component {
     }
 
     render() {
-        //console.log("this.state.experiment_info.id: " + this.props.experiment_info);
-
-
         if ('experimentInfo' in this.props) {
-
-            var experiment_id = this.props.experimentData.experiment_id;
-
             return (
                 <View style={{marginTop: 22}}>
                     <Modal
@@ -59,7 +51,7 @@ class ReactionModal extends Component {
                                 <View style = {styles.emojiDivider} >
                                     <View style={styles.emojiToken} >
                                         <TouchableHighlight onPress={() => {
-                                            this.postReaction(experiment_id, 1, 0);
+                                            this.postReaction(1, 0);
                                         }}>
                                             <View>
                                                 <Icon
@@ -71,7 +63,7 @@ class ReactionModal extends Component {
                                     </View>
                                     <View style={styles.emojiToken} >
                                         <TouchableHighlight onPress={() => {
-                                            this.postReaction(experiment_id, 1, .5);
+                                            this.postReaction(1, .5);
                                         }}>
                                             <View>
                                                 <Icon
@@ -83,7 +75,7 @@ class ReactionModal extends Component {
                                     </View>
                                     <View style={styles.emojiToken} >
                                         <TouchableHighlight onPress={() => {
-                                            this.postReaction(experiment_id, 1, 1);
+                                            this.postReaction(1, 1);
                                         }}>
                                             <View>
                                                 <Icon

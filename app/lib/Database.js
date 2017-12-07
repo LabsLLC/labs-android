@@ -4,10 +4,6 @@ import TimeUtils from './TimeUtils'
 class Database {
 
 
-    static createUser(){
-
-    }
-
     /**
      * Sets a users home address
      * @param userId
@@ -78,23 +74,57 @@ class Database {
      * @param pass the expe
      * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
      */
-    static addDailyReaction(experiment_id, completed, reaction) {
-        //Retrieve current users id
-        firebase.auth().onAuthStateChanged((user) => {
-            if(user) {
-                var id = user.uid;
-                var today = TimeUtils.getTime();
+    static addDailyReaction(completed, reaction) {
+        return new Promise( (success, fail) => {
+            //Retrieve current users id
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    var id = user.uid;
+                    var today = TimeUtils.getTime();
 
-                let dailyReactionPath = "/user/" + id + "/reactions/" + today;
-                return firebase.database().ref(dailyReactionPath).update({
-                    completed: completed,
-                    reaction: reaction
-                })
-            }
+                    let dailyReactionPath = "/user/" + id + "/reactions/" + today;
+                    success( firebase.database().ref(dailyReactionPath).update({
+                        completed: completed,
+                        reaction: reaction
+                    }))
+                }
+            });
         });
     }
 
+    /**
+     * Calculates a user's satisfaction based off of their reactions to an experiment
+     * @param cpmpleted
+     * @param reaction double on how the user felt
+     * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
+     */
+    static calculateUserSatisfaction() {
+        return new Promise( (success, fail) => {
+            firebase.auth().onAuthStateChanged((user) => { //Retrieve current users id
+                if(user) {
+                    var id = user.uid;
+                    let experimentPath = "/user/" + id ;
 
+                    //get the user's reactions -> then average them
+                    this.getMyExperimentData().then((userExperimentData) => {
+                        var reactions = userExperimentData.reactions;
+                        let sum = 0, count = 0;
+                        Object.keys(reactions).forEach((key) => {
+                            console.log(reactions[key]);
+                           sum += reactions[key].reaction;
+                           count += 1;
+                        });
+                        satisfaction = sum / count;
+
+                        success( firebase.database().ref(experimentPath).update({
+                            satisfaction: satisfaction
+                        }))
+                    })
+
+                }
+            });
+        })
+    }
 
     /**
      * Gets a users experiment data (get the ID, reactions, days etc)
@@ -111,45 +141,11 @@ class Database {
                     let experimentPath = "/user/" + id ;
                     return firebase.database().ref(experimentPath).on('value', (snapshot) => {
 
-                        var myExperimentData = JSON.stringify(snapshot.val());
-                        console.log("myExperimentData: "+myExperimentData);
                         success(snapshot.val());
                     });
                 }
             });
         })
-    }
-
-    /**
-     * Sets a userID in the database
-     * @param userId
-     * @returns {firebase.Promise.<void>}
-     */
-    static setUserID(userId) {
-        var userHomePath = "/user/";
-        return firebase.database().ref(userHomePath).set({
-            userId: userId
-        })
-    }
-
-    /**
-     * Listen for changes to a users mobile number
-     * @param userId
-     * @param callback Users mobile number
-     */
-    static listenUserHome(userId, callback) {
-
-        let userHomePath = "/user/" + userId + "/details";
-
-        firebase.database().ref(userHomePath).on('value', (snapshot) => {
-
-            var mobile = "";
-
-            if (snapshot.val()) {
-                userHome = snapshot.val().userHome
-            }
-            callback(userHome)
-        });
     }
 
 
@@ -172,7 +168,6 @@ class Database {
                     list.push(x);
                 });
 
-                //console.log(JSON.stringify(data.val()));
                 success(list);
             });
         })
