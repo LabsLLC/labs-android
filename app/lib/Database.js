@@ -28,25 +28,48 @@ class Database {
      * @param experimentId
      * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
      */
-    static setUserExperiment(experimentId) {
-        //Retrieve current users id
-        firebase.auth().onAuthStateChanged((user) => {
-            if(user) {
-                var id = user.uid;
-                let userHomePath = "/user/" + id; //update this user's experimentID
-                var today = TimeUtils.getTime();
-                firebase.database().ref(userHomePath).update({
-                    experiment_id: experimentId,
-                    start_date: today
-                })
-                //Update this experiment's active user count
-                let dailyReactionPath = "/experiment/" + experimentId ;
-                firebase.database().ref(dailyReactionPath).child('active_user_count').transaction(function(currentValue) {
-                    return (currentValue||0) + 1
-                });
-            }
-        });
+    static setUserExperiment(experimentId, userCurrentExperimentID) {
+        return new Promise( (success, fail) => {
+
+            //Retrieve current users id
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    var id = user.uid;
+                    let userHomePath = "/user/" + id; //update this user's experimentID
+                    var today = TimeUtils.getTime();
+                    firebase.database().ref(userHomePath).update({
+                        experiment_id: experimentId,
+                        start_date: today
+                    })
+
+                    //Update this experiment's active user count
+                    let dailyReactionPath = "/experiment/" + experimentId;
+                    success(firebase.database().ref(dailyReactionPath).child('active_user_count').transaction(function (currentValue) {
+                        return (currentValue || 0) + 1
+                    }));
+                }
+            });
+        })
     }
+
+    /**
+     * Remove a user form the active user count for an experiment
+     * @param userCurrentExperimentID
+     * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
+     */
+    static unsubscribeUser(userCurrentExperimentID) {
+        return new Promise( (success, fail) => {
+
+            //Update this experiment's active user count
+            let dailyReactionPath = "/experiment/" + userCurrentExperimentID;
+            success(firebase.database().ref(dailyReactionPath).child('active_user_count').transaction(function (currentValue) {
+                return (currentValue || 0) - 1
+            }));
+
+        });
+
+    }
+
 
     /**
      * Sets a users reaction for the day
@@ -163,6 +186,7 @@ class Database {
      */
     static getMyExperimentInfo(experiment_id) {
 
+        console.log("experiment_id: "+experiment_id);
         return new Promise( (success, fail) => {
 
             //Retrieve current users id
