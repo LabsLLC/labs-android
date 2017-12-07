@@ -9,6 +9,8 @@ import Secrets from '../config/secrets.js'
 import firebase from 'react-native-firebase';
 import Database from '../lib/Database.js'
 import { VictoryArea,VictoryChart, VictoryTheme } from "victory-native";
+import { Svg } from 'react-native-svg'
+
 
 export default class HomePage extends Component<{}> {
 
@@ -120,39 +122,17 @@ export default class HomePage extends Component<{}> {
         });
     }
 
-
-
     render() {
 
         let data = [];
 
-        // if(this.state.my_experiment_data && this.state.my_experiment_data.reactions){
-        //     console.log('Just for Andrew!');
-        //     console.log();
-        //
-        // }
         if(this.state.my_experiment_data && this.state.my_experiment_data.reactions){
-            console.log(this.state.my_experiment_data.reactions);
-
             Object.keys(this.state.my_experiment_data.reactions).forEach((key, index) => {
                 var info = (this.state.my_experiment_data.reactions[key]);
                 var val = {x: index, y: info.reaction};
                 data.push(val);
             });
-            // Object.values(this.state.my_experiment_data.reactions).forEach(function(day) {
-            //
-            // });
         }
-
-        console.log("OUR DATA: "+JSON.stringify(data));
-
-        const data1995 = [
-            {x: 1, y: 18000},
-            {x: 2, y: 13250},
-            {x: 3, y: 15000}
-        ];
-        console.log("THE DATA: "+JSON.stringify(data1995));
-
 
         return (
             <View style={{flex: 1}}>
@@ -175,28 +155,28 @@ export default class HomePage extends Component<{}> {
                     </Card>
 
 
-                    <Card title="Day 2"
+
+                    {data.length > 0 ?
+                    <Card title={`Started: ${this.state.my_experiment_data.start_date.replace(/_/g, '/')}`}
                           titleStyle = {styles.dividerTextStyle}>
 
                         <View style={styles.container}>
-                            <VictoryChart
-                                theme={VictoryTheme.material}
-                            >
-                                {data.length > 0 ?  <VictoryArea
-                                    style={{ data: { fill: "#c43a31" } }}
-                                    data={data}
-                                /> : null}
-
-
-                            </VictoryChart>
+                            <Svg width={400} height={350}>
+                                <VictoryChart
+                                    standalone={false}
+                                    theme={VictoryTheme.material}>
+                                     <VictoryArea
+                                        style={{ data: { fill: "#c43a31" } }}
+                                        data={data}
+                                    />
+                                </VictoryChart>
+                            </Svg>
                         </View>
                     </Card>
-
-
+                        : null}
 
                     <Card title="Goal Streak"
                           titleStyle = {styles.dividerTextStyle}>
-
                     </Card>
 
                 </View>
