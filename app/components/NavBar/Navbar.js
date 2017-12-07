@@ -20,7 +20,7 @@ export default class Navbar extends Component<{}> {
                 <View style={styles.button} >
                     <TouchableHighlight onPress={() => this.props.navigation.navigate('HomePage')}>
                         <Image
-                            source={require('../../../images/home.png')}
+                            source={require('../../images/home.png')}
                         />
                     </TouchableHighlight>
                 </View>
@@ -28,7 +28,7 @@ export default class Navbar extends Component<{}> {
                 <View style={styles.button} >
                     <TouchableHighlight onPress={() => this.props.navigation.navigate('ExperimentBrowse')}>
                         <Image
-                            source={require('../../../images/experiments.png')}
+                            source={require('../../images/experiments.png')}
                         />
                     </TouchableHighlight>
                 </View>
@@ -36,7 +36,7 @@ export default class Navbar extends Component<{}> {
                 <View style={styles.biggerButton} >
                     <TouchableHighlight onPress={this._onPressButton}>
                         <Image
-                            source={require('../../../images/completeSurvey.png')}
+                            source={require('../../images/completeSurvey.png')}
                         />
                     </TouchableHighlight>
                 </View>
@@ -44,7 +44,7 @@ export default class Navbar extends Component<{}> {
                 <View style={styles.button} >
                     <TouchableHighlight onPress={this._onPressButton}>
                         <Image
-                            source={require('../../../images/stats.png')}
+                            source={require('../../images/stats.png')}
                         />
                     </TouchableHighlight>
                 </View>
@@ -52,7 +52,7 @@ export default class Navbar extends Component<{}> {
                 <View style={styles.button} >
                     <TouchableHighlight onPress={() => this.props.navigation.navigate('UserProfile')}>
                         <Image
-                            source={require('../../../images/userProfile.png')}
+                            source={require('../../images/userProfile.png')}
                         />
                     </TouchableHighlight>
                 </View>

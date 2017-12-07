@@ -3,6 +3,7 @@ import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elemen
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import Navbar from '../components/NavBar/Navbar.js'
+import Database from '../lib/Database.js';
 
 
 export default class ExperimentBrowse extends Component<{}> {
@@ -13,48 +14,48 @@ export default class ExperimentBrowse extends Component<{}> {
         this.handleChange = this.handleChange.bind(this);
 
         this.state = {
-            searchText:'',
+            experimentData: null,
+            featuredExperiment: null,
+            featuredExperimentImage: '',
         };
     }
 
     handleChange(event) {
         this.setState({ searchText: event});
     }
+
     handleTileClick(event) {
-        console.log("Clicked Image "+event.toString()) //Not sure what is within this event object - cyclical structure
+        console.log("Clicked Image " + event.toString()) //Not sure what is within this event object - cyclical structure
         //this.setState({ searchText: event});
     }
+
     handleClickExperiment(event){
         console.log("Clicked List item "+event.toString())
     }
 
+    componentWillMount() {
+
+        //Query firebase to get the experiments
+        Database.getExperiments()
+            .then((data) => {
+                this.setState({experimentData: data});
+
+                this.setState({featuredExperiment: data[0]});
+                this.setState({featuredExperimentImage: data[0].image})
+
+                console.log("Image string: "+this.state.featuredExperimentImage);
+                //Object.values(data);
+
+
+            }).catch((error) => {
+                console.log(error)
+        });
+
+    }
+
+
     render() {
-        let searchText = this.state.searchText;
-
-        //Temporary list...
-        const list = [
-            {
-                name: 'Wake Up Early',
-                subtitle: 'Start this two week experiment',
-                icon: 'av-timer'
-            },
-            {
-                name: 'No Phone Before Bed',
-                subtitle: 'Put the god damn phone away',
-                icon: 'av-timer'
-            },
-            {
-                name: 'Exersize Daily',
-                subtitle: 'Hit the gym yo',
-                icon: 'av-timer'
-            },
-            {
-                name: 'Eat Healthy',
-                subtitle: 'Veggies and Keenwah man',
-                icon: 'av-timer'
-            }
-        ]
-
+        let experiments = this.state.experimentData;
         return (
             <View style={{flex: 1}}>
             <ScrollView>
@@ -66,26 +67,32 @@ export default class ExperimentBrowse extends Component<{}> {
                         onChangeText={(event) => this.handleChange(event)}
                         onClearText={(event) => this.handleChange(event)}
                         placeholder='Type Here...' />
+                    {
+                        this.state.featuredExperiment &&
+                        (
+                            <Tile
+                                icon={{name: 'favorite',  color: '#ffffff'  }}
+                                imageSrc={require('../images/wakeupearly.png')}
+                                title={this.state.featuredExperiment.val.name}
+                                featured
+                                titleStyle= {styles.dividerTextStyle}s
+                                caption={this.state.featuredExperiment.val.description}
+                                onPress={(event) => this.handleTileClick(event)}
+                            />
+                        )
+                    }
 
-                    <Tile
-                        icon={{name: 'favorite',  color: '#ffffff'  }}
-                        imageSrc={require('../../images/wakeupearly.png')}
-                        title="Wake Up Early"
-                        featured
-                        titleStyle= {styles.dividerTextStyle}
-                        caption="Get in the habit of being productive"
-                        onPress={(event) => this.handleTileClick(event)}
-                    />
 
                     <List containerStyle={{marginBottom: 20}}>
                         {
-                            list.map((l, i) => (
+                            this.state.experimentData &&
+                            this.state.experimentData.map((l) => (
                                 <ListItem
-                                    key={i}
-                                    leftIcon={{name: l.icon}}
-                                    title={l.name}
-                                    subtitle={l.subtitle}
-                                    onPress={(event) => this.handleClickExperiment(event)}
+                                    key={l.id}
+                                    leftIcon={{name: l.val.icon}}
+                                    title={l.val.name}
+                                    subtitle={l.val.description}
+                                    onPress={(event) =>  this.props.navigation.navigate('Experiment', {experiment: l})}
                                 />
                             ))
                         }
@@ -107,6 +114,10 @@ export default class ExperimentBrowse extends Component<{}> {
 }
 
 module.exports = ExperimentBrowse;
+
+
+
+
 
 const styles = StyleSheet.create({
     dividerTextStyle: {
