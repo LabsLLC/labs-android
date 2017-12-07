@@ -33,7 +33,7 @@ export default class HomePage extends Component<{}> {
 
     componentDidMount(){
 
-        //Get the current user's experiment data -> then get the experiments associated information to populate the screen
+        //Get the current user's experiment data under experiments directory
         Database.getMyExperimentData().then((data) => {
             this.setState({
                 my_experiment_data: data
@@ -117,16 +117,35 @@ export default class HomePage extends Component<{}> {
 
     render() {
 
+        let data = [];
+
+        // if(this.state.my_experiment_data && this.state.my_experiment_data.reactions){
+        //     console.log('Just for Andrew!');
+        //     console.log();
+        //
+        // }
+        if(this.state.my_experiment_data && this.state.my_experiment_data.reactions){
+            console.log(this.state.my_experiment_data.reactions);
+
+            Object.keys(this.state.my_experiment_data.reactions).forEach((key, index) => {
+                var info = (this.state.my_experiment_data.reactions[key]);
+                var val = {x: index, y: info.reaction};
+                data.push(val);
+            });
+            // Object.values(this.state.my_experiment_data.reactions).forEach(function(day) {
+            //
+            // });
+        }
+
+        console.log("OUR DATA: "+JSON.stringify(data));
+
         const data1995 = [
             {x: 1, y: 18000},
             {x: 2, y: 13250},
-            {x: 3, y: 15000},
-            {x: 4, y: 12000},
-            {x: 5, y: 18000},
-            {x: 6, y: 13250},
-            {x: 7, y: 15000},
-            {x: 8, y: 12000}
+            {x: 3, y: 15000}
         ];
+        console.log("THE DATA: "+JSON.stringify(data1995));
+
 
         return (
             <View style={{flex: 1}}>
@@ -145,7 +164,7 @@ export default class HomePage extends Component<{}> {
                                 color='#00aced' />
                         </View>
                         <Text>You still need to record progress for:  </Text>
-                        {this.state.experiment_info ?  <ReactionModal item={this.state.experiment_info} index={1}/> : null}
+                        {this.state.experiment_info ?  <ReactionModal experimentInfo={this.state.experiment_info} experimentData={this.state.my_experiment_data} index={1}/> : null}
                     </Card>
 
 
@@ -156,10 +175,12 @@ export default class HomePage extends Component<{}> {
                             <VictoryChart
                                 theme={VictoryTheme.material}
                             >
-                                <VictoryArea
+                                {data.length > 0 ?  <VictoryArea
                                     style={{ data: { fill: "#c43a31" } }}
-                                    data={data1995}
-                                />
+                                    data={data}
+                                /> : null}
+
+
                             </VictoryChart>
                         </View>
                     </Card>

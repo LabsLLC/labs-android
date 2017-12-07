@@ -47,9 +47,10 @@ class Database {
      * Sets a users reaction for the day
      * @param cpmpleted
      * @param reaction double on how the user felt
+     * @param pass the expe
      * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
      */
-    static addDailyReaction(completed, reaction) {
+    static addDailyReaction(experiment_id, completed, reaction) {
         //Retrieve current users id
         firebase.auth().onAuthStateChanged((user) => {
             if(user) {
@@ -79,6 +80,7 @@ class Database {
                     var id = user.uid;
                     let experimentPath = "/user/" + id ;
                     return firebase.database().ref(experimentPath).on('value', (snapshot) => {
+
                         var myExperimentData = JSON.stringify(snapshot.val());
                         console.log("myExperimentData: "+myExperimentData);
                         success(snapshot.val());
