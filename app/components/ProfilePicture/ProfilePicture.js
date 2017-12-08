@@ -16,11 +16,11 @@ export default class ProfilePicture extends Component
     render()
     {
         return (
-            <TouchableOpacity onPress={() => this.props.onPress()}>
                 <View style={styles.backgroundCircle}>
-                    <Image style={styles.image} onClick="onProfileClick" source={{uri: this.props.profileImage}}/>
+                    <TouchableOpacity onPress={() => this.props.onPress()}>
+                        <Image style={styles.image} onClick="onProfileClick" source={{uri: this.props.profileImage}}/>
+                    </TouchableOpacity>
                 </View>
-            </TouchableOpacity>
         )
     }
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Text, Button, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
+import {Card} from 'react-native-elements';
 import LoginForm from '../components/LoginForm'
 import Navbar from '../components/NavBar/Navbar.js'
 import firebase from 'react-native-firebase';
@@ -12,13 +13,6 @@ const instructions = Platform.select({
     android: 'Double tap R on your keyboard to reload,\n' +
     'Shake or press menu button for dev menu',
 });
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDw-gKR_SGlQwrK7EpC30jvl2Jx5tPIyV8",
-    authDomain: "labs-c6f2f.firebaseapp.com",
-    databaseURL: "https://labs-c6f2f.firebaseio.com/",
-    storageBucket: "",
-};
 
 /*const instance = firebase.initializeApp({
     persistence: true
@@ -53,8 +47,7 @@ export default class Main extends Component<{}> {
         {
             return (
                 <View >
-                    <Card
-                        title='Welcome'>
+                    <Card title='Welcome'>
                         <Button
                             onPress={() => this.props.navigation.navigate('SignUp')}
                             title="Create an account"/>

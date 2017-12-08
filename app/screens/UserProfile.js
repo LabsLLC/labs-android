@@ -8,7 +8,9 @@ import firebase from 'react-native-firebase';
 import { TextField } from 'react-native-material-textfield';
 import Database from "../lib/Database"
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import RNGooglePlacePicker from 'react-native-google-place-picker';
+import RNGooglePlaces from 'react-native-google-places';
+import SettingDetail from "../components/SettingDetail/SettingDetail";
+import Screens from "../config/navigationNames"
 
 const FBSDK = require('react-native-fbsdk');
 const {
@@ -26,8 +28,8 @@ export default class UserProfile extends Component<{}> {
         //function bindings
         this.handleChange = this.handleChange.bind(this);
         this._responseInfoCallback = this._responseInfoCallback.bind(this);
-
         this.pickHomeLocation = this.pickHomeLocation.bind(this);
+        this.signOut = this.signOut.bind(this);
 
         this.state = {
             searchText: '',
@@ -35,11 +37,8 @@ export default class UserProfile extends Component<{}> {
             user: firebase.auth().currentUser,
             name: firebase.auth().currentUser.displayName,
             email: firebase.auth().currentUser.email,
-            phone: '',
-
+            address: ""
         };
-
-        RNGooglePlacePicker.setApiKey(Secrets.GoogleApiSecret)
     }
 
     componentDidMount()
@@ -50,6 +49,19 @@ export default class UserProfile extends Component<{}> {
                 this.setState({profileImage: value});
             }
         }).done();
+
+        Database.getUserAddress(this.state.user.uid).then((address) => {
+            let trimmedAddress = address.replace(/"/g,"");
+
+            if(trimmedAddress !== "null")
+            {
+                this.setState({address: trimmedAddress});
+            }
+            else
+            {
+                this.setState({address: "No Address Set"});
+            }
+        });
 
         //in case the facebook profile picture has been updated, go fetch it
         this.fetchFbProfilePic()
@@ -112,39 +124,44 @@ export default class UserProfile extends Component<{}> {
 
     pickHomeLocation()
     {
-        RNGooglePlacePicker.show((response) => {
-            if (response.didCancel) {
-                console.log('User cancelled GooglePlacePicker');
-            }
-            else if (response.error) {
-                console.log('GooglePlacePicker Error: ', response.error);
-            }
-            else {
-                console.log(response)
-            }
-        })
+        RNGooglePlaces.openPlacePickerModal()
+            .then((place) => {
+                console.log(place);
+                let newAddress = place.address.replace(/"/g,"");
+
+                Database.setUserHomeAddress(this.state.user.uid, newAddress);
+
+                this.setState({address: newAddress});
+            })
+            .catch(error => console.log(error.message));  // error is a Javascript Error object
+
+    }
+
+    signOut()
+    {
+        firebase.auth().signOut().then(() => {
+            this.props.navigation.navigate(Screens.Login);
+        }).catch(error => {
+            // An error happened.
+        });
     }
 
     render() {
         let { phone } = this.state;
         return (
-            <KeyboardAwareScrollView enableOnAndroid={true}>
-            <View style={{flex: 1, flexDirection: 'column'}}>
-                <View style={{flex: 1, flexDirection: 'column'}}>
-                    <ProfilePicture profileImage={this.state.profileImage} onPress={this.pickHomeLocation}/>
-                    <Text style={{marginTop:16, fontSize: 24, fontWeight: "300"}}>{this.state.name}</Text>
-                    <Text style={{marginTop:4, fontSize: 14, fontWeight: "300"}}>{this.state.email}</Text>
-                    <TextField label='Home Address' value="" onChangeText={ (address) => Database.setUserHomeAddress({ address })}/>
-                    <TextInput
-                        style={styles.textInput}
-                        placeholder="lol"
-                        defaultValue="O"
-                    />
-
-
+            <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-around'}}>
+                <KeyboardAwareScrollView enableOnAndroid={true}>
+                    <View style={{ flex: 1, flexDirection: 'column', alignItems:"center"}}>
+                        <ProfilePicture profileImage={this.state.profileImage} onPress={this.pickHomeLocation}/>
+                        <Text style={{marginTop:16, fontSize: 24, fontWeight: "300"}}>{this.state.name}</Text>
+                        <Text style={{marginTop:4, fontSize: 14, fontWeight: "300"}}>{this.state.email}</Text>
+                        <SettingDetail onPress={this.pickHomeLocation} title="Home Address" content={this.state.address}/>
+                    </View>
+                </KeyboardAwareScrollView>
+                <View style={{margin:24}}>
+                <Button title="Log Out" onPress={this.signOut}/>
                 </View>
             </View>
-            </KeyboardAwareScrollView>
         )
     }
 }

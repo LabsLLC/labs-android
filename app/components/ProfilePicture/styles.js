@@ -14,6 +14,10 @@ export default styles = StyleSheet.create({
         alignSelf: "center",
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: "#FFFFFF"
+        backgroundColor: "#FFFFFF",
+        elevation: 8
+    },
+    container: {
+
     }
 });

@@ -1,0 +1,41 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'LabsApp' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for LabsApp
+
+  target 'LabsApp-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+    pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
+  end
+
+  target 'LabsAppTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
+
+target 'LabsApp-tvOS' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for LabsApp-tvOS
+
+  target 'LabsApp-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
+
+# react-native-google-place-picker dependencies
+
+pod 'GooglePlacePicker', '= 2.0.1'
+pod 'GooglePlaces', '= 2.0.1'
+pod 'GoogleMaps', '= 2.0.1'
