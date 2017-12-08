@@ -1,26 +1,29 @@
 import React, { Component } from 'react';
-import {StyleSheet, Modal, Text, TouchableHighlight, View } from 'react-native';
-import {Icon, Button,  Tile, SearchBar, List, ListItem} from 'react-native-elements';
+import { Modal, Text, TouchableHighlight, View } from 'react-native';
+import {Icon, ListItem} from 'react-native-elements';
 import styles from './styles'
 import Database from '../../lib/Database.js'
-
-
 
 class ReactionModal extends Component {
     constructor(props) {
         super(props);
-        //function bindings
-        //this.handleChange = this.handleChange.bind(this);
+        this.postReaction = this.postReaction.bind(this);
 
         this.state = {
             modalVisible: false,
         };
     }
 
-    /*
-    state = {
-        modalVisible: false,
-    }*/
+    postReaction(complete, reaction, experiment_id){
+        //Add the reaction to the user
+        Database.addDailyReaction(complete, reaction).then(() => {
+            Database.calculateUserSatisfaction(experiment_id);
+            this.setModalVisible(!this.state.modalVisible);
+            this.props.callback()
+        });
+
+    }
+
 
     //Here, we want to pass another variable depending on what emoji we clicked - Then send the data to the database!
     setModalVisible(visible) {
@@ -28,10 +31,10 @@ class ReactionModal extends Component {
     }
 
     render() {
-        //console.log("ASDASDASDASDAD: " + this.props.item);
+        if ('experimentInfo' in this.props) {
 
+            var experiment_id = this.props.experimentData.experiment_id;
 
-        if ('item' in this.props) {
             return (
                 <View style={{marginTop: 22}}>
                     <Modal
@@ -49,8 +52,7 @@ class ReactionModal extends Component {
                                 <View style = {styles.emojiDivider} >
                                     <View style={styles.emojiToken} >
                                         <TouchableHighlight onPress={() => {
-                                            Database.addDailyReaction(1, 0);
-                                            this.setModalVisible(!this.state.modalVisible)
+                                            this.postReaction(1, 0, experiment_id);
                                         }}>
                                             <View>
                                                 <Icon
@@ -62,8 +64,7 @@ class ReactionModal extends Component {
                                     </View>
                                     <View style={styles.emojiToken} >
                                         <TouchableHighlight onPress={() => {
-                                            Database.addDailyReaction(1, .5);
-                                            this.setModalVisible(!this.state.modalVisible)
+                                            this.postReaction(1, .5, experiment_id);
                                         }}>
                                             <View>
                                                 <Icon
@@ -75,8 +76,7 @@ class ReactionModal extends Component {
                                     </View>
                                     <View style={styles.emojiToken} >
                                         <TouchableHighlight onPress={() => {
-                                            Database.addDailyReaction(1, 1);
-                                            this.setModalVisible(!this.state.modalVisible)
+                                            this.postReaction(1, 1, experiment_id);
                                         }}>
                                             <View>
                                                 <Icon
@@ -98,9 +98,9 @@ class ReactionModal extends Component {
 
                     <View>
                         <ListItem
-                            leftIcon={{name: this.props.item.icon}}
-                            key={this.props.item.index}
-                            title={this.props.item.name}
+                            leftIcon={{name: this.props.experimentInfo.icon}}
+                            key={this.props.experimentInfo.index}
+                            title={this.props.experimentInfo.name}
                             onPress={() => this.setModalVisible(!this.state.modalVisible)} />
                     </View>
 

@@ -14,10 +14,18 @@ export default class Experiment extends Component<{}> {
         super(props);
         //function bindings
         this.handleChange = this.handleChange.bind(this);
+        this.getMyExperimentData = this.getMyExperimentData.bind(this);
+        this.getThisExperimentInfo = this.getThisExperimentInfo.bind(this);
+        this.isUserSubscribed = this.isUserSubscribed.bind(this);
+        this.subscribeToExperiment = this.subscribeToExperiment.bind(this);
+
 
         this.state = {
             experiment: null,
-            experimentID: null
+            active_user_count: null,
+            experimentID: null,
+            userExperimentID: null,
+            isUserAlreadySubscribed: false
         };
     }
 
@@ -26,53 +34,112 @@ export default class Experiment extends Component<{}> {
     }
 
     componentWillMount() {
-        this.setState({experiment: this.props.navigation.state.params.experiment.val });
-        this.setState({experimentID: this.props.navigation.state.params.experiment.id });
 
-        console.log("3HERE!!!!: "+ this.props.navigation.state.params.experiment.val);
+        //Get this page's information
+        this.getThisExperimentInfo().then(() => {
+            this.getMyExperimentData().then(() =>{
+                this.isUserSubscribed();
+            });
+        });
+    }
+
+    //THE PAGES INFO
+    getThisExperimentInfo() {
+        //console.log("this.props.navigation.state.params.experimentID: "+this.props.navigation.state.params.experimentID);
+        return Database.getMyExperimentInfo(this.props.navigation.state.params.experimentID).then((experimentData) => {
+            this.setState({
+                experiment: experimentData
+            });
+        });
+    }
+
+    //THE USERS INFO
+    getMyExperimentData() {
+        return Database.getMyExperimentData().then((data) => {
+            this.setState({
+                userExperimentID: data.experiment_id
+            });
+        });
     }
 
 
-    subscribeToExperiment(event){
-        console.log("The user is subscribing to a an experiment: "+this.state.experimentID);
-        //now all we need is the userID from local storage
-        Database.setUserExperiment(this.state.experimentID);
+    isUserSubscribed() {
+        var experimentID = this.props.navigation.state.params.experimentID;
+        var userExperimentID = this.state.userExperimentID;
+
+        if(userExperimentID && experimentID){
+            console.log("userExperimentID: "+ userExperimentID + " experimentID: " +experimentID)
+            if(userExperimentID == experimentID){
+                console.log("ALREADY SUBSCRIBED!");
+                this.setState({isUserAlreadySubscribed: true});
+            }
+        }
     }
+
+    subscribeToExperiment() {
+        //console.log("The user is subscribing to a an experiment: "+this.state.experimentID);
+        Database.setUserExperiment(this.props.navigation.state.params.experimentID).then(() => {
+            this.setState({
+                isUserAlreadySubscribed: true,
+            }, this.getThisExperimentInfo);
+        })
+        Database.unsubscribeUser(this.state.userExperimentID);
+    }
+
 
     render() {
-        return (
-            <View style={{flex: 1}}>
-                <ScrollView>
 
-                    <Tile
-                        imageSrc={ExperimentImages.getImage(this.state.experiment.name)}
-                        title= {this.state.experiment.name}
-                        contentContainerStyle={{height: 90}}
-                    >
-                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text>Active Users: {this.state.experiment.active_user_count}</Text>
-                            <Text>Satisfaction: {this.state.experiment.total_satisfaction} %</Text>
+
+        if (this.state.experiment) {
+            return (
+                <View style={{flex: 1}}>
+                    <ScrollView>
+
+                        <Tile
+                            imageSrc={ExperimentImages.getImage(this.state.experiment.name)}
+                            title={this.state.experiment.name}
+                            contentContainerStyle={{height: 90}}
+                        >
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                                <Text>Active Users: {this.state.experiment.active_user_count}</Text>
+                                <Text>Satisfaction: {parseFloat(Math.round(this.state.experiment.total_satisfaction * 100)).toFixed(2)  } %</Text>
+                            </View>
+                        </Tile>
+
+                        <View style={{flex: 1, margin: 10}}>
+                            <Text>{this.state.experiment.description}</Text>
                         </View>
-                    </Tile>
 
-                    <View style={{flex: 1, margin: 10}}>
-                        <Text>{this.state.experiment.description}</Text>
+                        {this.state.isUserAlreadySubscribed == true ?
+                            <Button
+                                raised
+                                icon={{name: 'cached'}}
+                                title='Already subscribed'
+                                disabled/>
+                            : <Button
+                                raised
+                                icon={{name: 'cached'}}
+                                title='Subscribe to experiment'
+                                onPress={() => this.subscribeToExperiment()}/>}
+
+
+                    </ScrollView>
+                    <View>
+                        <Navbar navigation={this.props.navigation}/>
                     </View>
-
-
-                    <Button
-                        raised
-                        icon={{name: 'cached'}}
-                        title='Subscribe to experiment'
-                        onPress={(event) => this.subscribeToExperiment(event)}/>
-
-                </ScrollView>
-                <View>
-                    <Navbar navigation = {this.props.navigation}/>
                 </View>
-            </View>
 
-        )}
+            )
+        } else {
+            return (
+                <View>
+                    <Text>
+                        Loading...
+                    </Text>
+                </View>
+            )
+        }
+    }
 }
 
 module.exports = Experiment;
@@ -88,3 +155,17 @@ const styles = StyleSheet.create({
     }
 });
 
+
+/*
+{this.state.isUserAlreadySubscribed == true ?
+                        <Button
+                            raised
+                            icon={{name: 'cached'}}
+                            title='Already subscribed'
+                            disabled/>
+                        : <Button
+                            raised
+                            icon={{name: 'cached'}}
+                            title='Subscribe to experiment'
+                            onPress={(event) => this.subscribeToExperiment(event)}/>}
+ */

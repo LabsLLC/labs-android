@@ -18,7 +18,7 @@ export default class SettingDetail extends Component
         return (
             <TouchableOpacity style={styles.container} onPress={this.props.onPress}>
                 <Image style={styles.listIcon} source={require('../../images/icons/mappinalternate.png')} />
-                <View style={}>
+                <View style={styles.textStack}>
                     <Text style={styles.contentText}>{this.props.content}</Text>
                     <Text style={styles.title}>{this.props.title}</Text>
                 </View>

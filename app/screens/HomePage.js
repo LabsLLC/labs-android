@@ -8,6 +8,9 @@ import Geocoder from 'react-native-geocoding'
 import Secrets from '../config/secrets.js'
 import firebase from 'react-native-firebase';
 import Database from '../lib/Database.js'
+import { VictoryArea,VictoryChart, VictoryTheme } from "victory-native";
+import { Svg } from 'react-native-svg'
+
 
 export default class HomePage extends Component<{}> {
 
@@ -16,6 +19,7 @@ export default class HomePage extends Component<{}> {
         //function bindings
         this.handleChange = this.handleChange.bind(this);
         this.getExperimentInfo = this.getExperimentInfo.bind(this);
+        this.getMyExperimentData = this.getMyExperimentData.bind(this);
 
         Geocoder.setApiKey(Secrets.GoogleApiSecret);
         this.state = {
@@ -30,14 +34,11 @@ export default class HomePage extends Component<{}> {
         };
     }
 
+
+
     componentDidMount(){
 
-        //Get the current user's experiment data -> then get the experiments associated information to populate the screen
-        Database.getMyExperimentData().then((data) => {
-            this.setState({
-                my_experiment_data: data
-            }, this.getExperimentInfo);
-        });
+       this.getMyExperimentData();
 
 
         //Retrieve current users id
@@ -87,9 +88,6 @@ export default class HomePage extends Component<{}> {
      * Retrieve the experiment information of a user given experiment
      */
     getExperimentInfo() {
-
-        console.log("DATA1: "+JSON.stringify(this.state.my_experiment_data));
-
         Database.getMyExperimentInfo(this.state.my_experiment_data.experiment_id).then((data) => {
             this.setState({
                 experiment_info: data
@@ -98,6 +96,7 @@ export default class HomePage extends Component<{}> {
             console.log("Error because: "+error);
         });
     }
+
 
     /**
      * Find the longitude and latitude of a user given its home address
@@ -114,7 +113,26 @@ export default class HomePage extends Component<{}> {
         );
     }
 
+    getMyExperimentData() {
+        //Get the current user's experiment data under experiments directory
+        Database.getMyExperimentData().then((data) => {
+            this.setState({
+                my_experiment_data: data
+            }, this.getExperimentInfo);
+        });
+    }
+
     render() {
+
+        let data = [];
+
+        if(this.state.my_experiment_data && this.state.my_experiment_data.reactions){
+            Object.keys(this.state.my_experiment_data.reactions).forEach((key, index) => {
+                var info = (this.state.my_experiment_data.reactions[key]);
+                var val = {x: index, y: info.reaction};
+                data.push(val);
+            });
+        }
 
         return (
             <View style={{flex: 1}}>
@@ -123,12 +141,6 @@ export default class HomePage extends Component<{}> {
                 <View>
                     <Text h4> My {this.state.experiment_info ? <Text>{this.state.experiment_info.name}</Text> : null} </Text>
                     <Text> See how you are doing with your experiment </Text>
-
-
-                    <Card title="Day 2"
-                          titleStyle = {styles.dividerTextStyle}>
-
-                    </Card>
 
                     <Card >
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -139,15 +151,32 @@ export default class HomePage extends Component<{}> {
                                 color='#00aced' />
                         </View>
                         <Text>You still need to record progress for:  </Text>
-
-                        {this.state.experiment_info ?  <ReactionModal item={this.state.experiment_info} index={1}/> : null}
-
-
+                        {this.state.experiment_info ?  <ReactionModal  experimentInfo={this.state.experiment_info} experimentData={this.state.my_experiment_data} callback= {this.getMyExperimentData} index={1}/> : null}
                     </Card>
+
+
+
+                    {data.length > 1 ?
+                    <Card title={`Started: ${this.state.my_experiment_data.start_date.replace(/_/g, '/')}`}
+                          titleStyle = {styles.dividerTextStyle}>
+
+                        <View style={styles.container}>
+                            <Svg width={400} height={350}>
+                                <VictoryChart
+                                    standalone={false}
+                                    theme={VictoryTheme.material}>
+                                     <VictoryArea
+                                        style={{ data: { fill: "#c43a31" } }}
+                                        data={data}
+                                    />
+                                </VictoryChart>
+                            </Svg>
+                        </View>
+                    </Card>
+                        : null}
 
                     <Card title="Goal Streak"
                           titleStyle = {styles.dividerTextStyle}>
-
                     </Card>
 
                 </View>
