@@ -17,7 +17,7 @@ class LoginForm extends Component {
             .then((currentUser) => {
                 this.setState({ error: '', loading: false });
             })
-            .then(Database.experimentTest())
+            .then(() => {Database.experimentTest()})
             .catch((error) => {
                 console.log(`Login fail with error: ${error}`);
                 this.setState({ error: 'Authentication failed. Please check your credentials', loading: false });

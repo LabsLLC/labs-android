@@ -17,8 +17,12 @@
     "react-native-fbsdk": "^0.6.3",
     "react-native-firebase": "^3.1.1",
     "react-native-geocoding": "^0.2.0",
+    "react-native-google-places": "^2.4.2",
+    "react-native-keyboard-aware-scroll-view": "^0.4.1",
+    "react-native-material-textfield": "^0.11.0",
     "react-native-simple-auth": "^2.1.0",
-    "react-native-svg": "^6.0.1-rc.1",
+    "react-native-svg": "^5.5.1",
+    "react-native-svg-uri": "^1.2.3",
     "react-native-vector-icons": "^4.4.2",
     "react-navigation": "^1.0.0-beta.21",
     "victory-native": "^0.16.1"
