@@ -56,11 +56,14 @@ class Database {
     static unsubscribeUser(userCurrentExperimentID) {
         return new Promise( (success, fail) => {
 
-            //Update this experiment's active user count
-            let dailyReactionPath = "/experiment/" + userCurrentExperimentID;
-            success(firebase.database().ref(dailyReactionPath).child('active_user_count').transaction(function (currentValue) {
-                return (currentValue || 0) - 1
-            }));
+            if(userCurrentExperimentID !== null){
+                //Update this experiment's active user count
+                let dailyReactionPath = "/experiment/" + userCurrentExperimentID;
+                success(firebase.database().ref(dailyReactionPath).child('active_user_count').transaction(function (currentValue) {
+                    return (currentValue || 0) - 1
+                }));
+            }
+
 
         });
 
