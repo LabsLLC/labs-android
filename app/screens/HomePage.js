@@ -151,12 +151,12 @@ export default class HomePage extends Component<{}> {
                                 color='#00aced' />
                         </View>
                         <Text>You still need to record progress for:  </Text>
-                        {this.state.experiment_info ?  <ReactionModal experimentInfo={this.state.experiment_info} experimentData={this.state.my_experiment_data} callback= {this.getMyExperimentData} index={1}/> : null}
+                        {this.state.experiment_info ?  <ReactionModal  experimentInfo={this.state.experiment_info} experimentData={this.state.my_experiment_data} callback= {this.getMyExperimentData} index={1}/> : null}
                     </Card>
 
 
 
-                    {data.length > 0 ?
+                    {data.length > 1 ?
                     <Card title={`Started: ${this.state.my_experiment_data.start_date.replace(/_/g, '/')}`}
                           titleStyle = {styles.dividerTextStyle}>
 
