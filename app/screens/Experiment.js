@@ -68,7 +68,7 @@ export default class Experiment extends Component<{}> {
         var userExperimentID = this.state.userExperimentID;
 
         if(userExperimentID && experimentID){
-            console.log("userExperimentID: "+ userExperimentID + " experimentID: " +experimentID)
+            //console.log("userExperimentID: "+ userExperimentID + " experimentID: " +experimentID)
             if(userExperimentID == experimentID){
                 console.log("ALREADY SUBSCRIBED!");
                 this.setState({isUserAlreadySubscribed: true});
@@ -78,12 +78,27 @@ export default class Experiment extends Component<{}> {
 
     subscribeToExperiment() {
         //console.log("The user is subscribing to a an experiment: "+this.state.experimentID);
-        Database.setUserExperiment(this.props.navigation.state.params.experimentID).then(() => {
-            this.setState({
-                isUserAlreadySubscribed: true,
-            }, this.getThisExperimentInfo);
+        Database.unsubscribeUser(this.state.userExperimentID).then(() =>
+        {
+            Database.archiveUserData(this.state.userExperimentID).then(() => {
+                Database.setUserExperiment(this.props.navigation.state.params.experimentID).then(() => {
+                    this.setState({
+                        isUserAlreadySubscribed: true,
+                    }, this.getThisExperimentInfo);
+                });
+            });
+
         })
-        Database.unsubscribeUser(this.state.userExperimentID);
+
+
+        //.then(() => {
+            //then archive
+            //Database.archiveUserData(this.state.userExperimentID).then(() => {
+                //then clear reaction data
+
+            //});
+        //});
+
     }
 
 
@@ -102,7 +117,11 @@ export default class Experiment extends Component<{}> {
                         >
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                                 <Text>Active Users: {this.state.experiment.active_user_count}</Text>
-                                <Text>Satisfaction: {parseFloat(Math.round(this.state.experiment.total_satisfaction * 100)).toFixed(2)  } %</Text>
+
+                                {this.state.experiment.total_satisfaction ?
+                                    <Text>Satisfaction: {parseFloat(Math.round(this.state.experiment.total_satisfaction * 100)).toFixed(2)  } %</Text>
+                                    : <Text>No data yet!</Text>
+                                }
                             </View>
                         </Tile>
 
