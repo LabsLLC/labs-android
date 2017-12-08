@@ -13,9 +13,26 @@ export default styles = StyleSheet.create({
         marginBottom: 2
     },
     container: {
-        flex:1,
-        alignSelf: "flex-start",
+        flex: 1,
+        flexDirection:"row",
+        marginTop: 24
+    },
+    textStack: {
+        flex: 2,
         marginLeft: 20,
-        marginTop: 20
+        flexDirection: "column"
+    },
+    listIcon: {
+        marginTop: 4,
+        marginLeft:20,
+        width:16,
+        height:23.58
+    },
+    chevron: {
+        marginTop:8,
+        height:28.6,
+        width:16,
+        marginLeft: 16,
+        marginRight: 20
     }
 });
