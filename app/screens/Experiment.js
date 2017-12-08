@@ -102,7 +102,7 @@ export default class Experiment extends Component<{}> {
                         >
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                                 <Text>Active Users: {this.state.experiment.active_user_count}</Text>
-                                <Text>Satisfaction: {this.state.experiment.total_satisfaction} %</Text>
+                                <Text>Satisfaction: {parseFloat(Math.round(this.state.experiment.total_satisfaction * 100)).toFixed(2)  } %</Text>
                             </View>
                         </Tile>
 
