@@ -3,6 +3,7 @@ package com.labs.android;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactlibrary.RNGooglePlacePickerPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.FacebookSdk;
 
@@ -40,6 +41,7 @@ public class MainApplication extends Application implements ReactApplication {
      mCallbackManager = new CallbackManager.Factory().create();
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNGooglePlacePickerPackage(),
             new FBSDKPackage(mCallbackManager),
             new RNFirebasePackage(),
             new RNFirebaseAuthPackage(),

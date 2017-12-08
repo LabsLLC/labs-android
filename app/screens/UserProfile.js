@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elements';
-import {Image, TouchableOpacity, ScrollView, Modal, StyleSheet, AsyncStorage} from 'react-native';
+import {Button, Text} from 'react-native-elements';
+import {TextInput, KeyboardAvoidingView, AsyncStorage} from 'react-native';
 import {View} from 'react-native';
 import Navbar from '../components/NavBar/Navbar.js'
 import ProfilePicture from "../components/ProfilePicture/ProfilePicture";
 import firebase from 'react-native-firebase';
-
+import { TextField } from 'react-native-material-textfield';
+import Database from "../lib/Database"
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import RNGooglePlacePicker from 'react-native-google-place-picker';
 
 const FBSDK = require('react-native-fbsdk');
 const {
@@ -24,13 +27,19 @@ export default class UserProfile extends Component<{}> {
         this.handleChange = this.handleChange.bind(this);
         this._responseInfoCallback = this._responseInfoCallback.bind(this);
 
+        this.pickHomeLocation = this.pickHomeLocation.bind(this);
+
         this.state = {
             searchText: '',
             profileImage: 'http://placehold.it/120x120',
             user: firebase.auth().currentUser,
             name: firebase.auth().currentUser.displayName,
-            email: firebase.auth().currentUser.email
+            email: firebase.auth().currentUser.email,
+            phone: '',
+
         };
+
+        RNGooglePlacePicker.setApiKey(Secrets.GoogleApiSecret)
     }
 
     componentDidMount()
@@ -101,13 +110,41 @@ export default class UserProfile extends Component<{}> {
         new GraphRequestManager().addRequest(infoRequest).start();
     }
 
+    pickHomeLocation()
+    {
+        RNGooglePlacePicker.show((response) => {
+            if (response.didCancel) {
+                console.log('User cancelled GooglePlacePicker');
+            }
+            else if (response.error) {
+                console.log('GooglePlacePicker Error: ', response.error);
+            }
+            else {
+                console.log(response)
+            }
+        })
+    }
+
     render() {
+        let { phone } = this.state;
         return (
-            <View style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}>
-                <ProfilePicture profileImage={this.state.profileImage} onPress={this.fetchFbProfilePic}/>
-                <Text style={{marginTop:16, fontSize: 24, fontWeight: "300"}}>{this.state.name}</Text>
-                <Text style={{marginTop:4, fontSize: 14, fontWeight: "300"}}>{this.state.email}</Text>
+            <KeyboardAwareScrollView enableOnAndroid={true}>
+            <View style={{flex: 1, flexDirection: 'column'}}>
+                <View style={{flex: 1, flexDirection: 'column'}}>
+                    <ProfilePicture profileImage={this.state.profileImage} onPress={this.pickHomeLocation}/>
+                    <Text style={{marginTop:16, fontSize: 24, fontWeight: "300"}}>{this.state.name}</Text>
+                    <Text style={{marginTop:4, fontSize: 14, fontWeight: "300"}}>{this.state.email}</Text>
+                    <TextField label='Home Address' value="" onChangeText={ (address) => Database.setUserHomeAddress({ address })}/>
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder="lol"
+                        defaultValue="O"
+                    />
+
+
+                </View>
             </View>
+            </KeyboardAwareScrollView>
         )
     }
 }

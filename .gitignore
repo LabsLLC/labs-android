@@ -22,6 +22,9 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 
+#Secrets included in Manifest
+**/*/res/values/secrets.xml
+
 # Android/IntelliJ
 #
 build/

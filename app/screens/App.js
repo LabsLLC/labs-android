@@ -5,7 +5,7 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React, { KeyboardAvoidingView, Component } from 'react';
 import { StackNavigator } from 'react-navigation';
 import Main from './Main.js'
 import SignUp from './SignUp.js'
