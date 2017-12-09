@@ -4,40 +4,68 @@ import {Card} from 'react-native-elements';
 import LoginForm from '../components/LoginForm'
 import Navbar from '../components/NavBar/Navbar.js'
 import firebase from 'react-native-firebase';
+import LoginUtils from '../lib/LoginUtils'
 
 import Screens from '../config/navigationNames'
-
-const instructions = Platform.select({
-    ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-    android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-/*const instance = firebase.initializeApp({
-    persistence: true
-});*/
 
 export default class Main extends Component<{}> {
 
     constructor() {
         super();
 
+        this.onLoginPress = this.onLoginPress.bind(this);
+        this.onSignUpPress = this.onSignUpPress.bind(this);
+
         this.state = {
             loading: true,
             authenticated: false,
+            error: '',
         };
     }
 
     componentDidMount(){
-        firebase.auth().onAuthStateChanged((user) => {
+
+        var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
             if (user) { //if user is authenticated
                 this.props.navigation.navigate(Screens.Home);
             } else {
                 this.setState({ loading: false, authenticated: false });
+                unsubscribe();
             }
         });
     }
+
+    onLoginPress() {
+        this.setState({ error: '', loading: true });
+        LoginUtils.getFacebookLoginPromise()
+            .then((currentUser) => {
+                this.setState({ error: '', loading: false });
+            })
+            .then(() => {Database.experimentTest()})
+            .catch((error) => {
+                console.log(`Login fail with error: ${error}`);
+                this.setState({ error: 'Authentication failed. Please check your credentials', loading: false });
+            });
+    }
+
+    /**
+     * Action for the Sign Up Button
+     */
+    onSignUpPress() {
+        console.log("onSignUpPress");
+        this.setState({error: '', loading: true});
+        LoginUtils.getFacebookLoginPromise().then((currentUser) => {
+            console.log("Has signed in now redirect with user: "+currentUser);
+
+            //Database.setUserHomeAddress(currentUser.uid, address);rrr
+
+            //redirect to location screen
+            this.props.navigation.navigate('ChooseAddress', {currentUser: currentUser});
+
+            this.setState({error: '', loading: false});
+        })
+    }
+
 
     render() {
         if (this.state.loading) {
@@ -49,9 +77,10 @@ export default class Main extends Component<{}> {
                 <View style={{ marginTop: 10}}>
                     <Card title='Welcome'>
                         <Button
-                            onPress={() => this.props.navigation.navigate('SignUp')}
+                            onPress={this.onSignUpPress.bind(this)}
                             title="Create an account"/>
-                        <LoginForm />
+                        <Button onPress={this.onLoginPress.bind(this)}
+                                title="Log in with Facebook"/>
                     </Card>
                     <Navbar navigation = {this.props.navigation}/>
                 </View>

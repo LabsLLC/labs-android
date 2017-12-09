@@ -14,7 +14,8 @@ import HomePage from './HomePage.js'
 import { AppRegistry, ScrollView, View} from 'react-native';
 import Navbar from '../components/NavBar/Navbar.js'
 import UserProfile from "./UserProfile";
-import Experiment from './Experiment.js'
+import Experiment from './Experiment.js';
+import ChooseAddress from './ChooseAddress'
 
 export default class App extends Component<{}> {
 
@@ -36,6 +37,9 @@ const RootNavigator = StackNavigator({
     },
     Experiment: {
         screen: Experiment,
+    },
+    ChooseAddress: {
+        screen: ChooseAddress,
     },
     HomePage: {
         screen: HomePage,

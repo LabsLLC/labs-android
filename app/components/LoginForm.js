@@ -1,15 +1,49 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-import TitledInput from './TitledInput/TitledInput';
 import Database from '../lib/Database';
-import firebase from 'react-native-firebase';
 import LoginUtils from '../lib/LoginUtils'
+import SettingDetail from './SettingDetail/SettingDetail';
+import RNGooglePlaces from 'react-native-google-places';
+
 
 class LoginForm extends Component {
+
+
+    constructor(props) {
+        super(props);
+
+        //function bindings
+        this.pickHomeLocation = this.pickHomeLocation.bind(this);
+        this.renderSignUp = this.renderSignUp.bind(this);
+
+        this.state = {
+            address: 'No address yet',
+            error: '',
+            loading: false
+        };
+    }
+
+
+    pickHomeLocation()
+    {
+        RNGooglePlaces.openPlacePickerModal()
+            .then((place) => {
+                console.log(place);
+                let newAddress = place.address.replace(/"/g,"");
+
+                Database.setUserHomeAddress(this.state.user.uid, newAddress);
+
+                this.setState({address: newAddress});
+            })
+            .catch(error => console.log(error.message));  // error is a Javascript Error object
+
+    }
+
+    /*
     state = {
         address: '',
         error: '',
-        loading: false };
+        loading: false };*/
 
     onLoginPress() {
         this.setState({ error: '', loading: true });
@@ -28,15 +62,21 @@ class LoginForm extends Component {
      * Action for the Sign Up Button
      */
     onSignUpPress() {
-        this.setState({ error: '', loading: true });
-        const {address } = this.state;
+        console.log("onSignUpPress");
+        this.setState({error: '', loading: true});
+        const {address} = this.state;
         LoginUtils.getFacebookLoginPromise().then((currentUser) => {
-            Database.setUserHomeAddress(currentUser.uid, address);
-            this.setState({ error: '', loading: false });
+            console.log("Has signed in now redirect");
+
+            //Database.setUserHomeAddress(currentUser.uid, address);
+
+            //redirect to location screen
+            this.props.navigation.navigate('ChooseAddress', {currentUser: currentUser})
+
+            this.setState({error: '', loading: false});
         })
-        .then(() => {
-            Database.experimentTest()} );
     }
+
 
 
     renderLogin() {
@@ -62,13 +102,11 @@ class LoginForm extends Component {
 
     renderSignUp() {
         if('SignUp' in this.props){
-            return <TitledInput
-                label='Home Address'
-                autoCorrect={false}
-                placeholder='100 Institute Rd, Worcester, MA'
-                value={this.state.address}
-                onChangeText={address => this.setState({ address })}
-            />;
+            return <SettingDetail onPress={this.pickHomeLocation}
+                                   title="Home Address"
+                                   content={this.state.address}/>
+
+
         }
     }
 
