@@ -75,7 +75,7 @@ export default class ExperimentBrowse extends Component<{}> {
                                 imageSrc={require('../images/wakeupearly.png')}
                                 title={this.state.featuredExperiment.val.name}
                                 featured
-                                titleStyle= {styles.dividerTextStyle}s
+                                titleStyle= {styles.dividerTextStyle}
                                 caption={this.state.featuredExperiment.val.description}
                                 onPress={(event) => this.handleTileClick(event)}
                             />
@@ -86,15 +86,22 @@ export default class ExperimentBrowse extends Component<{}> {
                     <List containerStyle={{marginBottom: 20}}>
                         {
                             this.state.experimentData &&
-                            this.state.experimentData.map((l) => (
+                            this.state.experimentData.map((l) => {
+                                const satisfaction = l.val.total_satisfaction != null && l.val.total_satisfaction != undefined ?
+                                    "Satisfaction: " + parseFloat(Math.round(l.val.total_satisfaction * 100)).toFixed(1) + "%"  : 'No satisfaction data';
+                                return (
                                 <ListItem
                                     key={l.id}
                                     leftIcon={{name: l.val.icon}}
                                     title={l.val.name}
                                     subtitle={l.val.description}
+                                    subtitleNumberOfLine={2}
+                                    rightTitle={satisfaction}
                                     onPress={(event) =>  this.props.navigation.navigate('Experiment', {experimentID: l.id})}
                                 />
-                            ))
+                            )}
+                            )
+
                         }
                     </List>
 

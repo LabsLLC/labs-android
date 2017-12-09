@@ -118,7 +118,7 @@ export default class Experiment extends Component<{}> {
                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                                 <Text>Active Users: {this.state.experiment.active_user_count}</Text>
 
-                                {this.state.experiment.total_satisfaction ?
+                                {this.state.experiment.total_satisfaction != undefined || this.state.experiment.total_satisfaction != null?
                                     <Text>Satisfaction: {parseFloat(Math.round(this.state.experiment.total_satisfaction * 100)).toFixed(2)  } %</Text>
                                     : <Text>No data yet!</Text>
                                 }
