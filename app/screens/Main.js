@@ -79,7 +79,7 @@ export default class Main extends Component<{}> {
         else
         {
             return (
-                <View >
+                <View style={{ marginTop: 10}}>
                     <Card title='Welcome'>
                         <Button
                             onPress={() => this.props.navigation.navigate('SignUp')}

@@ -1,5 +1,5 @@
 import firebase from 'react-native-firebase';
-import TimeUtils from './TimeUtils'
+import Utils from './Utils'
 
 class Database {
 
@@ -13,7 +13,7 @@ class Database {
     static setUserHomeAddress(userId, userHome) {
 
         let userHomePath = "/user/" + userId;
-        return firebase.database().ref(userHomePath).set({
+        return firebase.database().ref(userHomePath).update({
             userHome: userHome
         })
 
@@ -32,7 +32,7 @@ class Database {
                 if (user) {
                     var id = user.uid;
                     let userHomePath = "/user/" + id; //update this user's experimentID
-                    var today = TimeUtils.getTime();
+                    var today = Utils.getTime();
                     firebase.database().ref(userHomePath).update({
                         experiment_id: experimentId,
                         start_date: today
@@ -56,16 +56,82 @@ class Database {
     static unsubscribeUser(userCurrentExperimentID) {
         return new Promise( (success, fail) => {
 
-            //Update this experiment's active user count
-            let dailyReactionPath = "/experiment/" + userCurrentExperimentID;
-            success(firebase.database().ref(dailyReactionPath).child('active_user_count').transaction(function (currentValue) {
-                return (currentValue || 0) - 1
-            }));
+            if(userCurrentExperimentID !== null){
+                //Update this experiment's active user count
+                let dailyReactionPath = "/experiment/" + userCurrentExperimentID;
+                success(firebase.database().ref(dailyReactionPath).child('active_user_count').transaction(function (currentValue) {
+                    return (currentValue || 0) - 1
+                }));
+            }
 
+
+            /*
+            .then(() => {
+                this.archiveUserData(userCurrentExperimentID)
+            })
+             */
         });
-
     }
 
+    /**
+     * Archive the user's data
+     * @param userCurrentExperimentID
+     * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
+     */
+    static archiveUserData(userCurrentExperimentID) {
+        return new Promise( (success, fail) => {
+            let user = firebase.auth().currentUser;
+
+            if (user) {
+                var id = user.uid;
+                var userPath = "/user/"+id;
+
+                //extract the user's satisfaction rating
+                firebase.database().ref(userPath).once('value', (data) => {
+
+                    console.log("ARCHIVING DATA: "+ JSON.stringify(data.val()));
+                    //Check to see if the user has a satisfaction for the experiment their subscribed to, if not, don't update their archive.
+                    if(data.val().satisfaction || data.val().satisfaction === 0){
+                        var userSatisfaction = data.val().satisfaction;
+
+                        console.log("With userSatisfaction: "+userSatisfaction);
+                        let archiveDataPath = "/user/" + id + "/archive_data/"+userCurrentExperimentID;
+                        success( firebase.database().ref(archiveDataPath).update({
+                            satisfaction: userSatisfaction
+                        }).then(()=>{
+                             this.clearActiveExperimentData()
+                         }))
+                    } else {
+                        console.log("FAILED TO FIND SATISFACTION");
+                        fail();
+                    }
+                });
+            }
+
+        });
+    }
+
+    /**
+     * Archive the user's data
+     * @param userCurrentExperimentID
+     * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
+     */
+    static clearActiveExperimentData() {
+        return new Promise((success, fail) => {
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    var id = user.uid;
+                    var userPath = "/user/" + id;
+
+                    success(firebase.database().ref(userPath).update({
+                        reactions: null,
+                        satisfaction: null
+                    }))
+
+                }
+            });
+        });
+    }
 
     /**
      * Sets a users reaction for the day
@@ -80,7 +146,7 @@ class Database {
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
                     var id = user.uid;
-                    var today = TimeUtils.getTime();
+                    var today = Utils.getTime();
 
                     let dailyReactionPath = "/user/" + id + "/reactions/" + today;
                     success( firebase.database().ref(dailyReactionPath).update({
@@ -101,10 +167,11 @@ class Database {
     static calculateUserSatisfaction(experiment_id) {
         return new Promise( (success, fail) => {
             firebase.auth().onAuthStateChanged((user) => { //Retrieve current users id
+                console.log("User satisfaction calculated.");
+
                 if(user) {
                     var id = user.uid;
                     let userPath = "/user/" + id ;
-
                     //get the user's reactions -> then average them
                     this.getMyExperimentData().then((userExperimentData) => {
                         var reactions = userExperimentData.reactions;
@@ -114,7 +181,6 @@ class Database {
                            count += 1;
                         });
                         satisfaction = sum / count;
-
                         //post user satisfaction
                         success( firebase.database().ref(userPath).update({
                             satisfaction: satisfaction
@@ -134,7 +200,7 @@ class Database {
      * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
      */
     static calculateExperimentSatisfaction(experiment_id) {
-        console.log("experiment_id: "+experiment_id);
+        //console.log("experiment_id: "+experiment_id);
         return new Promise( (success, fail) => {
             firebase.auth().onAuthStateChanged((user) => { //Retrieve current users id
                 if(user) {
@@ -143,14 +209,17 @@ class Database {
                     //get the user's reactions -> then average them&&&&&&&&&&&&&&
                     this.getAllUserExperimentData(experiment_id).then((userExperimentSatisfactionData) => {
 
-
                         //calculate the overall satisfaction
                         let sum = 0, count = 0;
                         userExperimentSatisfactionData.map((userSatisfaction) => {
                             sum += userSatisfaction;
                             count += 1;
                         });
-                        var experimentSatisfaction = sum / count;
+                        var experimentSatisfaction;
+                        if(count == 0)
+                            experimentSatisfaction = 0; //delete this field for now
+                        else
+                            experimentSatisfaction = sum / count;
 
                         //post it in the experiment
                         success( firebase.database().ref(experimentPath).update({
@@ -174,12 +243,32 @@ class Database {
                 //convert data to an array
                 var userList =[]
                 data.forEach(function(data) {
-
                     //Filter out all but given experiment id - also filter out any nulls - this would indicate that a user has subscribed to an experiment, but hasn't posted any reactions yet
-                    if(data.val().experiment_id == experiment_id && data.val().satisfaction){
-                        userList.push(data.val().satisfaction);
+                    if('satisfaction' in data.val() && 'experiment_id' in data.val()){
+                        if(data.val().experiment_id === experiment_id){
+                            userList.push(data.val().satisfaction);
+                        }
                     }
+                    //Snatch all from the archives as well ;)
+                    if('archive_data' in data.val()) {
+                        //console.log("archive_data: "+JSON.stringify(data.val().archive_data));
+                        Object.keys(data.val().archive_data).forEach((key) => {
+                            //console.log('User has archieve data for experiment: ' + key);
+                            if(key!==null && data.val().archive_data[key] !== null) {
+
+                                if(key === experiment_id)  {
+                                    if('satisfaction' in data.val().archive_data[key]){
+                                        userList.push(data.val().archive_data[key].satisfaction)
+                                    }
+                                }
+                            }
+                        });
+                    }
+
                 });
+                //console.log("ARCHIVE USER RATINGS: "+ JSON.stringify(userArchiveList));
+                console.log("All USER RATINGS: "+ JSON.stringify(userList));
+
                 success(userList);
             });
 
@@ -197,12 +286,10 @@ class Database {
     static getMyExperimentData() {
         return new Promise( (success, fail) => {
             firebase.auth().onAuthStateChanged((user) => { //Retrieve current users id
-
                 if(user) {
                     var id = user.uid;
                     let experimentPath = "/user/" + id ;
                     return firebase.database().ref(experimentPath).on('value', (snapshot) => {
-
                         success(snapshot.val());
                     });
                 }
@@ -221,13 +308,15 @@ class Database {
 
             var experimentRef = firebase.database().ref("experiment/");
 
-            return experimentRef.orderByChild("name").on("value", function (data) {
+            return experimentRef.orderByChild("total_satisfaction").on("value", function (data) {
 
                 var list =[]
                 data.forEach(function(data) {
                     var x = {id: data.key, val: data.val()};
                     list.push(x);
                 });
+
+                list.reverse();
 
                 success(list);
             });
@@ -251,7 +340,6 @@ class Database {
                     let experimentPath = "/experiment/" + experiment_id;
                     return firebase.database().ref(experimentPath).on('value', (snapshot) => {
                         var experimentInfo = JSON.stringify(snapshot.val());
-                        console.log("experimentInfo: "+experimentInfo);
                         success(snapshot.val());
                     });
                 }

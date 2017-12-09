@@ -1,0 +1,42 @@
+diff --git a/app/screens/Experiment.js b/app/screens/Experiment.js
+index 4fdcc2f..7f26b7d 100644
+--- a/app/screens/Experiment.js
++++ b/app/screens/Experiment.js
+@@ -68,7 +68,7 @@ export default class Experiment extends Component<{}> {
+         var userExperimentID = this.state.userExperimentID;
+ 
+         if(userExperimentID && experimentID){
+-            console.log("userExperimentID: "+ userExperimentID + " experimentID: " +experimentID)
++            //console.log("userExperimentID: "+ userExperimentID + " experimentID: " +experimentID)
+             if(userExperimentID == experimentID){
+                 console.log("ALREADY SUBSCRIBED!");
+                 this.setState({isUserAlreadySubscribed: true});
+@@ -83,7 +83,14 @@ export default class Experiment extends Component<{}> {
+                 isUserAlreadySubscribed: true,
+             }, this.getThisExperimentInfo);
+         })
+-        Database.unsubscribeUser(this.state.userExperimentID);
++        Database.unsubscribeUser(this.state.userExperimentID)//.then(() => {
++            //then archive
++            //Database.archiveUserData(this.state.userExperimentID).then(() => {
++                //then clear reaction data
++
++            //});
++        //});
++
+     }
+ 
+ 
+@@ -102,7 +109,11 @@ export default class Experiment extends Component<{}> {
+                         >
+                             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                                 <Text>Active Users: {this.state.experiment.active_user_count}</Text>
+-                                <Text>Satisfaction: {parseFloat(Math.round(this.state.experiment.total_satisfaction * 100)).toFixed(2)  } %</Text>
++
++                                {this.state.experiment.total_satisfaction ?
++                                    <Text>Satisfaction: {parseFloat(Math.round(this.state.experiment.total_satisfaction * 100)).toFixed(2)  } %</Text>
++                                    : <Text>No data yet!</Text>
++                                }
+                             </View>
+                         </Tile>
+ 

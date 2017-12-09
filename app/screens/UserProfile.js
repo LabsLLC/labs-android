@@ -149,7 +149,7 @@ export default class UserProfile extends Component<{}> {
     render() {
         let { phone } = this.state;
         return (
-            <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-around'}}>
+            <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-around', marginTop: 10}}>
                 <KeyboardAwareScrollView enableOnAndroid={true}>
                     <View style={{ flex: 1, flexDirection: 'column', alignItems:"center"}}>
                         <ProfilePicture profileImage={this.state.profileImage} onPress={this.pickHomeLocation}/>
@@ -160,6 +160,9 @@ export default class UserProfile extends Component<{}> {
                 </KeyboardAwareScrollView>
                 <View style={{margin:24}}>
                 <Button title="Log Out" onPress={this.signOut}/>
+                </View>
+                <View>
+                    <Navbar navigation = {this.props.navigation} page="Profile"/>
                 </View>
             </View>
         )

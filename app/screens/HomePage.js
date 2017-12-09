@@ -10,7 +10,7 @@ import firebase from 'react-native-firebase';
 import Database from '../lib/Database.js'
 import { VictoryArea,VictoryChart, VictoryTheme } from "victory-native";
 import { Svg } from 'react-native-svg'
-
+import { Utils } from '../lib/Utils'
 
 export default class HomePage extends Component<{}> {
 
@@ -128,14 +128,25 @@ export default class HomePage extends Component<{}> {
 
         if(this.state.my_experiment_data && this.state.my_experiment_data.reactions){
             Object.keys(this.state.my_experiment_data.reactions).forEach((key, index) => {
+
                 var info = (this.state.my_experiment_data.reactions[key]);
-                var val = {x: index, y: info.reaction};
+                var val = {x: key, y: info.reaction};
                 data.push(val);
             });
+            //Sort the user's data by ascending dates
+            data.sort(function(a, b) {
+                return a.x.localeCompare(b.x)
+            });
+            //Convert keys back to indexes for display [dates -> index]
+            data.forEach((value, index) => {
+                data[index].x = index;
+            })
         }
 
+
+
         return (
-            <View style={{flex: 1}}>
+            <View style={{flex: 1,  marginTop: 10}}>
 
             <ScrollView>
                 <View>
@@ -160,7 +171,7 @@ export default class HomePage extends Component<{}> {
                     <Card title={`Started: ${this.state.my_experiment_data.start_date.replace(/_/g, '/')}`}
                           titleStyle = {styles.dividerTextStyle}>
 
-                        <View style={styles.container}>
+                        <View >
                             <Svg width={400} height={350}>
                                 <VictoryChart
                                     standalone={false}
@@ -188,8 +199,8 @@ export default class HomePage extends Component<{}> {
                 </View>
 
             </ScrollView>
-                <View>
-                    <Navbar navigation = {this.props.navigation}/>
+                <View style={{backgroundColor: 'white', borderWidth: 1, borderColor: '#e0ddde'}}>
+                    <Navbar navigation = {this.props.navigation} page="HomePage"/>
                 </View>
             </View>
         )}
