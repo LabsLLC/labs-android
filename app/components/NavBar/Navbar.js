@@ -9,33 +9,50 @@ export default class Navbar extends Component<{}> {
         super(props);
     }
 
+    //When an icon in the nav bar is pressed, update it's style to turn it blue
     onPressButton() {
         console.log('hi')
     }
 
     render() {
         return (
+
+
+
             <View style={styles.container}>
 
                 <View style={styles.button} >
                     <TouchableHighlight onPress={() => this.props.navigation.navigate('HomePage')}>
-                        <Image
-                            source={require('../../images/home.png')}
-                        />
+                        {'page' in this.props && this.props.page === "HomePage" ?
+                            <Image style={{width: 30, height: 30}}
+                                source={require('../../images/navigation/HomeBlue.png')}
+                            />
+                            :
+                            <Image style={{width: 30, height: 30}}
+                                source={require('../../images/navigation/HomeGrey.png')}
+                            />
+                        }
+
                     </TouchableHighlight>
                 </View>
 
                 <View style={styles.button} >
                     <TouchableHighlight onPress={() => this.props.navigation.navigate('ExperimentBrowse')}>
-                        <Image
-                            source={require('../../images/experiments.png')}
-                        />
+                        {'page' in this.props && this.props.page === "Browse" ?
+                            <Image style={{width: 30, height: 30}}
+                                source={require('../../images/navigation/BrowseBlue.png')}
+                            />
+                            :
+                            <Image style={{width: 30, height: 30}}
+                                source={require('../../images/navigation/BrowseGrey.png')}
+                            />
+                        }
                     </TouchableHighlight>
                 </View>
 
                 <View style={styles.biggerButton} >
                     <TouchableHighlight onPress={this._onPressButton}>
-                        <Image
+                        <Image style={{width: 50, height: 50}}
                             source={require('../../images/completeSurvey.png')}
                         />
                     </TouchableHighlight>
@@ -43,17 +60,29 @@ export default class Navbar extends Component<{}> {
 
                 <View style={styles.button} >
                     <TouchableHighlight onPress={this._onPressButton}>
-                        <Image
-                            source={require('../../images/stats.png')}
-                        />
+                        {'page' in this.props && this.props.page === "Stats" ?
+                            <Image style={{width: 30, height: 30}}
+                                source={require('../../images/navigation/StatsBlue.png')}
+                            />
+                            :
+                            <Image style={{width: 30, height: 30}}
+                                source={require('../../images/navigation/StatsGrey.png')}
+                            />
+                        }
                     </TouchableHighlight>
                 </View>
 
                 <View style={styles.button} >
                     <TouchableHighlight onPress={() => this.props.navigation.navigate('UserProfile')}>
-                        <Image
-                            source={require('../../images/userProfile.png')}
-                        />
+                        {'page' in this.props && this.props.page === "Profile" ?
+                            <Image style={{width: 30, height: 30}}
+                                source={require('../../images/navigation/ProfileBlue.png')}
+                            />
+                            :
+                            <Image style={{width: 30, height: 30}}
+                                source={require('../../images/navigation/ProfileGrey.png')}
+                            />
+                        }
                     </TouchableHighlight>
                 </View>
             </View>
