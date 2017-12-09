@@ -24,13 +24,8 @@ export default class ChooseAddress extends Component<{}> {
         };
     }
 
-    componentDidMount(){
 
-    }
-
-
-    pickHomeLocation()
-    {
+    pickHomeLocation() {
         RNGooglePlaces.openPlacePickerModal()
             .then((place) => {
                 console.log(place);

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Text, Button, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
 import {Card} from 'react-native-elements';
-import LoginForm from '../components/LoginForm'
 import Navbar from '../components/NavBar/Navbar.js'
 import firebase from 'react-native-firebase';
 import LoginUtils from '../lib/LoginUtils'
