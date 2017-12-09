@@ -40,8 +40,8 @@ export default class Main extends Component<{}> {
         LoginUtils.getFacebookLoginPromise()
             .then((currentUser) => {
                 this.setState({ error: '', loading: false });
+                this.props.navigation.navigate('HomePage');
             })
-            .then(() => {Database.experimentTest()})
             .catch((error) => {
                 console.log(`Login fail with error: ${error}`);
                 this.setState({ error: 'Authentication failed. Please check your credentials', loading: false });
@@ -79,7 +79,7 @@ export default class Main extends Component<{}> {
                         <Button
                             onPress={this.onSignUpPress.bind(this)}
                             title="Create an account"/>
-                        <Button onPress={this.onLoginPress.bind(this)}
+                        <Button onPress={this.onLoginPress}
                                 title="Log in with Facebook"/>
                     </Card>
                     <Navbar navigation = {this.props.navigation}/>
