@@ -2,4 +2,6 @@
     <string name="app_name">Labs App</string>
     <string name="facebook_app_id">1753124771659782</string>
     <string name="fb_login_protocol_scheme">fb1753124771659782</string>
+    <string name="account_type">com.labs.android.MainApplication</string>
+    <string name="content_authority">com.labs.android.MainApplication</string>
 </resources>

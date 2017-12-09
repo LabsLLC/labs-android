@@ -4,6 +4,7 @@ import {Card} from 'react-native-elements';
 import LoginForm from '../components/LoginForm'
 import Navbar from '../components/NavBar/Navbar.js'
 import firebase from 'react-native-firebase';
+import BackgroundTask from 'react-native-background-task'
 
 import Screens from '../config/navigationNames'
 
@@ -29,14 +30,46 @@ export default class Main extends Component<{}> {
         };
     }
 
+    componentWillMount() {
+        // This handler fires whenever bgGeo receives a location update.
+
+    }
+
     componentDidMount(){
-        firebase.auth().onAuthStateChanged((user) => {
+
+        BackgroundTask.schedule();
+
+        // Optional: Check if the device is blocking background tasks or not
+        this.checkStatus();
+
+        this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
             if (user) { //if user is authenticated
                 this.props.navigation.navigate(Screens.Home);
             } else {
                 this.setState({ loading: false, authenticated: false });
+                this.unsubscribe();
             }
         });
+    }
+
+    onLocation(location) {
+        console.log('- [event] location: ', location);
+    }
+
+    async checkStatus() {
+        const status = await BackgroundTask.statusAsync();
+
+        if (status.available) {
+            // Everything's fine
+            return
+        }
+
+        const reason = status.unavailableReason
+        if (reason === BackgroundTask.UNAVAILABLE_DENIED) {
+            Alert.alert('Denied', 'Please enable background "Background App Refresh" for this app')
+        } else if (reason === BackgroundTask.UNAVAILABLE_RESTRICTED) {
+            Alert.alert('Restricted', 'Background tasks are restricted on your device')
+        }
     }
 
     render() {
