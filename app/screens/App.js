@@ -46,6 +46,8 @@ const RootNavigator = StackNavigator({
     Navbar: {
         screen: Navbar,
     },
+}, {
+    headerMode: 'none'
 });
 
 AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
