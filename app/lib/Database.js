@@ -308,13 +308,15 @@ class Database {
 
             var experimentRef = firebase.database().ref("experiment/");
 
-            return experimentRef.orderByChild("name").on("value", function (data) {
+            return experimentRef.orderByChild("total_satisfaction").on("value", function (data) {
 
                 var list =[]
                 data.forEach(function(data) {
                     var x = {id: data.key, val: data.val()};
                     list.push(x);
                 });
+
+                list.reverse();
 
                 success(list);
             });
