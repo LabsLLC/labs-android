@@ -6,16 +6,19 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'baseline',
-        marginBottom: 80,
-        marginTop: 10,
-        marginLeft: 15,
+        marginBottom: 65,
+        marginTop: 7,
+        marginLeft: 20,
+
     },
     button: {
-        width: 60,
-        height: 60,
+        flex: 1,
+        margin: 5,
+        width: 30,
+        height: 30,
     },
     biggerButton: {
-        width:90,
-        height: 100,
+        width:80,
+        height: 90,
     },
 });

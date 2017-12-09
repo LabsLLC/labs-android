@@ -106,7 +106,7 @@ export default class ExperimentBrowse extends Component<{}> {
 
             </ScrollView>
                 <View>
-                    <Navbar navigation = {this.props.navigation}/>
+                    <Navbar navigation = {this.props.navigation} page="Browse"/>
                 </View>
             </View>
 
