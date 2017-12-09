@@ -13,7 +13,7 @@ class Database {
     static setUserHomeAddress(userId, userHome) {
 
         let userHomePath = "/user/" + userId;
-        return firebase.database().ref(userHomePath).set({
+        return firebase.database().ref(userHomePath).update({
             userHome: userHome
         })
 
