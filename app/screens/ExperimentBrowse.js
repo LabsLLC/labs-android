@@ -112,9 +112,10 @@ export default class ExperimentBrowse extends Component<{}> {
                 </View>
 
             </ScrollView>
-                <View>
+                <View style={{backgroundColor: 'white', borderWidth: 1, borderColor: '#e0ddde'}}>
                     <Navbar navigation = {this.props.navigation} page="Browse"/>
                 </View>
+
             </View>
 
         )}

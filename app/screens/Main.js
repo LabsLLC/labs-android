@@ -79,7 +79,7 @@ export default class Main extends Component<{}> {
                             onPress={this.onSignUpPress.bind(this)}
                             title="Create an account"/>
                         <Button onPress={this.onLoginPress}
-                                title="Log in with Facebook"/>
+                                title="Log in with Facebook" />
                     </Card>
                     <Navbar navigation = {this.props.navigation}/>
                 </View>

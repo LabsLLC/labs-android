@@ -161,9 +161,10 @@ export default class UserProfile extends Component<{}> {
                 <View style={{margin:24}}>
                 <Button title="Log Out" onPress={this.signOut}/>
                 </View>
-                <View>
+                <View style={{backgroundColor: 'white', borderWidth: 1, borderColor: '#e0ddde'}}>
                     <Navbar navigation = {this.props.navigation} page="Profile"/>
                 </View>
+
             </View>
         )
     }
