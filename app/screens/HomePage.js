@@ -171,7 +171,7 @@ export default class HomePage extends Component<{}> {
                     <Card title={`Started: ${this.state.my_experiment_data.start_date.replace(/_/g, '/')}`}
                           titleStyle = {styles.dividerTextStyle}>
 
-                        <View style={styles.container}>
+                        <View >
                             <Svg width={400} height={350}>
                                 <VictoryChart
                                     standalone={false}
@@ -199,8 +199,8 @@ export default class HomePage extends Component<{}> {
                 </View>
 
             </ScrollView>
-                <View>
-                    <Navbar navigation = {this.props.navigation}/>
+                <View style={{backgroundColor: 'white', borderWidth: 1, borderColor: '#e0ddde'}}>
+                    <Navbar navigation = {this.props.navigation} page="HomePage"/>
                 </View>
             </View>
         )}
