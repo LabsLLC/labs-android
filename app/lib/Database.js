@@ -1,5 +1,5 @@
 import firebase from 'react-native-firebase';
-import TimeUtils from './TimeUtils'
+import Utils from './Utils'
 
 class Database {
 
@@ -32,7 +32,7 @@ class Database {
                 if (user) {
                     var id = user.uid;
                     let userHomePath = "/user/" + id; //update this user's experimentID
-                    var today = TimeUtils.getTime();
+                    var today = Utils.getTime();
                     firebase.database().ref(userHomePath).update({
                         experiment_id: experimentId,
                         start_date: today
@@ -146,7 +146,7 @@ class Database {
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
                     var id = user.uid;
-                    var today = TimeUtils.getTime();
+                    var today = Utils.getTime();
 
                     let dailyReactionPath = "/user/" + id + "/reactions/" + today;
                     success( firebase.database().ref(dailyReactionPath).update({

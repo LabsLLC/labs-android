@@ -1,6 +1,6 @@
 
 
-class TimeUtils {
+class Utils {
     /**
      * Get the current date
      * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
@@ -21,6 +21,7 @@ class TimeUtils {
         return today
     }
 
+
 }
 
-module.exports = TimeUtils;
+module.exports = Utils;
