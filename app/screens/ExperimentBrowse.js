@@ -57,7 +57,7 @@ export default class ExperimentBrowse extends Component<{}> {
     render() {
         let experiments = this.state.experimentData;
         return (
-            <View style={{flex: 1}}>
+            <View style={{flex: 1,  marginTop: 10}}>
             <ScrollView>
                 <View>
                     <Text h4> Experiments </Text>

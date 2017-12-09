@@ -107,7 +107,7 @@ export default class Experiment extends Component<{}> {
 
         if (this.state.experiment) {
             return (
-                <View style={{flex: 1}}>
+                <View style={{flex: 1,  marginTop: 10}}>
                     <ScrollView>
 
                         <Tile

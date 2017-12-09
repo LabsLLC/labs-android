@@ -146,7 +146,7 @@ export default class HomePage extends Component<{}> {
 
 
         return (
-            <View style={{flex: 1}}>
+            <View style={{flex: 1,  marginTop: 10}}>
 
             <ScrollView>
                 <View>
