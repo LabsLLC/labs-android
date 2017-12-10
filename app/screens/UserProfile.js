@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {Button, Text} from 'react-native-elements';
 import {TextInput, KeyboardAvoidingView, AsyncStorage} from 'react-native';
 import {View} from 'react-native';
-import Navbar from '../components/TabBar/TabBar.js'
 import ProfilePicture from "../components/ProfilePicture/ProfilePicture";
 import firebase from 'react-native-firebase';
 import { TextField } from 'react-native-material-textfield';

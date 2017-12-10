@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Card, Text, Header } from 'react-native-elements';
 import { Button, StyleSheet, View, TouchableHighlight, TouchableOpacity, Image, ScrollView } from 'react-native';
 import styles from './styles'
 import Screens from '../../config/navigationNames'
@@ -15,7 +14,7 @@ export default class TabBar extends Component<{}> {
         console.log("Nav: " + JSON.stringify(this.props.navigation));
 
         this.state = {
-            currentPage: ''
+            currentPage: Screens.Home //this is a little bit hacky.. assumes initial page is home (but safe assumption)
         }
     }
 
@@ -29,37 +28,23 @@ export default class TabBar extends Component<{}> {
 
         if(screenName!==this.state.currentPage) {
             this.setState({currentPage: screenName});
-
-            console.log("Navigate called");
             this.props.navigation.navigate(screenName);
         }
     }
-
-    /* <View style={styles.button} >
-                        <TouchableOpacity style={{width: 30, height: 30}} onPress={() => this.selectTab(Screens.Home) }>
-                            {'page' in this.props && this.props.page === "HomePage" ?
-                                <Image style={{width: 30, height: 30}}
-                                    source={require('../../images/navigation/HomeBlue.png')}
-                                />
-                                :
-                                <Image style={{width: 30, height: 30}}
-                                    source={require('../../images/navigation/HomeGrey.png')}
-                                />
-                            }
-                        </TouchableOpacity>
-                    </View>*/
 
     render() {
         return (
             <View style={{position: 'absolute', left:0, right:0, bottom:0}}>
                 <View style={styles.container}>
 
-                    <TabIcon inactive={require('../../images/navigation/HomeGrey.png')}
-                             selected={require('../../images/navigation/HomeBlue.png')}
+                    <TabIcon isActive={this.state.currentPage===Screens.Home}
+                             inactiveIcon={require('../../images/navigation/HomeGrey.png')}
+                             selectedIcon={require('../../images/navigation/HomeBlue.png')}
                              onPress={()=>this.selectTab(Screens.Home)}/>
 
-                    <TabIcon inactive={require('../../images/navigation/BrowseGrey.png')}
-                             selected={require('../../images/navigation/BrowseBlue.png')}
+                    <TabIcon isActive={this.state.currentPage===Screens.BrowseExperiments}
+                             inactiveIcon={require('../../images/navigation/BrowseGrey.png')}
+                             selectedIcon={require('../../images/navigation/BrowseBlue.png')}
                              onPress={()=>this.selectTab(Screens.BrowseExperiments)}/>
 
                     <TouchableOpacity style={{width: 50, height: 50}} onPress={this._onPressButton}>
@@ -68,12 +53,14 @@ export default class TabBar extends Component<{}> {
                         />
                     </TouchableOpacity>
 
-                    <TabIcon inactive={require('../../images/navigation/StatsGrey.png')}
-                             selected={require('../../images/navigation/StatsBlue.png')}
+                    <TabIcon isActive={false}
+                             inactiveIcon={require('../../images/navigation/StatsGrey.png')}
+                             selectedIcon={require('../../images/navigation/StatsBlue.png')}
                              onPress={()=> this.onPressButton()}/>
 
-                    <TabIcon inactive={require('../../images/navigation/ProfileGrey.png')}
-                             selected={require('../../images/navigation/ProfileBlue.png')}
+                    <TabIcon isActive={this.state.currentPage===Screens.UserProfile}
+                             inactiveIcon={require('../../images/navigation/ProfileGrey.png')}
+                             selectedIcon={require('../../images/navigation/ProfileBlue.png')}
                              onPress={()=> this.selectTab(Screens.UserProfile)}/>
                 </View>
             </View>

@@ -3,7 +3,6 @@ import {Icon,Button, Text, Tile, SearchBar, List, ListItem, Card} from 'react-na
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import ReactionModal from '../components/ReactionModal/ReactionModal.js'
-import Navbar from '../components/TabBar/TabBar.js'
 import Geocoder from 'react-native-geocoding'
 import Secrets from '../config/secrets.js'
 import firebase from 'react-native-firebase';

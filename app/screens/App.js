@@ -9,14 +9,14 @@ import React, { KeyboardAvoidingView, Component } from 'react';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import {StyleSheet} from 'react-native';
 import Main from './Main.js'
-import SignUp from './SignUp.js'
 import ExperimentBrowse from './ExperimentBrowse.js'
 import HomePage from './HomePage.js'
 import { AppRegistry, ScrollView, View} from 'react-native';
-import Navbar from '../components/TabBar/TabBar.js'
+import TabBar from '../components/TabBar/TabBar.js'
 import UserProfile from "./UserProfile";
 import Experiment from './Experiment.js'
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
+import ChooseAddress from './ChooseAddress'
 
 export default class App extends Component<{}> {
 
@@ -135,6 +135,10 @@ const RootNavigator =
             SignIn: {
                 screen: Main,
             },
+	ChooseAddress:
+	{
+		screen: ChooseAddress,
+},
             Authenticated: {
                 screen:
                     TabNavigator({
@@ -160,10 +164,9 @@ const RootNavigator =
                         },
                     },
                     {
-                        tabBarComponent: Navbar,
+                        tabBarComponent: TabBar,
                         headerMode: 'none',
                         tabBarPosition: 'bottom',
-                        //lazy: true
                     })
             }
         },
