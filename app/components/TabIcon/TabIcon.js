@@ -10,13 +10,13 @@ export default class TabIcon extends Component<{}> {
 
     render() {
         return(
-        <TouchableOpacity style={{width: 30, height: 30}} onPress={this.props.onPress}>
+        <TouchableOpacity style={styles.container} onPress={this.props.onPress}>
             {this.props.isActive ?
-                <Image style={{width: 30, height: 30}}
+                <Image style={styles.icon}
                        source={this.props.selectedIcon}
                 />
                 :
-                <Image style={{width: 30, height: 30}}
+                <Image style={styles.icon}
                        source={this.props.inactiveIcon}
                 />
             }

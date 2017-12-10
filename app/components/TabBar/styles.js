@@ -8,10 +8,17 @@ export default StyleSheet.create({
         alignItems: 'baseline',
         backgroundColor: "white",
         paddingHorizontal:16,
-        paddingBottom:12
     },
-    biggerButton: {
-        width:80,
-        height: 90,
+    centerIcon: {
+        position:"absolute", zIndex:1, alignSelf:"center", top:-16, width: 72, height: 72
     },
+    centerIconSize:
+    {
+        height:72,
+        width:72
+    },
+    tabBarAnchor:
+    {
+        position: 'absolute', left:0, right:0, bottom:0
+    }
 });

@@ -34,7 +34,7 @@ export default class TabBar extends Component<{}> {
 
     render() {
         return (
-            <View style={{position: 'absolute', left:0, right:0, bottom:0}}>
+            <View style={styles.tabBarAnchor}>
                 <View style={styles.container}>
 
                     <TabIcon isActive={this.state.currentPage===Screens.Home}
@@ -47,11 +47,7 @@ export default class TabBar extends Component<{}> {
                              selectedIcon={require('../../images/navigation/BrowseBlue.png')}
                              onPress={()=>this.selectTab(Screens.BrowseExperiments)}/>
 
-                    <TouchableOpacity style={{width: 50, height: 50}} onPress={this._onPressButton}>
-                        <Image style={{width: 50, height: 50}}
-                            source={require('../../images/completeSurvey.png')}
-                        />
-                    </TouchableOpacity>
+                    <View style={{width:50, height:50}}/>
 
                     <TabIcon isActive={false}
                              inactiveIcon={require('../../images/navigation/StatsGrey.png')}
@@ -63,6 +59,13 @@ export default class TabBar extends Component<{}> {
                              selectedIcon={require('../../images/navigation/ProfileBlue.png')}
                              onPress={()=> this.selectTab(Screens.UserProfile)}/>
                 </View>
+
+                <TouchableOpacity style={styles.centerIcon}
+                                  onPress={this._onPressButton}>
+                    <Image style={styles.centerIconSize}
+                           source={require('../../images/completeSurvey.png')}
+                    />
+                </TouchableOpacity>
             </View>
         );
     }
