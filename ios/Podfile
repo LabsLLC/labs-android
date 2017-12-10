@@ -12,6 +12,9 @@ target 'LabsApp' do
     # Pods for testing
     pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
+    pod 'RNBackgroundFetch', :path => '../node_modules/react-native-background-fetch'
+
+
   end
 
   target 'LabsAppTests' do

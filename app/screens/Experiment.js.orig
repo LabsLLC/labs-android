@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elements';
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
+<<<<<<< HEAD
+=======
+import Navbar from '../components/NavBar/Navbar.js'
+>>>>>>> fceffd7023c7f833c07a9116af578f3061ab9105
 import ExperimentImages from '../config/utils'
 import Database from '../lib/Database.js';
 

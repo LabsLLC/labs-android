@@ -33,7 +33,7 @@ export default class ChooseAddress extends Component<{}> {
 
                 Database.setUserHomeAddress(this.props.navigation.state.params.currentUser.uid,  newAddress);
 
-                this.props.navigation.navigate('HomePage');
+                LoginUtils.navigateLogin(this.props.navigation);
 
             })
             .catch(error => console.log(error.message));  // error is a Javascript Error object

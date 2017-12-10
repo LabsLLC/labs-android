@@ -3,7 +3,6 @@ import {Icon,Button, Text, Tile, SearchBar, List, ListItem, Card} from 'react-na
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import ReactionModal from '../components/ReactionModal/ReactionModal.js'
-import Navbar from '../components/NavBar/Navbar.js'
 import Geocoder from 'react-native-geocoding'
 import Secrets from '../config/secrets.js'
 import firebase from 'react-native-firebase';
@@ -196,11 +195,7 @@ export default class HomePage extends Component<{}> {
                     <Text>Longitude: {this.state.longitude}</Text>
                     {this.state.error ? <Text>Error: {this.state.error}</Text> : null}
                 </View>
-
             </ScrollView>
-                <View style={{backgroundColor: 'white', borderWidth: 1, borderColor: '#e0ddde'}}>
-                    <Navbar navigation = {this.props.navigation} page="HomePage"/>
-                </View>
             </View>
         )}
 }

@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import {Text, Button, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
 import {Card} from 'react-native-elements';
-import Navbar from '../components/NavBar/Navbar.js'
 import firebase from 'react-native-firebase';
 import LoginUtils from '../lib/LoginUtils'
-
-import Screens from '../config/navigationNames'
 
 export default class Main extends Component<{}> {
 
@@ -22,16 +19,50 @@ export default class Main extends Component<{}> {
         };
     }
 
-    componentDidMount(){
-
-        var unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+    componentWillMount() {
+        this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
             if (user) { //if user is authenticated
-                this.props.navigation.navigate(Screens.Home);
+                //resets the navigation stack so user can't go back here
+                LoginUtils.navigateLogin(this.props.navigation);
+
             } else {
                 this.setState({ loading: false, authenticated: false });
-                unsubscribe();
+                this.unsubscribe();
             }
         });
+    }
+
+
+
+    render() {
+        if (this.state.loading) {
+            return this.renderLoadingView();
+        }
+        else
+        {
+            return (
+                <View style={{ marginTop: 10}}>
+                    <Card title='Welcome'>
+                        <Button
+                            style={{marginBottom:16}}
+                            onPress={this.onSignUpPress.bind(this)}
+                            title="Create an account"/>
+                        <Button onPress={this.onLoginPress}
+                                title="Log in with Facebook" />
+                    </Card>
+                </View>
+            );
+        }
+    }
+
+    renderLoadingView() {
+        return (
+            <View style={styles.container}>
+                <Text>
+                    Loading something great...
+                </Text>
+            </View>
+        );
     }
 
     onLoginPress() {
@@ -39,7 +70,7 @@ export default class Main extends Component<{}> {
         LoginUtils.getFacebookLoginPromise()
             .then((currentUser) => {
                 this.setState({ error: '', loading: false });
-                this.props.navigation.navigate('HomePage');
+                LoginUtils.navigateLogin(this.props.navigation);
             })
             .catch((error) => {
                 console.log(`Login fail with error: ${error}`);
@@ -63,38 +94,6 @@ export default class Main extends Component<{}> {
 
             this.setState({error: '', loading: false});
         })
-    }
-
-
-    render() {
-        if (this.state.loading) {
-            return this.renderLoadingView();
-        }
-        else
-        {
-            return (
-                <View style={{ marginTop: 10}}>
-                    <Card title='Welcome'>
-                        <Button
-                            onPress={this.onSignUpPress.bind(this)}
-                            title="Create an account"/>
-                        <Button onPress={this.onLoginPress}
-                                title="Log in with Facebook" />
-                    </Card>
-                    <Navbar navigation = {this.props.navigation}/>
-                </View>
-            );
-        }
-    }
-
-    renderLoadingView() {
-        return (
-            <View style={styles.container}>
-                <Text>
-                    Loading something great...
-                </Text>
-            </View>
-        );
     }
 }
 

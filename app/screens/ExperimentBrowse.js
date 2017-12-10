@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elements';
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
-import Navbar from '../components/NavBar/Navbar.js'
 import Database from '../lib/Database.js';
 
 
@@ -112,10 +111,6 @@ export default class ExperimentBrowse extends Component<{}> {
                 </View>
 
             </ScrollView>
-                <View style={{backgroundColor: 'white', borderWidth: 1, borderColor: '#e0ddde'}}>
-                    <Navbar navigation = {this.props.navigation} page="Browse"/>
-                </View>
-
             </View>
 
         )}

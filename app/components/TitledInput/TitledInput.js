@@ -13,8 +13,7 @@ const TitledInput = ({ label, value, onChangeText, placeholder, secureTextEntry 
                 secureTextEntry={secureTextEntry}
                 value={value}
                 onChangeText={onChangeText}
-                style={styles.inputStyle}
-            />
+                style={styles.inputStyle}/>
         </View>
     );
 };

@@ -1,6 +1,10 @@
 rootProject.name = 'LabsApp'
 include ':react-native-svg'
 project(':react-native-svg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-svg/android')
+include ':react-native-mauron85-background-geolocation'
+project(':react-native-mauron85-background-geolocation').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-mauron85-background-geolocation/android/lib')
+include ':react-native-background-task'
+project(':react-native-background-task').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-background-task/android')
 include ':react-native-google-places'
 project(':react-native-google-places').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-google-places/android')
 include ':react-native-fbsdk'

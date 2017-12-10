@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.horcrux.svg.SvgPackage;
+import com.jamesisaac.rnbackgroundtask.BackgroundTaskPackage;
 import com.arttitude360.reactnative.rngoogleplaces.RNGooglePlacesPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.FacebookSdk;
@@ -43,6 +44,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new SvgPackage(),
+            new BackgroundTaskPackage(),
             new RNGooglePlacesPackage(),
             new FBSDKPackage(mCallbackManager),
             new RNFirebasePackage(),
@@ -66,7 +68,9 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+
     FacebookSdk.sdkInitialize(getApplicationContext());
+    BackgroundTaskPackage.useContext(this);
     FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
     SoLoader.init(this, /* native exopackage */ false);

@@ -7,12 +7,15 @@
     "test": "jest"
   },
   "dependencies": {
+    "b": "^2.0.1",
     "babel-core": "^6.26.0",
     "fbjs": "^0.8.16",
     "firebase": "^4.6.2",
     "prop-types": "^15.6.0",
-    "react": "16.0.0",
-    "react-native": "0.50.4",
+    "react": "^16.0.0",
+    "react-native": "^0.51.0",
+    "react-native-background-fetch": "^2.0.8",
+    "react-native-background-task": "^0.2.1",
     "react-native-elements": "^0.18.4",
     "react-native-fbsdk": "^0.6.3",
     "react-native-firebase": "^3.1.1",
@@ -21,10 +24,10 @@
     "react-native-keyboard-aware-scroll-view": "^0.4.1",
     "react-native-material-textfield": "^0.11.0",
     "react-native-simple-auth": "^2.1.0",
-    "react-native-svg": "^5.5.1",
-    "react-native-svg-uri": "^1.2.3",
+    "react-native-svg": "^6.0.1-rc.1",
     "react-native-vector-icons": "^4.4.2",
     "react-navigation": "^1.0.0-beta.21",
+    "react-transform-hmr": "^1.0.4",
     "victory-native": "^0.16.1"
   },
   "devDependencies": {

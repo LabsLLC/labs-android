@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {Button, Text} from 'react-native-elements';
 import {TextInput, KeyboardAvoidingView, AsyncStorage} from 'react-native';
 import {View} from 'react-native';
-import Navbar from '../components/NavBar/Navbar.js'
 import ProfilePicture from "../components/ProfilePicture/ProfilePicture";
 import firebase from 'react-native-firebase';
 import { TextField } from 'react-native-material-textfield';
@@ -11,6 +10,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import RNGooglePlaces from 'react-native-google-places';
 import SettingDetail from "../components/SettingDetail/SettingDetail";
 import Screens from "../config/navigationNames"
+import LoginUtils from "../lib/LoginUtils";
 
 const FBSDK = require('react-native-fbsdk');
 const {
@@ -140,7 +140,7 @@ export default class UserProfile extends Component<{}> {
     signOut()
     {
         firebase.auth().signOut().then(() => {
-            this.props.navigation.navigate(Screens.Login);
+            LoginUtils.navigateLogout(this.props.navigation)
         }).catch(error => {
             // An error happened.
         });
@@ -158,13 +158,9 @@ export default class UserProfile extends Component<{}> {
                         <SettingDetail onPress={this.pickHomeLocation} title="Home Address" content={this.state.address}/>
                     </View>
                 </KeyboardAwareScrollView>
-                <View style={{margin:24}}>
+                    <View style={{margin:24, marginBottom:124}}>
                 <Button title="Log Out" onPress={this.signOut}/>
                 </View>
-                <View style={{backgroundColor: 'white', borderWidth: 1, borderColor: '#e0ddde'}}>
-                    <Navbar navigation = {this.props.navigation} page="Profile"/>
-                </View>
-
             </View>
         )
     }
