@@ -3,8 +3,6 @@ import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elemen
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import Navbar from '../components/NavBar/Navbar.js'
-//import WakeUpImage from '../images/experiments/icon_wakeup.png';
-//import ExerciseImage from '../images/experiments/icon_wakeup.png';
 import ExperimentImages from '../config/utils'
 import Database from '../lib/Database.js';
 
@@ -62,7 +60,6 @@ export default class Experiment extends Component<{}> {
         });
     }
 
-
     isUserSubscribed() {
         var experimentID = this.props.navigation.state.params.experimentID;
         var userExperimentID = this.state.userExperimentID;
@@ -76,8 +73,12 @@ export default class Experiment extends Component<{}> {
         }
     }
 
+    /**
+     * Checks if a user is subscribed to an experiment and archives the data if they are quitting.
+     * Then, sets this experiment as the new experiment.
+     */
     subscribeToExperiment() {
-        //console.log("The user is subscribing to a an experiment: "+this.state.experimentID);
+        if(this.state.userExperimentID != null){
         Database.unsubscribeUser(this.state.userExperimentID).then(() =>
         {
             Database.archiveUserData(this.state.userExperimentID).then(() => {
@@ -89,16 +90,13 @@ export default class Experiment extends Component<{}> {
             });
 
         })
-
-
-        //.then(() => {
-            //then archive
-            //Database.archiveUserData(this.state.userExperimentID).then(() => {
-                //then clear reaction data
-
-            //});
-        //});
-
+        } else {
+            Database.setUserExperiment(this.props.navigation.state.params.experimentID).then(() => {
+                this.setState({
+                    isUserAlreadySubscribed: true,
+                }, this.getThisExperimentInfo);
+            });
+        }
     }
 
 
