@@ -6,13 +6,14 @@
  */
 
 import React, { KeyboardAvoidingView, Component } from 'react';
-import { StackNavigator } from 'react-navigation';
+import { TabNavigator, StackNavigator } from 'react-navigation';
+import {StyleSheet} from 'react-native';
 import Main from './Main.js'
 import SignUp from './SignUp.js'
 import ExperimentBrowse from './ExperimentBrowse.js'
 import HomePage from './HomePage.js'
 import { AppRegistry, ScrollView, View} from 'react-native';
-import Navbar from '../components/NavBar/Navbar.js'
+import Navbar from '../components/TabBar/TabBar.js'
 import UserProfile from "./UserProfile";
 import Experiment from './Experiment.js'
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
@@ -117,32 +118,58 @@ export default class App extends Component<{}> {
         )}
 }
 
-const RootNavigator = StackNavigator({
-    Main: {
-        screen: Main,
+var navigationBarStyles = StyleSheet.create({
+    navigationBar: {
+        backgroundColor: '#FFFFFF',
+        height: 30,
+        position: 'absolute',
+        flexDirection: 'row',
+        bottom: 0,
+        justifyContent: 'space-between'
     },
-    SignUp: {
-        screen: SignUp,
-    },
-    ExperimentBrowse: {
-        screen: ExperimentBrowse,
-    },
-    Experiment: {
-        screen: Experiment,
-    },
-    HomePage: {
-        screen: HomePage,
-    },
-    UserProfile: {
-        screen: UserProfile
-    },
-    Navbar: {
-        screen: Navbar,
-    },
-}, {
-    headerMode: 'none'
 });
 
-AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
+const RootNavigator =
+    StackNavigator(
+        {
+            SignIn: {
+                screen: Main,
+            },
+            Authenticated: {
+                screen:
+                    TabNavigator({
+                        HomePage: {
+                            screen: HomePage,
+                        },
+                        ExperimentBrowse: {
+                            screen:
+                                StackNavigator({
+                                        ExperimentBrowse: {
+                                            screen: ExperimentBrowse
+                                        },
+                                        Experiment: {
+                                            screen: Experiment
+                                        }
+                                    },
+                                    {
+                                        headerMode: "none"
+                                    })
+                        },
+                        UserProfile: {
+                            screen: UserProfile
+                        },
+                    },
+                    {
+                        tabBarComponent: Navbar,
+                        headerMode: 'none',
+                        tabBarPosition: 'bottom',
+                        //lazy: true
+                    })
+            }
+        },
+        {
+            headerMode:'none'
+        });
+//AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
 
 //() => (<LoginForm SignUp={true}}/>) how to pass props

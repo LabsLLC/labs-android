@@ -2,20 +2,13 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 0,
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'baseline',
-        marginBottom: 65,
-        marginTop: 7,
-        marginLeft: 20,
-
-    },
-    button: {
-        flex: 1,
-        margin: 5,
-        width: 30,
-        height: 30,
+        backgroundColor: "white",
+        paddingHorizontal:16,
+        paddingBottom:12
     },
     biggerButton: {
         width:80,

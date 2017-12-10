@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import {Text, Button, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
 import {Card} from 'react-native-elements';
 import LoginForm from '../components/LoginForm'
-import Navbar from '../components/NavBar/Navbar.js'
+import Navbar from '../components/TabBar/TabBar.js'
 import firebase from 'react-native-firebase';
 import BackgroundTask from 'react-native-background-task'
+import { NavigationActions } from 'react-navigation'
 
 import Screens from '../config/navigationNames'
 
@@ -44,10 +45,15 @@ export default class Main extends Component<{}> {
 
         this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
             if (user) { //if user is authenticated
-                this.props.navigation.navigate(Screens.Home);
+                //this.props.navigation.navigate(Screens.Home);
+                this.props.navigation.dispatch(NavigationActions.reset({
+                    index: 0,
+                    key: null,
+                    actions: [NavigationActions.navigate({ routeName: Screens.Authenticated})]
+                }))
+
             } else {
                 this.setState({ loading: false, authenticated: false });
-                this.unsubscribe();
             }
         });
     }
@@ -86,7 +92,6 @@ export default class Main extends Component<{}> {
                             title="Create an account"/>
                         <LoginForm />
                     </Card>
-                    <Navbar navigation = {this.props.navigation}/>
                 </View>
             );
         }

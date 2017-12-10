@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elements';
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
-import Navbar from '../components/NavBar/Navbar.js'
+import Navbar from '../components/TabBar/TabBar.js'
 //import WakeUpImage from '../images/experiments/icon_wakeup.png';
 //import ExerciseImage from '../images/experiments/icon_wakeup.png';
 import ExperimentImages from '../config/utils'
@@ -143,9 +143,6 @@ export default class Experiment extends Component<{}> {
 
 
                     </ScrollView>
-                    <View>
-                        <Navbar navigation={this.props.navigation}/>
-                    </View>
                 </View>
 
             )

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Button, Text} from 'react-native-elements';
 import {TextInput, KeyboardAvoidingView, AsyncStorage} from 'react-native';
 import {View} from 'react-native';
-import Navbar from '../components/NavBar/Navbar.js'
+import Navbar from '../components/TabBar/TabBar.js'
 import ProfilePicture from "../components/ProfilePicture/ProfilePicture";
 import firebase from 'react-native-firebase';
 import { TextField } from 'react-native-material-textfield';
@@ -158,11 +158,8 @@ export default class UserProfile extends Component<{}> {
                         <SettingDetail onPress={this.pickHomeLocation} title="Home Address" content={this.state.address}/>
                     </View>
                 </KeyboardAwareScrollView>
-                <View style={{margin:24}}>
+                <View style={{margin:24, marginBottom:96}}>
                 <Button title="Log Out" onPress={this.signOut}/>
-                </View>
-                <View>
-                    <Navbar navigation = {this.props.navigation} page="Profile"/>
                 </View>
             </View>
         )
