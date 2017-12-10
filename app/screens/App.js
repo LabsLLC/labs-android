@@ -135,10 +135,10 @@ const RootNavigator =
             SignIn: {
                 screen: Main,
             },
-	ChooseAddress:
-	{
-		screen: ChooseAddress,
-},
+            ChooseAddress:
+            {
+                screen: ChooseAddress,
+            },
             Authenticated: {
                 screen:
                     TabNavigator({

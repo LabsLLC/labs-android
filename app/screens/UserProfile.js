@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import RNGooglePlaces from 'react-native-google-places';
 import SettingDetail from "../components/SettingDetail/SettingDetail";
 import Screens from "../config/navigationNames"
+import LoginUtils from "../lib/LoginUtils";
 
 const FBSDK = require('react-native-fbsdk');
 const {
@@ -139,7 +140,7 @@ export default class UserProfile extends Component<{}> {
     signOut()
     {
         firebase.auth().signOut().then(() => {
-            this.props.navigation.navigate(Screens.Login);
+            LoginUtils.navigateLogout(this.props.navigation)
         }).catch(error => {
             // An error happened.
         });

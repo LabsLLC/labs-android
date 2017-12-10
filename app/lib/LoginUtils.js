@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
-import Database from './Database';
 import firebase from 'react-native-firebase';
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
+import { NavigationActions } from 'react-navigation'
+import Screens from '../config/navigationNames'
 
 export default class LoginUtils
 {
@@ -30,5 +30,29 @@ export default class LoginUtils
                // callback();
                 return firebase.auth().signInWithCredential(credential);
             })
+    }
+
+    /**
+     * Navigates to the home page and clears the stack
+     */
+    static navigateLogin(navigation)
+    {
+        navigation.dispatch(NavigationActions.reset({
+            index: 0,
+            key: null,
+            actions: [NavigationActions.navigate({ routeName: Screens.Authenticated})]
+        }));
+    }
+
+    /**
+     * Navigates to the login page and clears the stack
+     */
+    static navigateLogout(navigation)
+    {
+        navigation.dispatch(NavigationActions.reset({
+            index: 0,
+            key: null,
+            actions: [NavigationActions.navigate({ routeName: Screens.Login})]
+        }));
     }
 }
