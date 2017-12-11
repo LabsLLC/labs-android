@@ -63,13 +63,6 @@ class Database {
                     return (currentValue || 0) - 1
                 }));
             }
-
-
-            /*
-            .then(() => {
-                this.archiveUserData(userCurrentExperimentID)
-            })
-             */
         });
     }
 
@@ -102,8 +95,8 @@ class Database {
                              this.clearActiveExperimentData()
                          }))
                     } else {
-                        console.log("FAILED TO FIND SATISFACTION");
-                        fail();
+                        console.log("No data to archive");
+                        success();
                     }
                 });
             }
