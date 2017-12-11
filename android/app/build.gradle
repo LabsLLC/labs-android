@@ -138,6 +138,11 @@ android {
 }
 
 dependencies {
+    compile(project(':react-native-mauron85-background-geolocation'))
+    {
+        exclude group: 'com.google.android.gms', module: 'play-services-location'
+    }
+
     compile project(':react-native-svg')
 
     compile(project(':react-native-google-places')){
