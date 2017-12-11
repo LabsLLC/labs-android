@@ -40,7 +40,6 @@ export default class HomePage extends Component<{}> {
        this.getMyExperimentData();
 
 
-
         //Retrieve current users id
         firebase.auth().onAuthStateChanged((user) => {
             if(user) {
@@ -94,6 +93,8 @@ export default class HomePage extends Component<{}> {
      * Retrieve the experiment information of a user given experiment
      */
     getExperimentInfo() {
+        this.state.my_experiment_data.start_date ="";
+
         Database.getMyExperimentInfo(this.state.my_experiment_data.experiment_id).then((data) => {
             this.setState({
                 experiment_info: data
@@ -119,16 +120,25 @@ export default class HomePage extends Component<{}> {
             });
         }
 
-        //Update to 14
-        if(data.length >= 14){
+        if(data.length > 0)
+        {
+            var startDate = new Date(data[0].x);
+            var lastDate = new Date(data[data.length-1].x);
 
-            Database.unsubscribeUser(this.state.my_experiment_data.experiment_id).then(() => {
-                Database.archiveUserData(this.state.my_experiment_data.experiment_id).then(() => {
-                    Database.clearUserExperiment().then(() => {
-                        this.props.navigation.navigate("ExperimentComplete", {experiment: this.state.experiment_info});
+            var timeDiff = Math.abs(lastDate.getTime() - startDate.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            this.state.my_experiment_data.start_date = startDate;
+
+            if(diffDays >= 14) {
+                Database.unsubscribeUser(this.state.my_experiment_data.experiment_id).then(() => {
+                    Database.archiveUserData(this.state.my_experiment_data.experiment_id).then(() => {
+                        Database.clearUserExperiment().then(() => {
+                            this.props.navigation.navigate("ExperimentComplete", {experiment: this.state.experiment_info});
+                        });
                     });
                 });
-            });
+            }
         }
     }
 

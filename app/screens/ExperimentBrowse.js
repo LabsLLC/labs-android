@@ -30,7 +30,6 @@ export default class ExperimentBrowse extends Component<{}> {
         //this.setState({ searchText: event});
     }
 
-
     componentWillMount() {
 
        this.getExperiments();
@@ -134,10 +133,6 @@ export default class ExperimentBrowse extends Component<{}> {
 }
 
 module.exports = ExperimentBrowse;
-
-
-
-
 
 const styles = StyleSheet.create({
     dividerTextStyle: {
