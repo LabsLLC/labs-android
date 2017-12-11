@@ -40,6 +40,7 @@ export default class HomePage extends Component<{}> {
        this.getMyExperimentData();
 
 
+
         //Retrieve current users id
         firebase.auth().onAuthStateChanged((user) => {
             if(user) {
@@ -47,7 +48,17 @@ export default class HomePage extends Component<{}> {
                 this.setState({
                     user_uid: id
                 }, this.getHomeAddress);
+
+                //update the page
+                var ref = firebase.database().ref("/user/"+id);
+                ref.on('value', (snapshot) => {
+                    // Do whatever
+                    this.getMyExperimentData();
+                    console.log("DATA WAS CHANGED! TRIGGER SOME SHIT")
+                });
+
             }
+
         });
 
         //Users current position
