@@ -20,18 +20,18 @@ export default class Main extends Component<{}> {
     }
 
     componentWillMount() {
-        this.unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+
+        const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
             if (user) { //if user is authenticated
                 //resets the navigation stack so user can't go back here
                 LoginUtils.navigateLogin(this.props.navigation);
 
             } else {
                 this.setState({ loading: false, authenticated: false });
-                this.unsubscribe();
+                unsubscribe();
             }
         });
     }
-
 
 
     render() {
