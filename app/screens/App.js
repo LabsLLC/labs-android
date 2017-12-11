@@ -109,7 +109,7 @@ export default class App extends Component<{}> {
 
     componentWillUnmount() {
         // unregister all event listeners
-        BackgroundGeolocation.events.forEach(event => BackgroundGeolocation.removeAllListeners(event));
+        //BackgroundGeolocation.events.forEach(event => BackgroundGeolocation.removeAllListeners(event));
     }
 
     render() {
