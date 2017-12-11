@@ -139,7 +139,6 @@ android {
 
 dependencies {
     compile project(':react-native-svg')
-    compile project(':react-native-background-task')
 
     compile(project(':react-native-google-places')){
             exclude group: 'com.google.android.gms', module: 'play-services-base'

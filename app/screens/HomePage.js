@@ -93,8 +93,6 @@ export default class HomePage extends Component<{}> {
      * Retrieve the experiment information of a user given experiment
      */
     getExperimentInfo() {
-        this.state.my_experiment_data.start_date ="";
-
         Database.getMyExperimentInfo(this.state.my_experiment_data.experiment_id).then((data) => {
             this.setState({
                 experiment_info: data
@@ -212,10 +210,8 @@ export default class HomePage extends Component<{}> {
                         {this.state.experiment_info ?  <ReactionModal  experimentInfo={this.state.experiment_info} experimentData={this.state.my_experiment_data} callback= {this.getMyExperimentData} index={1}/> : null}
                     </Card>
 
-
-
-                    {data.length > 1 ?
-                    <Card title={`Started: ${this.state.my_experiment_data.start_date.replace(/_/g, '/')}`}
+                    {data.length > 1 && this.state.my_experiment_data.start_date ?
+                    <Card title={`Started: ${this.state.my_experiment_data.start_date}`}
                           titleStyle = {styles.dividerTextStyle}>
 
                         <View >
