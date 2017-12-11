@@ -120,10 +120,12 @@ export default class ExperimentBrowse extends Component<{}> {
                         }
                     </List>
 
+                    <View style={{paddingBottom: 100}}>
                     <Button
                         raised
                         icon={{name: 'cached'}}
                         title='See more' />
+                    </View>
                 </View>
 
             </ScrollView>
