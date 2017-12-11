@@ -3,6 +3,7 @@ import {Button, Text, Tile, SearchBar, List, ListItem} from 'react-native-elemen
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import Database from '../lib/Database.js';
+import firebase from 'react-native-firebase';
 
 
 export default class ExperimentBrowse extends Component<{}> {
@@ -11,6 +12,7 @@ export default class ExperimentBrowse extends Component<{}> {
         super(props);
         //function bindings
         this.handleChange = this.handleChange.bind(this);
+        this.getExperiments = this.getExperiments.bind(this);
 
         this.state = {
             experimentData: null,
@@ -28,12 +30,27 @@ export default class ExperimentBrowse extends Component<{}> {
         //this.setState({ searchText: event});
     }
 
-    handleClickExperiment(event){
-        console.log("Clicked List item "+event.toString())
-    }
-
     componentWillMount() {
 
+       this.getExperiments();
+
+        //Retrieve current users id
+        firebase.auth().onAuthStateChanged((user) => {
+            if(user) {
+
+                //update the page
+                var ref = firebase.database().ref("/experiment/");
+                ref.on('value', (snapshot) => {
+                    // Do whatever
+                    this.getExperiments();
+                });
+
+            }
+
+        });
+    }
+
+    getExperiments(){
         //Query firebase to get the experiments
         Database.getExperiments()
             .then((data) => {
@@ -47,9 +64,8 @@ export default class ExperimentBrowse extends Component<{}> {
 
 
             }).catch((error) => {
-                console.log(error)
+            console.log(error)
         });
-
     }
 
 
@@ -117,10 +133,6 @@ export default class ExperimentBrowse extends Component<{}> {
 }
 
 module.exports = ExperimentBrowse;
-
-
-
-
 
 const styles = StyleSheet.create({
     dividerTextStyle: {

@@ -17,6 +17,7 @@ import UserProfile from "./UserProfile";
 import Experiment from './Experiment.js'
 // import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
 import ChooseAddress from './ChooseAddress'
+import ExperimentComplete from './ExperimentComplete'
 
 export default class App extends Component<{}> {
 
@@ -138,6 +139,10 @@ const RootNavigator =
             ChooseAddress:
             {
                 screen: ChooseAddress,
+            },
+            ExperimentComplete:
+            {
+                screen: ExperimentComplete,
             },
             Authenticated: {
                 screen:

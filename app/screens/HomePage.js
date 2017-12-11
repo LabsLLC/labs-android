@@ -19,6 +19,7 @@ export default class HomePage extends Component<{}> {
         this.handleChange = this.handleChange.bind(this);
         this.getExperimentInfo = this.getExperimentInfo.bind(this);
         this.getMyExperimentData = this.getMyExperimentData.bind(this);
+        this.hasUserCompletedExperiment = this.hasUserCompletedExperiment.bind(this);
 
         Geocoder.setApiKey(Secrets.GoogleApiSecret);
         this.state = {
@@ -46,7 +47,17 @@ export default class HomePage extends Component<{}> {
                 this.setState({
                     user_uid: id
                 }, this.getHomeAddress);
+
+                //update the page
+                var ref = firebase.database().ref("/user/"+id);
+                ref.on('value', (snapshot) => {
+                    // Do whatever
+                    this.getMyExperimentData();
+                    console.log("DATA WAS CHANGED! TRIGGER SOME SHIT")
+                });
+
             }
+
         });
 
         //Users current position
@@ -67,10 +78,6 @@ export default class HomePage extends Component<{}> {
         this.setState({ searchText: event});
     }
 
-    handleClickExperiment(event){
-        console.log("Clicked List item "+event.toString())
-    }
-
     /**
      * Retrieve the home address of a user given its user id
      */
@@ -86,15 +93,54 @@ export default class HomePage extends Component<{}> {
      * Retrieve the experiment information of a user given experiment
      */
     getExperimentInfo() {
+        this.state.my_experiment_data.start_date ="";
+
         Database.getMyExperimentInfo(this.state.my_experiment_data.experiment_id).then((data) => {
             this.setState({
                 experiment_info: data
-            });
+            }, this.hasUserCompletedExperiment);
         }).catch((error) => {
             console.log("Error because: "+error);
         });
     }
 
+
+    /**
+     * Check if user has completed experiment, if yes, redirect.
+     */
+    hasUserCompletedExperiment() {
+        console.log('aquiiiii');
+        data = [];
+        if(this.state.my_experiment_data && this.state.my_experiment_data.reactions) {
+            Object.keys(this.state.my_experiment_data.reactions).forEach((key, index) => {
+
+                var info = (this.state.my_experiment_data.reactions[key]);
+                var val = {x: key, y: info.reaction};
+                data.push(val);
+            });
+        }
+
+        if(data.length > 0)
+        {
+            var startDate = new Date(data[0].x);
+            var lastDate = new Date(data[data.length-1].x);
+
+            var timeDiff = Math.abs(lastDate.getTime() - startDate.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            this.state.my_experiment_data.start_date = startDate;
+
+            if(diffDays >= 14) {
+                Database.unsubscribeUser(this.state.my_experiment_data.experiment_id).then(() => {
+                    Database.archiveUserData(this.state.my_experiment_data.experiment_id).then(() => {
+                        Database.clearUserExperiment().then(() => {
+                            this.props.navigation.navigate("ExperimentComplete", {experiment: this.state.experiment_info});
+                        });
+                    });
+                });
+            }
+        }
+    }
 
     /**
      * Find the longitude and latitude of a user given its home address
@@ -135,6 +181,8 @@ export default class HomePage extends Component<{}> {
             data.sort(function(a, b) {
                 return a.x.localeCompare(b.x)
             });
+
+
             //Convert keys back to indexes for display [dates -> index]
             data.forEach((value, index) => {
                 data[index].x = index;

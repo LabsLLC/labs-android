@@ -40,6 +40,15 @@ export default class Experiment extends Component<{}> {
         });
     }
 
+    componentWillReceiveProps()
+    {
+        this.getThisExperimentInfo().then(() => {
+            this.getMyExperimentData().then(() =>{
+                this.isUserSubscribed();
+            });
+        });
+    }
+
     //THE PAGES INFO
     getThisExperimentInfo() {
         //console.log("this.props.navigation.state.params.experimentID: "+this.props.navigation.state.params.experimentID);
