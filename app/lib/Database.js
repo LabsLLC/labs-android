@@ -24,7 +24,7 @@ class Database {
      * @param experimentId
      * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
      */
-    static setUserExperiment(experimentId, userCurrentExperimentID) {
+    static setUserExperiment(experimentId) {
         return new Promise( (success, fail) => {
 
             //Retrieve current users id
@@ -47,6 +47,31 @@ class Database {
             });
         })
     }
+
+    /**
+     * clears a users experiment
+     * @param experimentId
+     * @returns {firebase.Promise<any>|!firebase.Promise.<void>}
+     */
+    static clearUserExperiment() {
+        return new Promise( (success, fail) => {
+
+            //Retrieve current users id
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    var id = user.uid;
+                    let userHomePath = "/user/" + id; //update this user's experimentID
+
+                    success(firebase.database().ref(userHomePath).update({
+                        experiment_id: null,
+                        start_date: null
+                    }));
+
+                }
+            });
+        })
+    }
+
 
     /**
      * Remove a user form the active user count for an experiment
@@ -358,15 +383,6 @@ class Database {
         })
     }
 
-    static experimentTest()
-    {
-        console.log("Ran");
-        let userHomePath = "experiment/";
-
-        firebase.database().ref(userHomePath).on('value', (snapshot) => {
-            console.log(snapshot.val())
-        });
-    }
 }
 
 module.exports = Database;
