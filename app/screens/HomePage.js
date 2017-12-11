@@ -196,9 +196,10 @@ export default class HomePage extends Component<{}> {
 
             <ScrollView>
                 <View>
-                    <Text h4> My {this.state.experiment_info ? <Text>{this.state.experiment_info.name}</Text> : null} </Text>
-                    <Text> See how you are doing with your experiment </Text>
-
+                    <View style={{marginLeft:12, marginTop: 4}}>
+                        <Text h4> My {this.state.experiment_info ? <Text>{this.state.experiment_info.name}</Text> : null} </Text>
+                        <Text> See how you are doing with your experiment </Text>
+                    </View>
                     <Card >
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text style = {styles.dividerTextStyle}> Daily Checkup </Text>
