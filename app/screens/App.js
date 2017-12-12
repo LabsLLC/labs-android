@@ -22,11 +22,13 @@ import PushNotification from 'react-native-push-notification'
 import firebase from 'react-native-firebase';
 import Geocoder from 'react-native-geocoding'
 import Database from '../lib/Database.js'
+import Secrets from '../config/secrets.js'
 
 export default class App extends Component<{}> {
 
     componentWillMount()
     {
+        Geocoder.setApiKey(Secrets.GoogleApiSecret);
         //Register to push notifications
         PushNotification.configure({
             onRegister: function(token) {
@@ -61,13 +63,16 @@ export default class App extends Component<{}> {
             stopOnStillActivity: false,
             url: 'http://192.168.81.15:3000/location',
         });
-        console.log("App.js called");
+
         BackgroundGeolocation.on('location', (location) => {
             console.log("BackgroundGeolocation (Active)" + JSON.stringify(location));
             firebase.auth().onAuthStateChanged((user) => {
                 if(user) {
                     const id = user.uid;
                     this.getHomeAddress(user.uid).then((home_location) => {
+                        console.log("home is where the heart is!!" + JSON.stringify(home_location));
+                        console.log("but unfortunately I am here" + JSON.stringify(location));
+
                         let range = .001;
                         let left_upper_point = {latitude: home_location.lat + range, longitude: home_location.lng - range};
                         let right_upper_point = {latitude: home_location.lat + range, longitude: home_location.lng + range};
@@ -94,6 +99,8 @@ export default class App extends Component<{}> {
                                 soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
                             });
                         }
+                    }).catch((error) => {
+                        console.log("BADDDD" + error);
                     })
                 }
 
