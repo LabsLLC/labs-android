@@ -138,6 +138,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-push-notification')
     compile(project(':react-native-mauron85-background-geolocation'))
     {
         exclude group: 'com.google.android.gms', module: 'play-services-location'
@@ -155,7 +156,10 @@ dependencies {
      compile 'com.google.android.gms:play-services-places:11.6.2'
      compile 'com.google.android.gms:play-services-maps:11.6.2'
      compile 'com.google.android.gms:play-services-location:11.6.2'
-     compile 'com.google.android.gms:play-services-gcm:11.6.2'
+     compile ('com.google.android.gms:play-services-gcm:11.6.2')
+     {
+        force = true;
+     }
 
     compile(project(':react-native-fbsdk')){
         exclude(group: 'com.facebook.android', module: 'facebook-android-sdk')

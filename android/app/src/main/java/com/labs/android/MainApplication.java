@@ -3,6 +3,7 @@ package com.labs.android;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 
 import com.marianhello.react.BackgroundGeolocationPackage;
 import com.horcrux.svg.SvgPackage;
@@ -44,6 +45,7 @@ public class MainApplication extends Application implements ReactApplication {
      mCallbackManager = new CallbackManager.Factory().create();
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativePushNotificationPackage(),
             new BackgroundGeolocationPackage(),
             new SvgPackage(),
             new RNGooglePlacesPackage(),
