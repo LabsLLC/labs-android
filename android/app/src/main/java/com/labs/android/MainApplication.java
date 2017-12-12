@@ -3,7 +3,6 @@ package com.labs.android;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.wix.reactnativenotifications.RNNotificationsPackage;
 
 import com.marianhello.react.BackgroundGeolocationPackage;
 import com.horcrux.svg.SvgPackage;
@@ -46,7 +45,6 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new BackgroundGeolocationPackage(),
-            new RNNotificationsPackage(MainApplication.this),
             new SvgPackage(),
             new RNGooglePlacesPackage(),
             new FBSDKPackage(mCallbackManager),

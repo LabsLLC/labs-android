@@ -143,8 +143,6 @@ dependencies {
         exclude group: 'com.google.android.gms', module: 'play-services-location'
     }
 
-    compile project(':reactnativenotifications')
-
     compile project(':react-native-svg')
 
     compile(project(':react-native-google-places')){
