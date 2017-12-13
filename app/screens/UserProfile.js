@@ -11,6 +11,7 @@ import RNGooglePlaces from 'react-native-google-places';
 import SettingDetail from "../components/SettingDetail/SettingDetail";
 import Screens from "../config/navigationNames"
 import LoginUtils from "../lib/LoginUtils";
+import App from "../screens/App"
 
 const FBSDK = require('react-native-fbsdk');
 const {
@@ -130,6 +131,13 @@ export default class UserProfile extends Component<{}> {
                 let newAddress = place.address.replace(/"/g,"");
 
                 Database.setUserHomeAddress(this.state.user.uid, newAddress);
+
+                /************* Demo Purposes Only ******************/
+                /** Resets last home notification date in storage **/
+
+                AsyncStorage.setItem(App.LastHomeReminderKey, "");
+
+                /***************************************************/
 
                 this.setState({address: newAddress});
             })
