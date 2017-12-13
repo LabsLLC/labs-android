@@ -3,7 +3,7 @@ import {Text, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking}
 import { Button } from 'react-native-elements'
 import RNGooglePlaces from 'react-native-google-places';
 import Database from '../lib/Database';
-
+import LoginUtils from '../lib/LoginUtils'
 
 /*const instance = firebase.initializeApp({
     persistence: true
@@ -24,7 +24,6 @@ export default class ChooseAddress extends Component<{}> {
         };
     }
 
-
     pickHomeLocation() {
         RNGooglePlaces.openPlacePickerModal()
             .then((place) => {
@@ -41,32 +40,26 @@ export default class ChooseAddress extends Component<{}> {
 
     render() {
         //console.log("GOT PROPS?: "+JSON.stringify(this.props.navigation.state.params.currentUser));
-        console.log("GOT PROPS?: "+JSON.stringify(this.props.navigation.state.params.currentUser.uid));
+       // console.log("GOT PROPS?: "+JSON.stringify(this.props.navigation.state.params.currentUser.uid));
 
         return (
             <View style={styles.container}>
 
-                <View style={styles.innerContainer}>
+                <Text style={styles.textTitle}>Intelligent Reminders</Text>
 
-                    <Text style={styles.textTitle}>Intelligent Reminders</Text>
+                <Text style={styles.text}>Get reminders to complete your goal when you get home each day</Text>
 
-                    <Text style={styles.text}>Get reminders to complete your goal when you get home each day</Text>
+                <Image style={styles.image}
+                       source={require('../images/HomeLocation.png')}/>
 
-                    <Image style={styles.image}
-                           source={require('../images/HomeLocation.png')}
-                    />
+                <Button buttonStyle={styles.button}
+                        textStyle={styles.buttonText}
+                        title="  Set Your Address  "
+                        borderRadius = {48}
+                        onPress={this.pickHomeLocation} >
+                </Button>
 
-                    <Button buttonStyle={styles.button}
-                            textStyle={styles.buttonText}
-                            title="  Set your address  "
-                            borderRadius = {48}
-                            onPress={this.pickHomeLocation} >
-
-                    </Button>
-
-                    <Text style={styles.skipText}>Skip</Text>
-
-                </View>
+                <Text style={styles.skipText}>Skip</Text>
             </View>
         );
     }
@@ -75,7 +68,6 @@ export default class ChooseAddress extends Component<{}> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
         backgroundColor: '#5764fe',
     },
     innerContainer: {
@@ -86,33 +78,43 @@ const styles = StyleSheet.create({
     },
     textTitle: {
         color: 'white',
-        fontSize: 34,
+        paddingHorizontal:24,
+        paddingTop:32,
+        fontSize: 28,
         textAlign: 'center',
         fontWeight: 'bold'
     },
     text: {
         color: 'white',
-        fontSize: 20,
-        textAlign: 'center',
+        fontSize: 18,
+        paddingHorizontal:44,
+        textAlign:'left',
+        alignItems:'center',
         marginTop: 20
     },
     image: {
-        width: 80,
-        height: 80,
-        marginTop: 40
+        width: 152,
+        height: 146,
+        marginTop:78,
+        marginBottom:47,
+        alignSelf: 'center',
     },
     button: {
         backgroundColor: 'white',
-        margin: 40
+        marginHorizontal:44,
+        marginTop:32
     },
     buttonText: {
         color: '#5764fe',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: 20
     },
     skipText: {
         color: 'white',
         textDecorationLine: 'underline',
-        fontSize: 20,
+        fontSize: 18,
+        marginTop:16,
+        alignSelf:'center'
     }
 });
 

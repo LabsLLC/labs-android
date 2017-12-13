@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {Text, Button, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
+import {Text, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
+import { Button } from 'react-native-elements'
 import {Card} from 'react-native-elements';
 import firebase from 'react-native-firebase';
 import LoginUtils from '../lib/LoginUtils'
@@ -19,7 +20,7 @@ export default class Main extends Component<{}> {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
 
         const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
             if (user) { //if user is authenticated
@@ -33,21 +34,22 @@ export default class Main extends Component<{}> {
         });
     }
 
-
     render() {
         if (this.state.loading) {
-            return this.renderLoadingView();
+            return Main.renderLoadingView();
         }
         else
         {
             return (
                 <View style={{ marginTop: 10}}>
-                    <Card title='Welcome'>
-                        <Button
-                            style={{marginBottom:16}}
+                    <Card title='Welcome to Labs'>
+                        <Button buttonStyle={styles.button}
+                                borderRadius = {48}
                             onPress={this.onSignUpPress.bind(this)}
                             title="Create an account"/>
-                        <Button onPress={this.onLoginPress}
+                        <Button buttonStyle={styles.button}
+                                borderRadius = {48}
+                                onPress={this.onLoginPress}
                                 title="Log in with Facebook" />
                     </Card>
                 </View>
@@ -55,7 +57,7 @@ export default class Main extends Component<{}> {
         }
     }
 
-    renderLoadingView() {
+    static renderLoadingView() {
         return (
             <View style={styles.container}>
                 <Text>
@@ -105,6 +107,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
+    button: {
+        marginVertical:8,
+        backgroundColor:'#5764FE'
+    }
 });
 
 module.exports = Main;

@@ -135,7 +135,7 @@ export default class UserProfile extends Component<{}> {
                 /************* Demo Purposes Only ******************/
                 /** Resets last home notification date in storage **/
 
-                AsyncStorage.setItem(App.LastHomeReminderKey, "");
+                AsyncStorage.setItem("LAST_NOTIFIED_KEY", "test").then(()=>console.log("Removed last home reminder"));
 
                 /***************************************************/
 
