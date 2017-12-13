@@ -11,7 +11,7 @@ import {StyleSheet} from 'react-native';
 import Main from './Main.js'
 import ExperimentBrowse from './ExperimentBrowse.js'
 import HomePage from './HomePage.js'
-import { AppRegistry, ScrollView, View} from 'react-native';
+import {AsyncStorage} from 'react-native';
 import TabBar from '../components/TabBar/TabBar.js'
 import UserProfile from "./UserProfile";
 import Experiment from './Experiment.js'
@@ -23,6 +23,7 @@ import firebase from 'react-native-firebase';
 import Geocoder from 'react-native-geocoding'
 import Database from '../lib/Database.js'
 import Secrets from '../config/secrets.js'
+const LastHomeReminderKey = "LAST_NOTIFIED_KEY";
 
 export default class App extends Component<{}> {
 
@@ -66,6 +67,7 @@ export default class App extends Component<{}> {
 
         BackgroundGeolocation.on('location', (location) => {
             console.log("BackgroundGeolocation (Active)" + JSON.stringify(location));
+
             firebase.auth().onAuthStateChanged((user) => {
                 if(user) {
                     const id = user.uid;
@@ -73,32 +75,35 @@ export default class App extends Component<{}> {
                         console.log("home is where the heart is!!" + JSON.stringify(home_location));
                         console.log("but unfortunately I am here" + JSON.stringify(location));
 
-                        let range = .001;
-                        let left_upper_point = {latitude: home_location.lat + range, longitude: home_location.lng - range};
-                        let right_upper_point = {latitude: home_location.lat + range, longitude: home_location.lng + range};
-                        let left_lower_point = {latitude: home_location.lat - range, longitude: home_location.lng - range};
-                        let right_lower_point = {latitude: home_location.lat - range, longitude: home_location.lng + range};
+                        AsyncStorage.getItem(LastHomeReminderKey).then((value) => {
+                            notifiedToday = false;
 
-                        if(location.longitude > left_upper_point.longitude &&
-                        location.longitude < right_upper_point.longitude &&
-                        location.latitude < left_upper_point.latitude &&
-                        location.latitude > left_lower_point.latitude){
-                            PushNotification.localNotification({
-                                autoCancel: true, // (optional) default: true
-                                largeIcon: "ic_launcher", // (optional) default: "ic_launcher"
-                                smallIcon: "ic_notification", // (optional) default: "ic_notification" with fallback for "ic_launcher"
-                                bigText: "Remember to fill out your survey!", // (optional) default: "message" prop
-                                subText: "Reminder", // (optional) default: none
-                                color: "purple", // (optional) default: system default
-                                vibrate: true, // (optional) default: true
-                                vibration: 500, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
-                                tag: 'some_tag', // (optional) add tag to message
-                                title: "Welcome Home", // (optional, for iOS this is only used in apple watch, the title will be the app name on other iOS devices)
-                                message: "Remember to fill out your survey!", // (required)
-                                playSound: true, // (optional) default: true
-                                soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
-                            });
-                        }
+                            console.log("Retrieved last reminded time. ");
+
+                            if(value) //todo reset this when address is changed
+                            {
+                                let lastNotifiedDate = new Date();
+                                lastNotifiedDate.setTime(value);
+
+                                var timeDiff = Math.abs(lastNotifiedDate - Date.now());
+                                var diffHours = Math.ceil(timeDiff / (1000 * 3600));
+
+                                if(diffHours < 20)
+                                {
+                                    console.log("Home, but user was already notified.");
+                                    notifiedToday = true;
+                                }
+
+                                console.log("Last notified at home " + lastNotifiedDate.toLocaleDateString() + ", " +
+                                diffHours + " ago.");
+                            }
+
+                            if(!notifiedToday && this.userIsHome(location, home_location))
+                            {
+                                App.sendHomeReminder();
+                            }
+                        }).done();
+
                     }).catch((error) => {
                         console.log("BADDDD" + error);
                     })
@@ -167,7 +172,46 @@ export default class App extends Component<{}> {
         });
     };
 
+    userIsHome(currentLocation, homeLocation) {
+        let range = .001;
 
+        let left_upper_point = {latitude: homeLocation.lat + range, longitude: homeLocation.lng - range};
+        let right_upper_point = {latitude: homeLocation.lat + range, longitude: homeLocation.lng + range};
+        let left_lower_point = {latitude: homeLocation.lat - range, longitude: homeLocation.lng - range};
+
+        return (currentLocation.longitude > left_upper_point.longitude &&
+            currentLocation.longitude < right_upper_point.longitude &&
+            currentLocation.latitude < left_upper_point.latitude &&
+            currentLocation.latitude > left_lower_point.latitude);
+    }
+
+    static sendHomeReminder()
+    {
+        console.log("sending...");
+        App.sendNotification("Welcome Home",  "Don't forget your daily check in!");
+        AsyncStorage.setItem(LastHomeReminderKey, Date.now().toString());
+        console.log("Set item");
+        //todo update last reminded in database
+    }
+
+    static sendNotification(title, message)
+    {
+        PushNotification.localNotification({
+            autoCancel: true, // (optional) default: true
+            largeIcon: "ic_launcher", // (optional) default: "ic_launcher"
+            smallIcon: "ic_notification", // (optional) default: "ic_notification" with fallback for "ic_launcher"
+            bigText: message, // (optional) default: "message" prop
+            subText: "Reminder", // (optional) default: none
+            color: "purple", // (optional) default: system default
+            vibrate: true, // (optional) default: true
+            vibration: 500, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
+            tag: 'some_tag', // (optional) add tag to message
+            title: title, // (optional, for iOS this is only used in apple watch, the title will be the app name on other iOS devices)
+            message: message, // (required)
+            playSound: true, // (optional) default: true
+            soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
+        });
+    }
 
     /**
      * Find the longitude and latitude of a user given its home address
