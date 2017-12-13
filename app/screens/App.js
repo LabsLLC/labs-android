@@ -24,6 +24,7 @@ import Geocoder from 'react-native-geocoding'
 import Database from '../lib/Database.js'
 import Secrets from '../config/secrets.js'
 const LastHomeReminderKey = "LAST_NOTIFIED_KEY";
+var processingGeoEvent = false;
 
 export default class App extends Component<{}> {
 
@@ -68,54 +69,50 @@ export default class App extends Component<{}> {
         BackgroundGeolocation.on('location', (location) => {
             console.log("BackgroundGeolocation (Active)" + JSON.stringify(location));
 
-            firebase.auth().onAuthStateChanged((user) => {
-                if(user) {
-                    const id = user.uid;
-                    this.getHomeAddress(user.uid).then((home_location) => {
-                        console.log("home is where the heart is!!" + JSON.stringify(home_location));
-                        console.log("but unfortunately I am here" + JSON.stringify(location));
+            //if theres an authorized user and we're not currently processing any geo events
+            if(!processingGeoEvent && firebase.auth().currentUser)
+            {
+                processingGeoEvent = true; //don't process any geo updates until we're done here
 
-                        AsyncStorage.getItem(LastHomeReminderKey).then((value) => {
-                            notifiedToday = false;
+                let user = firebase.auth().currentUser;
+                const id = user.uid;
 
-                            console.log("Retrieved last reminded time. ");
+                this.getHomeAddress(user.uid).then((home_location) => {
+                    console.log("home is where the heart is!!" + JSON.stringify(home_location));
+                    console.log("but unfortunately I am here" + JSON.stringify(location));
 
-                            if(value) //todo reset this when address is changed
-                            {
-                                let lastNotifiedDate = new Date();
-                                lastNotifiedDate.setTime(value);
+                    AsyncStorage.getItem(LastHomeReminderKey).then((value) => {
+                        notifiedToday = false;
 
-                                var timeDiff = Math.abs(lastNotifiedDate - Date.now());
-                                var diffHours = Math.ceil(timeDiff / (1000 * 3600));
+                        console.log("Retrieved last reminded time. ");
 
-                                if(diffHours < 20)
-                                {
-                                    console.log("Home, but user was already notified.");
-                                    notifiedToday = true;
-                                }
+                        if (value) //todo reset this when address is changed
+                        {
+                            console.log("Received: " + value);
+
+                            let lastNotifiedDate = new Date();
+                            lastNotifiedDate.setTime(value);
+
+                            var timeDiff = Math.abs(lastNotifiedDate - Date.now());
+                            var diffHours = Math.ceil(timeDiff / (1000 * 3600));
+
+                            if (diffHours < 20) {
+                                console.log("Home, but user was already notified.");
 
                                 console.log("Last notified at home " + lastNotifiedDate.toLocaleDateString() + ", " +
-                                diffHours + " ago.");
+                                    diffHours + " hours ago.");
+                                notifiedToday = true;
                             }
+                        }
 
-                            if(!notifiedToday && this.userIsHome(location, home_location))
-                            {
-                                App.sendHomeReminder();
-                            }
-                        }).done();
+                        if (!notifiedToday && this.userIsHome(location, home_location)) {
+                            App.sendHomeReminder();
+                        }
 
-                    }).catch((error) => {
-                        console.log("BADDDD" + error);
-                    })
-                }
-
-            });
-            BackgroundGeolocation.startTask(taskKey => {
-                // execute long running task
-                // eg. ajax post location
-                // IMPORTANT: task has to be ended by endTask
-                BackgroundGeolocation.endTask(taskKey);
-            });
+                        processingGeoEvent = false;
+                    });
+                });
+            }
         });
 
         BackgroundGeolocation.on('stationary', (stationaryLocation) => {

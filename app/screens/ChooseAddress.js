@@ -3,7 +3,7 @@ import {Text, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking}
 import { Button } from 'react-native-elements'
 import RNGooglePlaces from 'react-native-google-places';
 import Database from '../lib/Database';
-
+import LoginUtils from '../lib/LoginUtils'
 
 /*const instance = firebase.initializeApp({
     persistence: true
@@ -23,7 +23,6 @@ export default class ChooseAddress extends Component<{}> {
             loading: false
         };
     }
-
 
     pickHomeLocation() {
         RNGooglePlaces.openPlacePickerModal()
@@ -55,7 +54,7 @@ export default class ChooseAddress extends Component<{}> {
 
                 <Button buttonStyle={styles.button}
                         textStyle={styles.buttonText}
-                        title="  Set your address  "
+                        title="  Set Your Address  "
                         borderRadius = {48}
                         onPress={this.pickHomeLocation} >
                 </Button>
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
     textTitle: {
         color: 'white',
         paddingHorizontal:24,
-        paddingTop:56,
+        paddingTop:32,
         fontSize: 28,
         textAlign: 'center',
         fontWeight: 'bold'
@@ -94,15 +93,16 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     image: {
-        width: 177,
-        height: 170,
-        marginTop: 60,
+        width: 152,
+        height: 146,
+        marginTop:78,
+        marginBottom:47,
         alignSelf: 'center',
     },
     button: {
         backgroundColor: 'white',
         marginHorizontal:44,
-        marginTop:64
+        marginTop:32
     },
     buttonText: {
         color: '#5764fe',

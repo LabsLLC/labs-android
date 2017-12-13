@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {Text, Button, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
+import {Text, Platform, StyleSheet, View, AppRegistry, Image, ListView, Linking} from 'react-native';
+import { Button } from 'react-native-elements'
 import {Card} from 'react-native-elements';
 import firebase from 'react-native-firebase';
 import LoginUtils from '../lib/LoginUtils'
@@ -41,16 +42,15 @@ export default class Main extends Component<{}> {
         {
             return (
                 <View style={{ marginTop: 10}}>
-                    <Card title='Welcome'>
-                        <View style={{marginBottom:16}}>
-                            <Button
-                                onPress={this.onSignUpPress.bind(this)}
-                                title="Create an account"/>
-                        </View>
-                        <View>
-                            <Button onPress={this.onLoginPress}
-                                    title="Log in with Facebook" />
-                        </View>
+                    <Card title='Welcome to Labs'>
+                        <Button buttonStyle={styles.button}
+                                borderRadius = {48}
+                            onPress={this.onSignUpPress.bind(this)}
+                            title="Create an account"/>
+                        <Button buttonStyle={styles.button}
+                                borderRadius = {48}
+                                onPress={this.onLoginPress}
+                                title="Log in with Facebook" />
                     </Card>
                 </View>
             );
@@ -107,6 +107,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
+    button: {
+        marginVertical:8,
+        backgroundColor:'#5764FE'
+    }
 });
 
 module.exports = Main;
