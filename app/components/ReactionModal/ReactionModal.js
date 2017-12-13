@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Text, TouchableHighlight, View } from 'react-native';
+import { Modal, Text, TouchableOpacity, View } from 'react-native';
 import {Icon, ListItem} from 'react-native-elements';
 import styles from './styles'
 import Database from '../../lib/Database.js'
@@ -51,7 +51,7 @@ class ReactionModal extends Component {
 
                                 <View style = {styles.emojiDivider} >
                                     <View style={styles.emojiToken} >
-                                        <TouchableHighlight onPress={() => {
+                                        <TouchableOpacity onPress={() => {
                                             this.postReaction(1, 0, experiment_id);
                                         }}>
                                             <View>
@@ -60,10 +60,10 @@ class ReactionModal extends Component {
                                                     name='sentiment-very-dissatisfied'
                                                     color="#be0002"/>
                                             </View>
-                                        </TouchableHighlight>
+                                        </TouchableOpacity>
                                     </View>
                                     <View style={styles.emojiToken} >
-                                        <TouchableHighlight onPress={() => {
+                                        <TouchableOpacity onPress={() => {
                                             this.postReaction(1, .5, experiment_id);
                                         }}>
                                             <View>
@@ -72,10 +72,10 @@ class ReactionModal extends Component {
                                                     name='sentiment-neutral'
                                                     color='#00aced' />
                                             </View>
-                                        </TouchableHighlight>
+                                        </TouchableOpacity>
                                     </View>
                                     <View style={styles.emojiToken} >
-                                        <TouchableHighlight onPress={() => {
+                                        <TouchableOpacity onPress={() => {
                                             this.postReaction(1, 1, experiment_id);
                                         }}>
                                             <View>
@@ -84,7 +84,7 @@ class ReactionModal extends Component {
                                                     name='sentiment-very-satisfied'
                                                     color="#1dab00"/>
                                             </View>
-                                        </TouchableHighlight>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
 
@@ -92,7 +92,7 @@ class ReactionModal extends Component {
                         </View>
                     </Modal>
 
-                    <TouchableHighlight onPress={() => {
+                    <TouchableOpacity onPress={() => {
                         this.setModalVisible(true)
                     }}>
 
@@ -104,7 +104,7 @@ class ReactionModal extends Component {
                             onPress={() => this.setModalVisible(!this.state.modalVisible)} />
                     </View>
 
-                    </TouchableHighlight>
+                    </TouchableOpacity>
 
                 </View>
             );
