@@ -184,9 +184,12 @@ export default class HomePage extends Component<{}> {
                     </Card>
                         : null}
 
-                    <Card title="Goal Streak"
-                          titleStyle = {styles.dividerTextStyle}>
-                    </Card>
+
+                    <View style={{marginBottom: 100}}>
+                        <Card title="Goal Streak"
+                              titleStyle = {styles.dividerTextStyle}>
+                        </Card>
+                    </View>
 
                 </View>
             </ScrollView>
