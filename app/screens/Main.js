@@ -19,7 +19,7 @@ export default class Main extends Component<{}> {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
 
         const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
             if (user) { //if user is authenticated
@@ -33,29 +33,31 @@ export default class Main extends Component<{}> {
         });
     }
 
-
     render() {
         if (this.state.loading) {
-            return this.renderLoadingView();
+            return Main.renderLoadingView();
         }
         else
         {
             return (
                 <View style={{ marginTop: 10}}>
                     <Card title='Welcome'>
-                        <Button
-                            style={{marginBottom:16}}
-                            onPress={this.onSignUpPress.bind(this)}
-                            title="Create an account"/>
-                        <Button onPress={this.onLoginPress}
-                                title="Log in with Facebook" />
+                        <View style={{marginBottom:16}}>
+                            <Button
+                                onPress={this.onSignUpPress.bind(this)}
+                                title="Create an account"/>
+                        </View>
+                        <View>
+                            <Button onPress={this.onLoginPress}
+                                    title="Log in with Facebook" />
+                        </View>
                     </Card>
                 </View>
             );
         }
     }
 
-    renderLoadingView() {
+    static renderLoadingView() {
         return (
             <View style={styles.container}>
                 <Text>
