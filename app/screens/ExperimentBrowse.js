@@ -92,7 +92,7 @@ export default class ExperimentBrowse extends Component<{}> {
                                 featured
                                 titleStyle= {styles.dividerTextStyle}
                                 caption={this.state.featuredExperiment.val.description}
-                                onPress={(event) => this.handleTileClick(event)}
+                                onPress={(event) =>  this.props.navigation.navigate('Experiment', {experimentID: this.state.featuredExperiment.id})}
                             />
                         )
                     }
