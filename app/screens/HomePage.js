@@ -3,8 +3,6 @@ import {Icon,Button, Text, Tile, SearchBar, List, ListItem, Card} from 'react-na
 import {ScrollView, Modal, StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import ReactionModal from '../components/ReactionModal/ReactionModal.js'
-import Geocoder from 'react-native-geocoding'
-import Secrets from '../config/secrets.js'
 import firebase from 'react-native-firebase';
 import Database from '../lib/Database.js'
 import { VictoryArea,VictoryChart, VictoryTheme } from "victory-native";
@@ -21,11 +19,9 @@ export default class HomePage extends Component<{}> {
         this.getMyExperimentData = this.getMyExperimentData.bind(this);
         this.hasUserCompletedExperiment = this.hasUserCompletedExperiment.bind(this);
 
-        Geocoder.setApiKey(Secrets.GoogleApiSecret);
+
         this.state = {
             searchText:'',
-            latitude: null,
-            longitude: null,
             error: null,
             user_uid: null,
             home_address: null,
@@ -46,47 +42,22 @@ export default class HomePage extends Component<{}> {
                 var id = user.uid;
                 this.setState({
                     user_uid: id
-                }, this.getHomeAddress);
+                });
 
                 //update the page
                 var ref = firebase.database().ref("/user/"+id);
                 ref.on('value', (snapshot) => {
                     // Do whatever
                     this.getMyExperimentData();
-                    console.log("DATA WAS CHANGED! TRIGGER SOME SHIT")
                 });
 
             }
 
         });
-
-        //Users current position
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                this.setState({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                    error: null,
-                });
-            },
-            (error) => this.setState({ error: error.message }),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-        );
     }
 
     handleChange(event) {
         this.setState({ searchText: event});
-    }
-
-    /**
-     * Retrieve the home address of a user given its user id
-     */
-    getHomeAddress() {
-        Database.getUserAddress(this.state.user_uid).then((address) => {
-            this.setState({
-                home_address: address
-            }, this.findGeoLocation)
-        });
     }
 
     /** (Andrew added)
@@ -107,7 +78,6 @@ export default class HomePage extends Component<{}> {
      * Check if user has completed experiment, if yes, redirect.
      */
     hasUserCompletedExperiment() {
-        console.log('aquiiiii');
         data = [];
         if(this.state.my_experiment_data && this.state.my_experiment_data.reactions) {
             Object.keys(this.state.my_experiment_data.reactions).forEach((key, index) => {
@@ -138,21 +108,6 @@ export default class HomePage extends Component<{}> {
                 });
             }
         }
-    }
-
-    /**
-     * Find the longitude and latitude of a user given its home address
-     */
-    findGeoLocation() {
-        Geocoder.getFromLocation(this.state.home_address).then(
-            json => {
-                var location = json.results[0].geometry.location;
-                console.log(location.lat + ", " + location.lng);
-            },
-            error => {
-                console.log(error);
-            }
-        );
     }
 
     getMyExperimentData() {
@@ -234,18 +189,12 @@ export default class HomePage extends Component<{}> {
                     </Card>
 
                 </View>
-
-                <View style={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <Text>Latitude: {this.state.latitude}</Text>
-                    <Text>Longitude: {this.state.longitude}</Text>
-                    {this.state.error ? <Text>Error: {this.state.error}</Text> : null}
-                </View>
             </ScrollView>
             </View>
         )}
 }
 
-module.exports = HomePage
+module.exports = HomePage;
 
 const styles = StyleSheet.create({
     dividerTextStyle: {
