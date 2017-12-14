@@ -160,7 +160,7 @@ export default class UserProfile extends Component<{}> {
             <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-around', marginTop: 10}}>
                 <KeyboardAwareScrollView enableOnAndroid={true}>
                     <View style={{ flex: 1, flexDirection: 'column', alignItems:"center"}}>
-                        <ProfilePicture profileImage={this.state.profileImage} onPress={this.pickHomeLocation}/>
+                        <ProfilePicture profileImage={this.state.profileImage} onPress={this.fetchFbProfilePic}/>
                         <Text style={{marginTop:16, fontSize: 24, fontWeight: "300"}}>{this.state.name}</Text>
                         <Text style={{marginTop:4, fontSize: 14, fontWeight: "300"}}>{this.state.email}</Text>
                         <SettingDetail onPress={this.pickHomeLocation} title="Home Address" content={this.state.address}/>

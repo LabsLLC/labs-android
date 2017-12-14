@@ -30,6 +30,8 @@ export default class App extends Component<{}> {
 
     componentWillMount()
     {
+        console.disableYellowBox = true; //hide warnings
+
         Geocoder.setApiKey(Secrets.GoogleApiSecret);
         //Register to push notifications
         PushNotification.configure({
