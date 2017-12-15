@@ -86,7 +86,7 @@ export default class Experiment extends Component<{}> {
      * Then, sets this experiment as the new experiment.
      */
     subscribeToExperiment() {
-        if(this.state.userExperimentID != null){
+        if(this.state.userExperimentID !== null){
         Database.unsubscribeUser(this.state.userExperimentID).then(() =>
         {
             Database.archiveUserData(this.state.userExperimentID).then(() => {

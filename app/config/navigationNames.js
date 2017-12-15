@@ -5,4 +5,5 @@ export default class Screens {
     static Experiments = "Experiment";
     static BrowseExperiments ="ExperimentBrowse";
     static Login = "SignIn";
+    static Stats = "Stats";
 }

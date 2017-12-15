@@ -8,6 +8,9 @@ import Database from '../lib/Database.js'
 import { VictoryArea,VictoryChart, VictoryTheme } from "victory-native";
 import { Svg } from 'react-native-svg'
 import { Utils } from '../lib/Utils'
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+
+const experiment_length = 14;
 
 export default class HomePage extends Component<{}> {
 
@@ -27,6 +30,8 @@ export default class HomePage extends Component<{}> {
             home_address: null,
             my_experiment_data: null,
             experiment_info: null,
+            progress:0,
+            daysLeft:" "
         };
     }
 
@@ -34,7 +39,6 @@ export default class HomePage extends Component<{}> {
 
     componentDidMount(){
        this.getMyExperimentData();
-
 
         //Retrieve current users id
         firebase.auth().onAuthStateChanged((user) => {
@@ -52,12 +56,22 @@ export default class HomePage extends Component<{}> {
                 });
 
             }
-
         });
+
+      //  setTimeout(()=> {this.setState({progress:50})}, 1000);
     }
 
     handleChange(event) {
         this.setState({ searchText: event});
+    }
+
+    calculateProgress()
+    {
+        setTimeout(()=> {
+            this.setState({
+                daysLeft: 14-Object.keys(this.state.my_experiment_data.reactions).length,
+                progress: (Object.keys(this.state.my_experiment_data.reactions).length/14) * 100})}, 500);
+
     }
 
     /** (Andrew added)
@@ -73,12 +87,31 @@ export default class HomePage extends Component<{}> {
         });
     }
 
-
     /**
      * Check if user has completed experiment, if yes, redirect.
      */
     hasUserCompletedExperiment() {
+        let daysCompleted = this.getNumberOfDaysCompleted();
+
+        if(daysCompleted >= 14) {
+            Database.unsubscribeUser(this.state.my_experiment_data.experiment_id).then(() => {
+                Database.archiveUserData(this.state.my_experiment_data.experiment_id).then(() => {
+                    Database.clearUserExperiment().then(() => {
+                        this.props.navigation.navigate("ExperimentComplete", {experiment: this.state.experiment_info});
+                    });
+                });
+            });
+        }
+    }
+
+    /**
+     * Returns the number of days completed by the user
+     *
+     * Returns: int, days completed
+     */
+    getNumberOfDaysCompleted() {
         data = [];
+
         if(this.state.my_experiment_data && this.state.my_experiment_data.reactions) {
             Object.keys(this.state.my_experiment_data.reactions).forEach((key, index) => {
 
@@ -88,35 +121,46 @@ export default class HomePage extends Component<{}> {
             });
         }
 
-        if(data.length > 0)
-        {
-            var startDate = new Date(data[0].x);
-            var lastDate = new Date(data[data.length-1].x);
+        if(data.length > 0) {
 
-            var timeDiff = Math.abs(lastDate.getTime() - startDate.getTime());
-            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            let startDate = new Date(data[0].x);
+            let lastDate = new Date(data[data.length - 1].x);
 
-            this.state.my_experiment_data.start_date = startDate;
+            let timeDiff = Math.abs(lastDate.getTime() - startDate.getTime());
+            let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-            if(diffDays >= 14) {
-                Database.unsubscribeUser(this.state.my_experiment_data.experiment_id).then(() => {
-                    Database.archiveUserData(this.state.my_experiment_data.experiment_id).then(() => {
-                        Database.clearUserExperiment().then(() => {
-                            this.props.navigation.navigate("ExperimentComplete", {experiment: this.state.experiment_info});
-                        });
-                    });
-                });
-            }
+            return diffDays;
         }
+
+        return 0;
     }
 
     getMyExperimentData() {
+
         //Get the current user's experiment data under experiments directory
+        //Side effect: updates start date from data retrieved
+
         Database.getMyExperimentData().then((data) => {
             this.setState({
                 my_experiment_data: data
             }, this.getExperimentInfo);
+
+            if (data && "reactions" in data && Object.keys(data.reactions).length > 0) {
+                console.log("has reactions");
+                let firstKey = Object.keys(data.reactions)[0];
+                let startDate = new Date(firstKey);
+
+                this.state.my_experiment_data.start_date = startDate.toLocaleString();
+                this.calculateProgress();
+            }
+            else {
+                this.setState({
+                    daysLeft: 14,
+                    progress: 0
+                });
+            }
         });
+
     }
 
     render() {
@@ -135,7 +179,6 @@ export default class HomePage extends Component<{}> {
                 return a.x.localeCompare(b.x)
             });
 
-
             //Convert keys back to indexes for display [dates -> index]
             data.forEach((value, index) => {
                 data[index].x = index;
@@ -153,10 +196,30 @@ export default class HomePage extends Component<{}> {
                         <Text h4> {this.state.experiment_info ? <Text>{this.state.experiment_info.name}</Text> : null} </Text>
                         <Text> See how you are doing with your experiment </Text>
                     </View>
-                    <Card >
+                    <Card>
+                        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-between'}}>
+                            <Text style = {styles.dividerTextStyle}>Your Progress</Text>
+                            <View style= {{flex:1, alignItems:'center', marginTop:20, alignSelf:"center"}}>
+                                <AnimatedCircularProgress
+                                    rotation={0}
+                                    linecap="round"
+                                    size={228}
+                                    width={28}
+                                    fill={this.state.progress}
+                                    tintColor="#5764fe"
+                                    onAnimationComplete={() => console.log('onAnimationComplete')}
+                                    backgroundColor="#FFFFFF">
+                                </AnimatedCircularProgress>
+                                <View style={{top: -20, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', position: 'absolute'}}>
+                                    <Text style={{fontSize:48}}>{this.state.daysLeft}</Text>
+                                    <Text style={{fontSize:20}}>Days Left</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </Card>
+                    <Card>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text style = {styles.dividerTextStyle}> Daily Checkup </Text>
-
+                            <Text style = {styles.dividerTextStyle}>Daily Checkup</Text>
                             <Icon
                                 name='assignment'
                                 color='#00aced' />
@@ -183,7 +246,6 @@ export default class HomePage extends Component<{}> {
                         </View>
                     </Card>
                         : null}
-
 
                     <View style={{marginBottom: 100}}>
                         <Card title="Goal Streak"

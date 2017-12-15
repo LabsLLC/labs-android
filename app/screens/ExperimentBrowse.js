@@ -97,7 +97,6 @@ export default class ExperimentBrowse extends Component<{}> {
                         )
                     }
 
-
                     <List containerStyle={{marginBottom: 20}}>
                         {
                             this.state.experimentData &&

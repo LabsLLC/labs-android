@@ -30,7 +30,7 @@ export default class ChooseAddress extends Component<{}> {
                 console.log(place);
                 let newAddress = place.address.replace(/"/g,"");
 
-                Database.setUserHomeAddress(this.props.navigation.state.params.currentUser.uid,  newAddress);
+                Database.setUserHomeAddress(this.props.navigation.state.params.currentUser.uid, newAddress);
 
                 LoginUtils.navigateLogin(this.props.navigation);
 
