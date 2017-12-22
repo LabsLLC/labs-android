@@ -4,6 +4,7 @@ import { Button } from 'react-native-elements'
 import {Card} from 'react-native-elements';
 import firebase from 'react-native-firebase';
 import LoginUtils from '../lib/LoginUtils'
+import Database from '../lib/Database'
 
 export default class Main extends Component<{}> {
 
@@ -71,6 +72,8 @@ export default class Main extends Component<{}> {
         this.setState({ error: '', loading: true });
         LoginUtils.getFacebookLoginPromise()
             .then((currentUser) => {
+                Database.setUserName(currentUser.uid, currentUser.displayName);
+
                 this.setState({ error: '', loading: false });
                 LoginUtils.navigateLogin(this.props.navigation);
             })
@@ -89,6 +92,7 @@ export default class Main extends Component<{}> {
         LoginUtils.getFacebookLoginPromise().then((currentUser) => {
             console.log("Has signed in now redirect with user: "+currentUser);
 
+            Database.setUserName(currentUser.uid, currentUser.displayName);
             //Database.setUserHomeAddress(currentUser.uid, address);rrr
 
             //redirect to location screen

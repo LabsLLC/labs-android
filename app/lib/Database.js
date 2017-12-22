@@ -16,9 +16,30 @@ class Database {
         return firebase.database().ref(userHomePath).update({
             userHome: userHome
         })
-
     }
 
+    static setUserName(userId, name)
+    {
+        let userPath = "/user/" + userId;
+
+        return firebase.database().ref(userPath).update({
+            name: name
+        });
+    }
+
+    static getAllUsers()
+    {
+        return new Promise( (success, fail) => {
+            firebase.auth().onAuthStateChanged((user) => { //Retrieve current users id
+                if(user) {
+                    let userPath = "/user";
+                    return firebase.database().ref(userPath).on('value', (snapshot) => {
+                        success(snapshot.val());
+                    });
+                }
+            });
+        })
+    }
     /**
      * Sets a users experiment - then also update the experiment's active users
      * @param experimentId

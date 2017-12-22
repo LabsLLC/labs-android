@@ -23,6 +23,7 @@ import firebase from 'react-native-firebase';
 import Geocoder from 'react-native-geocoding'
 import Database from '../lib/Database.js'
 import Secrets from '../config/secrets.js'
+import StatsScreen from "./StatsScreen";
 const LastHomeReminderKey = "LAST_NOTIFIED_KEY";
 var processingGeoEvent = false;
 
@@ -30,7 +31,7 @@ export default class App extends Component<{}> {
 
     componentWillMount()
     {
-        console.disableYellowBox = true; //hide warnings
+     //   console.disableYellowBox = true; //hide warnings
 
         Geocoder.setApiKey(Secrets.GoogleApiSecret);
         //Register to push notifications
@@ -85,7 +86,6 @@ export default class App extends Component<{}> {
 
                     AsyncStorage.getItem(LastHomeReminderKey).then((value) => {
                         notifiedToday = false;
-
                         console.log("Retrieved last reminded time. ");
 
                         if (value) //todo reset this when address is changed
@@ -281,6 +281,10 @@ const RootNavigator =
                                     {
                                         headerMode: "none"
                                     })
+                        },
+                        Stats:
+                        {
+                            screen: StatsScreen
                         },
                         UserProfile: {
                             screen: UserProfile

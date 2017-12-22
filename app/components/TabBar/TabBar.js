@@ -49,10 +49,10 @@ export default class TabBar extends Component<{}> {
 
                     <View style={{width:50, height:50}}/>
 
-                    <TabIcon isActive={false}
+                    <TabIcon isActive={this.state.currentPage===Screens.Stats}
                              inactiveIcon={require('../../images/navigation/StatsGrey.png')}
                              selectedIcon={require('../../images/navigation/StatsBlue.png')}
-                             onPress={()=> this.onPressButton()}/>
+                             onPress={()=> this.selectTab(Screens.Stats)}/>
 
                     <TabIcon isActive={this.state.currentPage===Screens.UserProfile}
                              inactiveIcon={require('../../images/navigation/ProfileGrey.png')}
