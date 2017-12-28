@@ -67,10 +67,16 @@ export default class HomePage extends Component<{}> {
 
     calculateProgress()
     {
-        setTimeout(()=> {
-            this.setState({
-                daysLeft: 14-Object.keys(this.state.my_experiment_data.reactions).length,
-                progress: (Object.keys(this.state.my_experiment_data.reactions).length/14) * 100})}, 500);
+       /* setTimeout(()=> {
+            console.log("calculate progress: "+JSON.stringify(this.state.my_experiment_data.reactions));
+        }, 500);*/
+        if(this.state.my_experiment_data.reactions){
+            setTimeout(()=> {
+                this.setState({
+                    daysLeft: 14-Object.keys(this.state.my_experiment_data.reactions).length,
+                    progress: (Object.keys(this.state.my_experiment_data.reactions).length/14) * 100})}, 500);
+        }
+
 
     }
 

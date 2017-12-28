@@ -343,7 +343,6 @@ class Database {
      */
     static getExperiments() {
         return new Promise(function (success, fail) {
-            console.log("getExperiments: ");
 
             var experimentRef = firebase.database().ref("experiment/");
 
@@ -357,6 +356,7 @@ class Database {
 
                 list.reverse();
 
+                console.log("getExperiments: "+list);
                 success(list);
             });
         })
