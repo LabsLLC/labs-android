@@ -24,7 +24,7 @@ import Geocoder from 'react-native-geocoding'
 import Database from '../lib/Database.js'
 import Secrets from '../config/secrets.js'
 import StatsScreen from "./StatsScreen";
-import Onboarding from "./Onboarding";
+import OnboardingPage from "./OnboardingPage";
 const LastHomeReminderKey = "LAST_NOTIFIED_KEY";
 var processingGeoEvent = false;
 
@@ -252,8 +252,8 @@ var navigationBarStyles = StyleSheet.create({
 const RootNavigator =
     StackNavigator(
         {
-            Onboarding: {
-                screen: Onboarding,
+            OnboardingPage: {
+                screen: OnboardingPage,
             },
             SignIn: {
                 screen: Main,
