@@ -18,10 +18,11 @@ class OnboardingPage extends Component<{}> {
         return (
 
                 <Onboarding
+                    onSkip={() =>  this.props.navigation.navigate("SignIn")}
                     onDone={() =>  this.props.navigation.navigate("SignIn")}
                     pages={[
                         {
-                            backgroundColor: '#fff',
+                            backgroundColor: '#ffffff',
                             image: <Image source={require('../images/onboarding/exercise.png')} />,
                             title: 'Onboarding',
                             subtitle: 'Done with React Native Onboarding Swiper',
